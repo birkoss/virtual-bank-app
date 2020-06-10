@@ -1,7 +1,8 @@
 import React, { useRef } from "react";
+
 import { Input as KittenInput } from "@ui-kitten/components";
 
-export default function Input(props) {
+export default function Input(props: any) {
     const inputRef = useRef();
     return (
         <KittenInput

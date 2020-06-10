@@ -73,7 +73,7 @@ export default function LoginScreen({ navigation }: Props) {
                     }
                 />
 
-                <ErrorMessage errors={errors} name="email" />
+                <ErrorMessage field={errors.email} />
                 <Input
                     style={styles.passwordInput}
                     secureTextEntry
@@ -82,7 +82,7 @@ export default function LoginScreen({ navigation }: Props) {
                     }
                     placeholder="Password"
                 />
-                <ErrorMessage errors={errors} name="password" />
+                <ErrorMessage field={errors.password} />
                 <View style={styles.forgotPasswordContainer}>
                     <Button
                         style={styles.forgotPasswordButton}

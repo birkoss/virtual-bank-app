@@ -1,26 +1,23 @@
 import React from "react";
 
-import { View } from "react-native";
+import { View, ImagePropTypes } from "react-native";
+
+import { FieldError } from "react-hook-form";
 
 import { Icon, Button } from "@ui-kitten/components";
 
 type Props = {
-    errors: Object;
-    name: string;
+    field: FieldError | undefined;
 };
 
-export default function ErrorMessage({ errors, name }: Props) {
-    if (name === undefined) {
+export default function ErrorMessage({ field }: Props) {
+    if (field === undefined || field.message === undefined) {
         return null;
     }
 
-    if (errors[name] === undefined) {
-        return null;
-    }
+    const errorMessage: string = field.message.toString();
 
-    const errorMessage = errors[name]["message"];
-
-    const ErrorIcon = (style) => <Icon {...style} name="alert-triangle" />;
+    const ErrorIcon = (style: any) => <Icon {...style} name="alert-triangle" />;
 
     return (
         <View
