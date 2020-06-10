@@ -1,25 +1,58 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { View, Alert } from "react-native";
 
-import {
-    Button,
-    Layout,
-    StyleService,
-    Text,
-    useStyleSheet,
-} from "@ui-kitten/components";
+import { Button, Layout, Text, useStyleSheet } from "@ui-kitten/components";
+
+import { useForm } from "react-hook-form";
 
 import { KeyboardAvoidingView } from "../components/KeyboardAvoidingView";
 import Input from "../components/Input";
+import ErrorMessage from "../components/ErrorMessage";
 
 import { LoginScreenNavigationProp } from "../types";
+
+import { onePagerStyles } from "../styles/onePagerStyles";
+
+import { validateEmail } from "../validations";
 
 type Props = {
     navigation: LoginScreenNavigationProp;
 };
 
+type formData = {
+    email: string;
+    password: string;
+};
+
+const defaultValues = {
+    email: "",
+    password: "",
+};
+
 export default function LoginScreen({ navigation }: Props) {
-    const styles = useStyleSheet(themedStyles);
+    const { errors, register, setValue, handleSubmit } = useForm<formData>({
+        defaultValues,
+    });
+
+    const styles = useStyleSheet(onePagerStyles);
+
+    useEffect(() => {
+        register(
+            { name: "email" },
+            {
+                required: "Email is mandatory",
+                validate: (value) => validateEmail(value) || true,
+            }
+        );
+        register(
+            { name: "password" },
+            { required: "Password is mandatory", min: 8 }
+        );
+    }, [register]);
+
+    const onSubmit = (data: formData) => {
+        console.log(data);
+    };
 
     return (
         <KeyboardAvoidingView style={styles.container}>
@@ -32,8 +65,24 @@ export default function LoginScreen({ navigation }: Props) {
                 </Text>
             </View>
             <Layout style={styles.formContainer} level="1">
-                <Input placeholder="Email" />
-                <Input style={styles.passwordInput} placeholder="Password" />
+                <Input
+                    placeholder="Email"
+                    keyboardType="email-address"
+                    onChangeText={(text: string) =>
+                        setValue("email", text, true)
+                    }
+                />
+
+                <ErrorMessage errors={errors} name="email" />
+                <Input
+                    style={styles.passwordInput}
+                    secureTextEntry
+                    onChangeText={(text: string) =>
+                        setValue("password", text, true)
+                    }
+                    placeholder="Password"
+                />
+                <ErrorMessage errors={errors} name="password" />
                 <View style={styles.forgotPasswordContainer}>
                     <Button
                         style={styles.forgotPasswordButton}
@@ -45,8 +94,12 @@ export default function LoginScreen({ navigation }: Props) {
                     </Button>
                 </View>
             </Layout>
-            <Button style={styles.primaryActionButton} size="giant">
-                SIGN IN
+            <Button
+                style={styles.primaryActionButton}
+                size="giant"
+                onPress={handleSubmit(onSubmit)}
+            >
+                LOGIN
             </Button>
             <Button
                 style={styles.secondaryActionButton}
@@ -59,41 +112,3 @@ export default function LoginScreen({ navigation }: Props) {
         </KeyboardAvoidingView>
     );
 }
-
-const themedStyles = StyleService.create({
-    container: {
-        backgroundColor: "background-basic-color-1",
-        flex: 1,
-    },
-    headerContainer: {
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: 216,
-        backgroundColor: "color-primary-default",
-    },
-    formContainer: {
-        flex: 1,
-        paddingTop: 32,
-        paddingHorizontal: 16,
-    },
-    subtitle: {
-        marginTop: 16,
-    },
-    primaryActionButton: {
-        marginHorizontal: 16,
-    },
-    secondaryActionButton: {
-        marginVertical: 12,
-        marginHorizontal: 16,
-    },
-    forgotPasswordContainer: {
-        flexDirection: "row",
-        justifyContent: "flex-end",
-    },
-    passwordInput: {
-        marginTop: 16,
-    },
-    forgotPasswordButton: {
-        paddingHorizontal: 0,
-    },
-});
