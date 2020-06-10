@@ -1,19 +1,22 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+
+import Navigation from "./src/components/Navigation";
+
+import {
+    UserContext,
+    UserContextInitialValues,
+    UserContextReducer,
+} from "./src/contexts";
 
 export default function App() {
+    const [state, dispatch] = React.useReducer(
+        UserContextReducer,
+        UserContextInitialValues
+    );
+
     return (
-        <View style={styles.container}>
-            <Text>Open up App.tsx to start working on your app!</Text>
-        </View>
+        <UserContext.Provider value={{ state, dispatch }}>
+            <Navigation />
+        </UserContext.Provider>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-});
