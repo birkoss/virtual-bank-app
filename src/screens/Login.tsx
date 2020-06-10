@@ -1,13 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Alert } from "react-native";
 
-import { Button, Layout, Text, useStyleSheet } from "@ui-kitten/components";
+import {
+    Button,
+    Layout,
+    Text,
+    useStyleSheet,
+    Spinner,
+} from "@ui-kitten/components";
 
 import { useForm } from "react-hook-form";
 
 import { KeyboardAvoidingView } from "../components/KeyboardAvoidingView";
 import Input from "../components/Input";
 import ErrorMessage from "../components/ErrorMessage";
+import Loading from "../components/Loading";
+import ButtonLoading from "../components/ButtonLoading";
 
 import { LoginScreenNavigationProp } from "../types";
 
@@ -36,6 +44,8 @@ export default function LoginScreen({ navigation }: Props) {
 
     const styles = useStyleSheet(onePagerStyles);
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     useEffect(() => {
         register(
             { name: "email" },
@@ -51,6 +61,7 @@ export default function LoginScreen({ navigation }: Props) {
     }, [register]);
 
     const onSubmit = (data: formData) => {
+        setIsSubmitting(true);
         console.log(data);
     };
 
@@ -94,13 +105,12 @@ export default function LoginScreen({ navigation }: Props) {
                     </Button>
                 </View>
             </Layout>
-            <Button
-                style={styles.primaryActionButton}
-                size="giant"
+            <ButtonLoading
+                isSubmitting={isSubmitting}
                 onPress={handleSubmit(onSubmit)}
-            >
-                LOGIN
-            </Button>
+                label="LOGIN"
+                style={styles.primaryActionButton}
+            />
             <Button
                 style={styles.secondaryActionButton}
                 appearance="ghost"
