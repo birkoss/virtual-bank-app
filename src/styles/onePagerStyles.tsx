@@ -31,8 +31,8 @@ export const onePagerStyles = StyleService.create({
         flexDirection: "row",
         justifyContent: "flex-end",
     },
-    passwordInput: {
-        marginTop: 16,
+    input: {
+        marginTop: 10,
     },
     forgotPasswordButton: {
         paddingHorizontal: 0,

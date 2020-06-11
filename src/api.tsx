@@ -41,7 +41,10 @@ function fetchRequest(request: Request, response: Function) {
 
             // Errors from the API
             if (data["message"]) {
-                if (Array.isArray(data["message"])) {
+                if (
+                    typeof data["message"] === "object" &&
+                    data["message"] !== null
+                ) {
                     for (let field in data["message"]) {
                         throw new ApiError(
                             field + ": " + data["message"][field].join(" ")
@@ -56,7 +59,6 @@ function fetchRequest(request: Request, response: Function) {
             throw new ApiError("An error occurred please try again later.");
         })
         .catch((error) => {
-            console.log(error);
             if (error.name !== "ApiError") {
                 throw new Error("An error occurred please try again later.");
             }
@@ -65,8 +67,18 @@ function fetchRequest(request: Request, response: Function) {
         });
 }
 
-export function APIRegister(email: string, password: string) {
-    let request = APICreateRequest("register", "POST", { email, password });
+export function APIRegister(
+    email: string,
+    password: string,
+    firstname: string,
+    lastname: string
+) {
+    let request = APICreateRequest("register", "POST", {
+        email,
+        password,
+        firstname,
+        lastname,
+    });
 
     return fetchRequest(request, (data: any) => {
         return {

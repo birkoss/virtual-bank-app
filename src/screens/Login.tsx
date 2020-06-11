@@ -106,7 +106,7 @@ export default function LoginScreen({ navigation }: Props) {
                 <Input
                     returnKeyType="go"
                     onSubmitEditing={handleSubmit(onSubmit)}
-                    style={styles.passwordInput}
+                    style={styles.input}
                     secureTextEntry
                     onChangeText={(text: string) =>
                         setValue("password", text, true)
