@@ -49,8 +49,8 @@ export default function HomeScreen({ navigation }: Props) {
                 </View>
                 <ProgressCircle
                     progressColor="#FF4C58"
-                    startAngle={0}
-                    endAngle={180}
+                    startAngle={-Math.PI * 0.8}
+                    endAngle={Math.PI * 0.8}
                     style={styles.goalChart}
                     progress={0.97}
                 />

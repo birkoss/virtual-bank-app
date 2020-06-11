@@ -45,7 +45,7 @@ const HomeStackScreen = () => {
 const TransactionsStack = createStackNavigator<TransactionsStackParamList>();
 const TransactionsStackScreen = () => {
     return (
-        <TransactionsStack.Navigator>
+        <TransactionsStack.Navigator headerMode="none">
             <TransactionsStack.Screen
                 name="Transactions"
                 component={TransactionsScreen}
