@@ -3,7 +3,12 @@ import React, { useEffect, useState } from "react";
 import { AsyncStorage, StatusBar } from "react-native";
 
 import * as eva from "@eva-design/eva";
-import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
+import {
+    ApplicationProvider,
+    IconRegistry,
+    Layout,
+    Text,
+} from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
 import Navigation from "./src/components/Navigation";
@@ -53,7 +58,16 @@ export default function App() {
     if (isLoading) {
         return (
             <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
-                <Loading />
+                <StatusBar barStyle="light-content" />
+                <Layout
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <Loading />
+                </Layout>
             </ApplicationProvider>
         );
     }
