@@ -7,10 +7,19 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
+import { BottomNavigation, BottomNavigationTab } from "@ui-kitten/components";
+
 import LoginScreen from "../screens/Login";
 import HomeScreen from "../screens/Home";
 import RegisterScreen from "../screens/Register";
 import TransactionsScreen from "../screens/Transactions";
+
+import {
+    HomeIcon,
+    TransactionsIcon,
+    SendMoneyIcon,
+    ReceiveMoney,
+} from "../icons";
 
 import {
     AuthStackParamList,
@@ -42,29 +51,43 @@ const TransactionsStackScreen = () => {
     );
 };
 
+const BottomTabBar = ({ navigation, state }) => {
+    return (
+        <BottomNavigation
+            selectedIndex={state.index}
+            onSelect={(index) => navigation.navigate(state.routeNames[index])}
+        >
+            <BottomNavigationTab
+                title={state.index === 0 ? "Home" : undefined}
+                icon={HomeIcon}
+            />
+            <BottomNavigationTab
+                title={state.index === 1 ? "Transactions" : undefined}
+                icon={TransactionsIcon}
+            />
+            <BottomNavigationTab
+                title={state.index === 2 ? "Send" : undefined}
+                icon={SendMoneyIcon}
+            />
+            <BottomNavigationTab
+                title={state.index === 3 ? "Receive" : undefined}
+                icon={ReceiveMoney}
+            />
+        </BottomNavigation>
+    );
+};
+
 const Tabs = createBottomTabNavigator();
 const TabsScreen = () => {
     return (
-        <Tabs.Navigator>
-            <Tabs.Screen
-                name="Home"
-                component={HomeStackScreen}
-                options={{
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="ios-person" size={size} color={color} />
-                    ),
-                }}
-            />
+        <Tabs.Navigator tabBar={(props) => <BottomTabBar {...props} />}>
+            <Tabs.Screen name="Home" component={HomeStackScreen} />
             <Tabs.Screen
                 name="Transactions"
                 component={TransactionsStackScreen}
-                options={{
-                    tabBarLabel: "Users",
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="ios-person" size={size} color={color} />
-                    ),
-                }}
             />
+            <Tabs.Screen name="Send" component={HomeStackScreen} />
+            <Tabs.Screen name="Receive" component={HomeStackScreen} />
         </Tabs.Navigator>
     );
 };
