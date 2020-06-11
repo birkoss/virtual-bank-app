@@ -4,7 +4,7 @@ import { ScrollViewProps } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 type Props = {
-    style: Object;
+    style?: Object;
     children: any;
 };
 

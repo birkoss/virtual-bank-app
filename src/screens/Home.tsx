@@ -62,7 +62,7 @@ export default function HomeScreen({ navigation }: Props) {
 const themeStyles = StyleService.create({
     cardContainer: {
         margin: 20,
-        marginTop: 40,
+        marginTop: 20,
         marginBottom: 0,
     },
     balanceCardAmount: {

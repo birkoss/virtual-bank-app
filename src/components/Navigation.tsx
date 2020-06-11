@@ -16,6 +16,7 @@ import LoginScreen from "../screens/Login";
 import HomeScreen from "../screens/Home";
 import RegisterScreen from "../screens/Register";
 import TransactionsScreen from "../screens/Transactions";
+import SendMoneyScreen from "../screens/SendMoney";
 
 import {
     HomeIcon,
@@ -28,6 +29,7 @@ import {
     AuthStackParamList,
     HomeStackParamList,
     TransactionsStackParamList,
+    SendMoneyStackParamList,
 } from "../types";
 import { UserContext } from "../contexts";
 
@@ -51,6 +53,18 @@ const TransactionsStackScreen = () => {
                 component={TransactionsScreen}
             />
         </TransactionsStack.Navigator>
+    );
+};
+
+const SendMoneyStack = createStackNavigator<SendMoneyStackParamList>();
+const SendMoneyStackScreen = () => {
+    return (
+        <SendMoneyStack.Navigator headerMode="none">
+            <SendMoneyStack.Screen
+                name="SendMoney"
+                component={SendMoneyScreen}
+            />
+        </SendMoneyStack.Navigator>
     );
 };
 
@@ -89,7 +103,7 @@ const TabsScreen = () => {
                 name="Transactions"
                 component={TransactionsStackScreen}
             />
-            <Tabs.Screen name="Send" component={HomeStackScreen} />
+            <Tabs.Screen name="Send" component={SendMoneyStackScreen} />
             <Tabs.Screen name="Receive" component={HomeStackScreen} />
         </Tabs.Navigator>
     );

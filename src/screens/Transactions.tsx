@@ -56,7 +56,17 @@ export default function TransactionsScreen({ navigation }: Props) {
     const { label, value } = selectedSlice;
     const keys = ["google", "facebook", "linkedin", "youtube", "Twitter"];
     const values = [15, 25, 35, 45, 55];
-    const colors = ["#600080", "#9900cc", "#c61aff", "#d966ff", "#ecb3ff"];
+    const colors = [
+        "#FFE5DB",
+        "#FFC5B7",
+        "#FF9F93",
+        "#FF7B78",
+        "#FF4C58",
+        "#DB3751",
+        "#B7264A",
+        "#931841",
+        "#7A0E3C",
+    ];
     const expensesData = keys.map((key, index) => {
         return {
             key,

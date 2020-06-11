@@ -34,3 +34,11 @@ export type TransactionsScreenNavigationProp = CompositeNavigationProp<
     DrawerNavigationProp<DrawerParamList>,
     StackNavigationProp<TransactionsStackParamList>
 >;
+
+export type SendMoneyStackParamList = {
+    SendMoney: undefined;
+};
+export type SendMoneyScreenNavigationProp = CompositeNavigationProp<
+    DrawerNavigationProp<DrawerParamList>,
+    StackNavigationProp<TransactionsStackParamList>
+>;
