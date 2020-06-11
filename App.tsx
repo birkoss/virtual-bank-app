@@ -59,6 +59,7 @@ export default function App() {
         return (
             <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
                 <StatusBar barStyle="light-content" />
+                {/* @TODO Replace with LoadingScreen */}
                 <Layout
                     style={{
                         flex: 1,

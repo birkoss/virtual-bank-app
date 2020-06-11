@@ -96,3 +96,13 @@ export function APILogin(email: string, password: string) {
         };
     });
 }
+
+export function APIStats(token: string) {
+    let request = APICreateRequest("stats", "GET", null, token);
+
+    return fetchRequest(request, (data: any) => {
+        return {
+            accounts: data["accounts"],
+        };
+    });
+}

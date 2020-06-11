@@ -9,13 +9,15 @@ import {
     Text,
 } from "@ui-kitten/components";
 import { View } from "react-native";
+import LoadingScreen from "../screens/Loading";
 
 type Props = {
     title: string;
     children: any;
+    isLoading: boolean;
 };
 
-export default function Screen({ title, children }: Props) {
+export default function Screen({ title, children, isLoading }: Props) {
     const styles = useStyleSheet(themeStyles);
 
     return (
@@ -26,7 +28,9 @@ export default function Screen({ title, children }: Props) {
                 style={styles.topNavigation}
             />
             <Divider />
-            <View style={styles.componentContainer}>{children}</View>
+            <View style={styles.componentContainer}>
+                {isLoading ? <LoadingScreen /> : [children]}
+            </View>
         </SafeAreaView>
     );
 }

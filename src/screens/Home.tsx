@@ -1,19 +1,15 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { View } from "react-native";
 
-import {
-    Text,
-    Layout,
-    Card,
-    StyleService,
-    useStyleSheet,
-} from "@ui-kitten/components";
+import { Text, Card, StyleService, useStyleSheet } from "@ui-kitten/components";
 
 import { ProgressCircle } from "react-native-svg-charts";
 
 import Screen from "../components/Screen";
 
-import { HomeScreenNavigationProp } from "../types";
+import { APIStats } from "../api";
+import { HomeScreenNavigationProp, Account } from "../types";
+import { UserContext } from "../contexts";
 
 type Props = {
     navigation: HomeScreenNavigationProp;
@@ -21,8 +17,32 @@ type Props = {
 
 export default function HomeScreen({ navigation }: Props) {
     const styles = useStyleSheet(themeStyles);
+    const { state } = useContext(UserContext);
+    const [isLoading, setIsLoading] = useState(true);
+    const [balance, setBalance] = useState(0);
+    const [goal, setGoal] = useState(150);
+
+    const getStats = () => {
+        APIStats(state.token)
+            .then((data) => {
+                data["accounts"].forEach((account: Account) => {
+                    setBalance(account.balance);
+                });
+                setIsLoading(false);
+            })
+            .catch((error) => console.log("error", error));
+    };
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", () => {
+            setIsLoading(true);
+            getStats();
+        });
+        return unsubscribe;
+    }, [navigation]);
+
     return (
-        <Screen title="Dashboard">
+        <Screen isLoading={isLoading} title="Dashboard">
             <Card
                 style={styles.cardContainer}
                 header={(props) => (
@@ -32,7 +52,7 @@ export default function HomeScreen({ navigation }: Props) {
                 )}
             >
                 <Text category="h1" style={styles.balanceCardAmount}>
-                    100$
+                    {balance} $
                 </Text>
             </Card>
 
@@ -45,14 +65,16 @@ export default function HomeScreen({ navigation }: Props) {
                 )}
             >
                 <View style={styles.goalAmountsContainer}>
-                    <Text category="h5">100 / 150 $</Text>
+                    <Text category="h5">
+                        {balance} / {goal} $
+                    </Text>
                 </View>
                 <ProgressCircle
                     progressColor="#FF4C58"
                     startAngle={-Math.PI * 0.8}
                     endAngle={Math.PI * 0.8}
                     style={styles.goalChart}
-                    progress={0.97}
+                    progress={balance / goal}
                 />
             </Card>
         </Screen>

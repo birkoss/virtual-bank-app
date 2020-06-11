@@ -42,3 +42,8 @@ export type SendMoneyScreenNavigationProp = CompositeNavigationProp<
     DrawerNavigationProp<DrawerParamList>,
     StackNavigationProp<TransactionsStackParamList>
 >;
+
+export type Account = {
+    id: string;
+    balance: number;
+};
