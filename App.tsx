@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { StatusBar } from "react-native";
+import { AsyncStorage, StatusBar } from "react-native";
 
 import * as eva from "@eva-design/eva";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
@@ -15,12 +15,48 @@ import {
 } from "./src/contexts";
 
 import { default as theme } from "./src/assets/theme.json";
+import Loading from "./src/components/Loading";
 
 export default function App() {
+    const [isLoading, setIsLoading] = useState(true);
     const [state, dispatch] = React.useReducer(
         UserContextReducer,
         UserContextInitialValues
     );
+
+    const getTokenFromStorage = async () => {
+        console.log("getTokenFromStorage");
+        try {
+            const token = await AsyncStorage.getItem("token");
+            if (token !== null) {
+                console.log("autoLogin: ", token);
+                dispatch({
+                    type: "LOGIN",
+                    payload: {
+                        token,
+                    },
+                });
+
+                setIsLoading(false);
+            } else {
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        getTokenFromStorage();
+    }, []);
+
+    if (isLoading) {
+        return (
+            <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
+                <Loading />
+            </ApplicationProvider>
+        );
+    }
 
     return (
         <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>

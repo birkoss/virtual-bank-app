@@ -15,6 +15,7 @@
     "@react-navigation/native": "^5.5.1",
     "@react-navigation/stack": "^5.5.1",
     "@types/react-native": "^0.62.13",
+    "@types/react-native-svg-charts": "^5.0.3",
     "@ui-kitten/components": "^5.0.0",
     "@ui-kitten/eva-icons": "^5.0.0",
     "expo": "~37.0.3",
@@ -28,6 +29,7 @@
     "react-native-safe-area-context": "0.7.3",
     "react-native-screens": "~2.2.0",
     "react-native-svg": "^11.0.1",
+    "react-native-svg-charts": "^5.4.0",
     "react-native-web": "~0.11.7"
   },
   "devDependencies": {
