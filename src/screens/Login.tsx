@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { View, Alert } from "react-native";
 
 import {
@@ -23,6 +23,9 @@ import { onePagerStyles } from "../styles/onePagerStyles";
 
 import { validateEmail } from "../validations";
 
+import { APILogin } from "../api";
+import { UserContext } from "../contexts";
+
 type Props = {
     navigation: LoginScreenNavigationProp;
 };
@@ -38,6 +41,8 @@ const defaultValues = {
 };
 
 export default function LoginScreen({ navigation }: Props) {
+    const { dispatch } = useContext(UserContext);
+
     const { errors, register, setValue, handleSubmit } = useForm<formData>({
         defaultValues,
     });
@@ -62,7 +67,27 @@ export default function LoginScreen({ navigation }: Props) {
 
     const onSubmit = (data: formData) => {
         setIsSubmitting(true);
-        console.log(data);
+
+        APILogin(data.email, data.password)
+            .then(onSubmitSuccess)
+            .catch((error) => {
+                onSubmitFailed(error);
+            });
+    };
+
+    const onSubmitSuccess = (data: any) => {
+        setIsSubmitting(false);
+        dispatch({
+            type: "LOGIN",
+            payload: {
+                token: data["token"],
+            },
+        });
+    };
+
+    const onSubmitFailed = (error: any) => {
+        setIsSubmitting(false);
+        Alert.alert(error.message);
     };
 
     return (
