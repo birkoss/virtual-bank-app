@@ -4,7 +4,10 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+    createBottomTabNavigator,
+    BottomTabBarProps,
+} from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { BottomNavigation, BottomNavigationTab } from "@ui-kitten/components";
@@ -51,7 +54,7 @@ const TransactionsStackScreen = () => {
     );
 };
 
-const BottomTabBar = ({ navigation, state }) => {
+const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => {
     return (
         <BottomNavigation
             selectedIndex={state.index}

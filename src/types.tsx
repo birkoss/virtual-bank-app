@@ -1,4 +1,4 @@
-import { CompositeNavigationProp, RouteProp } from "@react-navigation/native";
+import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 
