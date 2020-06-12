@@ -77,6 +77,16 @@ export function APIAddUser(token: string, user: object) {
     });
 }
 
+export function APIListUsers(token: string) {
+    let request = APICreateRequest("users", "GET", null, token);
+
+    return fetchRequest(request, (data: any) => {
+        return {
+            users: data["users"],
+        };
+    });
+}
+
 export function APILogin(email: string, password: string) {
     let request = APICreateRequest("login", "POST", { email, password });
 

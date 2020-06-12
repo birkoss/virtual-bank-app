@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import {
     StyleService,
@@ -6,47 +6,66 @@ import {
     ListItem,
     List,
     Icon,
+    Button,
     TopNavigationAction,
 } from "@ui-kitten/components";
 
 import Screen from "../../components/Screen";
 
-import { UserAddIcon } from "../../icons";
+import { UserAddIcon, UsersIcon } from "../../icons";
+import { APIListUsers } from "../../api";
 
-import { UsersScreenNavigationProp } from "../../types";
+import { UsersScreenNavigationProp, User } from "../../types";
+import { Alert } from "react-native";
+import { UserContext } from "../../contexts";
 
 type Props = {
     navigation: UsersScreenNavigationProp;
 };
 
-export const renderItemIconNavigation = (props: any) => (
-    <Icon {...props} name="person-outline" />
+export const renderItemAction = (props: any) => (
+    <Button size="tiny">DELETE</Button>
 );
 
 export default function UsersListScreen({ navigation }: Props) {
     const styles = useStyleSheet(themeStyles);
+    const { state } = useContext(UserContext);
+    const [users, setUsers] = useState<User[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const renderItemIcon = (props: any) => (
-        <Icon {...props} name="person-outline" />
-    );
-
-    const transactionsData = new Array(8).fill({
-        title: "Title for Item",
-        description: "Description for Item",
-    });
-
-    const renderItem = ({ item, index }: { item: any; index: number }) => (
+    const renderItem = ({ item }: { item: User }) => (
         <ListItem
-            title={`${item.title} ${index + 1}`}
-            description={`${item.description} ${index + 1}`}
-            accessoryLeft={renderItemIcon}
-            accessoryRight={renderItemIconNavigation}
+            title={`${item.firstname} ${item.lastname}`}
+            description={item.email}
+            accessoryLeft={UsersIcon}
+            accessoryRight={renderItemAction}
         />
     );
 
+    const getList = () => {
+        APIListUsers(state.token)
+            .then((data) => {
+                let newUsers: User[] = [];
+                data["users"].forEach((user: User) => {
+                    newUsers.push(user);
+                });
+                setUsers(newUsers);
+                setIsLoading(false);
+            })
+            .catch((error) => Alert.alert(error.message));
+    };
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", () => {
+            setIsLoading(true);
+            getList();
+        });
+        return unsubscribe;
+    }, [navigation]);
+
     return (
         <Screen
-            isLoading={false}
+            isLoading={isLoading}
             navigation={navigation}
             title="Users"
             secondaryAction={() => (
@@ -56,11 +75,7 @@ export default function UsersListScreen({ navigation }: Props) {
                 />
             )}
         >
-            <List
-                data={transactionsData}
-                style={styles.list}
-                renderItem={renderItem}
-            />
+            <List data={users} style={styles.list} renderItem={renderItem} />
         </Screen>
     );
 }

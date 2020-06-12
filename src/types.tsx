@@ -57,3 +57,11 @@ export type Account = {
     id: string;
     balance: number;
 };
+
+export type User = {
+    id: string;
+    email: string;
+    firstname: string;
+    lastname: string;
+    is_children: boolean;
+};
