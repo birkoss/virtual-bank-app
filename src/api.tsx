@@ -67,18 +67,8 @@ function fetchRequest(request: Request, response: Function) {
         });
 }
 
-export function APIRegister(
-    email: string,
-    password: string,
-    firstname: string,
-    lastname: string
-) {
-    let request = APICreateRequest("register", "POST", {
-        email,
-        password,
-        firstname,
-        lastname,
-    });
+export function APIAddUser(token: string, user: object) {
+    let request = APICreateRequest("users", "POST", user, token);
 
     return fetchRequest(request, (data: any) => {
         return {
@@ -103,6 +93,26 @@ export function APIStats(token: string) {
     return fetchRequest(request, (data: any) => {
         return {
             accounts: data["accounts"],
+        };
+    });
+}
+
+export function APIRegister(
+    email: string,
+    password: string,
+    firstname: string,
+    lastname: string
+) {
+    let request = APICreateRequest("register", "POST", {
+        email,
+        password,
+        firstname,
+        lastname,
+    });
+
+    return fetchRequest(request, (data: any) => {
+        return {
+            token: data["token"],
         };
     });
 }

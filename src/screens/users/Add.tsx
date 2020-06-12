@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { useForm, Controller } from "react-hook-form";
 
@@ -18,10 +18,12 @@ import { KeyboardAvoidingView } from "../../components/KeyboardAvoidingView";
 
 import { UsersScreenNavigationProp } from "../../types";
 
-import { onePagerStyles } from "../../styles/onePagerStyles";
+import { APIAddUser } from "../../api";
 import { FormStyles } from "../../styles";
 
 import { validateEmail } from "../../validations";
+import { UserContext } from "../../contexts";
+import { Alert } from "react-native";
 
 type Props = {
     navigation: UsersScreenNavigationProp;
@@ -44,24 +46,30 @@ const defaultValues = {
 };
 
 export default function UsersAddScreen({ navigation }: Props) {
+    const { state } = useContext(UserContext);
     const formStyles = useStyleSheet(FormStyles);
     const styles = useStyleSheet(themeStyles);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const {
-        errors,
-        register,
-        setValue,
-        handleSubmit,
-        watch,
-        control,
-    } = useForm<formData>({
+    const { errors, register, setValue, handleSubmit, control } = useForm<
+        formData
+    >({
         defaultValues,
     });
 
     const onSubmit = (data: formData) => {
         setIsSubmitting(true);
+
+        APIAddUser(state.token, data)
+            .then((data) => {
+                setIsSubmitting(false);
+                navigation.pop();
+            })
+            .catch((error) => {
+                setIsSubmitting(false);
+                Alert.alert(error.message);
+            });
 
         console.log(data);
     };
