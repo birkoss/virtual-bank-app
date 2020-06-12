@@ -30,11 +30,9 @@ export default function App() {
     );
 
     const getTokenFromStorage = async () => {
-        console.log("getTokenFromStorage");
         try {
             const token = await AsyncStorage.getItem("token");
             if (token !== null) {
-                console.log("autoLogin: ", token);
                 dispatch({
                     type: "LOGIN",
                     payload: {

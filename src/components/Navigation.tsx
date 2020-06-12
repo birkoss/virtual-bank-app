@@ -19,6 +19,8 @@ import HomeScreen from "../screens/Home";
 import RegisterScreen from "../screens/Register";
 import TransactionsScreen from "../screens/Transactions";
 import SendMoneyScreen from "../screens/SendMoney";
+import UsersListScreen from "../screens/users/List";
+import UsersAddScreen from "../screens/users/Add";
 
 import {
     HomeIcon,
@@ -32,6 +34,7 @@ import {
     HomeStackParamList,
     TransactionsStackParamList,
     SendMoneyStackParamList,
+    UsersStackParamList,
 } from "../types";
 import { UserContext } from "../contexts";
 
@@ -43,6 +46,16 @@ const HomeStackScreen = () => {
         <HomeStack.Navigator headerMode="none">
             <HomeStack.Screen name="Home" component={HomeScreen} />
         </HomeStack.Navigator>
+    );
+};
+
+const UsersStack = createStackNavigator<UsersStackParamList>();
+const UsersStackScreen = () => {
+    return (
+        <UsersStack.Navigator headerMode="none">
+            <UsersStack.Screen name="List" component={UsersListScreen} />
+            <UsersStack.Screen name="Add" component={UsersAddScreen} />
+        </UsersStack.Navigator>
     );
 };
 
@@ -123,7 +136,7 @@ export default function Navigation() {
                     drawerContent={(props) => <SideMenu {...props} />}
                 >
                     <Drawer.Screen name="Home" component={TabsScreen} />
-                    <Drawer.Screen name="Users" component={TabsScreen} />
+                    <Drawer.Screen name="Users" component={UsersStackScreen} />
                 </Drawer.Navigator>
             ) : (
                 <AuthStack.Navigator headerMode="none">

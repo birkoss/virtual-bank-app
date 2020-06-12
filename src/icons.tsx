@@ -20,7 +20,16 @@ export const UsersIcon = (props: any) => (
     <Icon {...props} name="person-outline" />
 );
 
+export const UserAddIcon = (props: any) => (
+    <Icon {...props} name="person-add-outline" />
+);
+
 export const ForwardIcon = (props: any) => {
-    console.log(props);
     return <Icon {...props} name="arrow-ios-forward" />;
 };
+
+export const MenuIcon = (props: any) => <Icon {...props} name="menu-outline" />;
+
+export const BackIcon = (props: any) => (
+    <Icon {...props} name="arrow-ios-back-outline" />
+);

@@ -27,6 +27,16 @@ export type HomeScreenNavigationProp = CompositeNavigationProp<
     StackNavigationProp<HomeStackParamList>
 >;
 
+export type UsersStackParamList = {
+    List: undefined;
+    Add: undefined;
+    Edit: undefined;
+};
+export type UsersScreenNavigationProp = CompositeNavigationProp<
+    DrawerNavigationProp<DrawerParamList>,
+    StackNavigationProp<UsersStackParamList>
+>;
+
 export type TransactionsStackParamList = {
     Transactions: undefined;
 };

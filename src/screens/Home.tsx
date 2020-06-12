@@ -43,49 +43,49 @@ export default function HomeScreen({ navigation }: Props) {
 
     return (
         <Screen isLoading={isLoading} title="Dashboard" navigation={navigation}>
-            <Card
-                style={styles.cardContainer}
-                header={(props) => (
-                    <View {...props}>
-                        <Text category="h6">Your balance</Text>
-                    </View>
-                )}
-            >
-                <Text category="h1" style={styles.balanceCardAmount}>
-                    {balance} $
-                </Text>
-            </Card>
-
-            <Card
-                style={styles.cardContainer}
-                header={(props) => (
-                    <View {...props}>
-                        <Text category="h6">Your goal</Text>
-                    </View>
-                )}
-            >
-                <View style={styles.goalAmountsContainer}>
-                    <Text category="h5">
-                        {balance} / {goal} $
+            <View style={{ padding: 20 }}>
+                <Card
+                    style={styles.cardContainer}
+                    header={(props) => (
+                        <View {...props}>
+                            <Text category="h6">Your balance</Text>
+                        </View>
+                    )}
+                >
+                    <Text category="h1" style={styles.balanceCardAmount}>
+                        {balance} $
                     </Text>
-                </View>
-                <ProgressCircle
-                    progressColor="#FF4C58"
-                    startAngle={-Math.PI * 0.8}
-                    endAngle={Math.PI * 0.8}
-                    style={styles.goalChart}
-                    progress={balance / goal}
-                />
-            </Card>
+                </Card>
+
+                <Card
+                    style={styles.cardContainer}
+                    header={(props) => (
+                        <View {...props}>
+                            <Text category="h6">Your goal</Text>
+                        </View>
+                    )}
+                >
+                    <View style={styles.goalAmountsContainer}>
+                        <Text category="h5">
+                            {balance} / {goal} $
+                        </Text>
+                    </View>
+                    <ProgressCircle
+                        progressColor="#FF4C58"
+                        startAngle={-Math.PI * 0.8}
+                        endAngle={Math.PI * 0.8}
+                        style={styles.goalChart}
+                        progress={balance / goal}
+                    />
+                </Card>
+            </View>
         </Screen>
     );
 }
 
 const themeStyles = StyleService.create({
     cardContainer: {
-        margin: 20,
-        marginTop: 20,
-        marginBottom: 0,
+        marginBottom: 20,
     },
     balanceCardAmount: {
         textAlign: "center",

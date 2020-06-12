@@ -10,33 +10,50 @@ import {
     TopNavigationAction,
     Icon,
 } from "@ui-kitten/components";
-import { View } from "react-native";
+import { View, ViewProps } from "react-native";
 import LoadingScreen from "../screens/Loading";
+import { RenderProp } from "@ui-kitten/components/devsupport";
+
+type ActionType = "menu" | "back";
 
 type Props = {
     title: string;
     children: any;
     isLoading: boolean;
     navigation: any;
+    mainActionType?: ActionType;
+    secondaryAction?: () => JSX.Element;
 };
 
-const BackIcon = (props: any) => <Icon {...props} name="menu-outline" />;
+import { MenuIcon, BackIcon } from "../icons";
 
 export default function Screen({
     title,
     children,
     isLoading,
     navigation,
+    secondaryAction,
+    mainActionType,
 }: Props) {
     const styles = useStyleSheet(themeStyles);
 
-    const toggleMenu = () => {
+    const actionToggleMenu = () => {
         navigation.toggleDrawer();
     };
+    const actionGoBack = () => {
+        navigation.goBack();
+    };
 
-    const BackAction = () => (
-        <TopNavigationAction onPress={toggleMenu} icon={BackIcon} />
-    );
+    const mainAction = () => {
+        return (
+            <TopNavigationAction
+                onPress={
+                    mainActionType === "back" ? actionGoBack : actionToggleMenu
+                }
+                icon={mainActionType === "back" ? BackIcon : MenuIcon}
+            />
+        );
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -44,7 +61,8 @@ export default function Screen({
                 alignment="center"
                 title={() => <Text style={styles.title}>{title}</Text>}
                 style={styles.topNavigation}
-                accessoryLeft={BackAction}
+                accessoryLeft={mainAction}
+                accessoryRight={secondaryAction}
             />
             <Divider />
             <View style={styles.componentContainer}>

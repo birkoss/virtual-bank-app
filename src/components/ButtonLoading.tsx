@@ -7,7 +7,7 @@ import { Button } from "@ui-kitten/components";
 import Loading from "../components/Loading";
 
 type Props = {
-    style: any;
+    style?: any;
     isSubmitting: boolean;
     onPress: (event: GestureResponderEvent) => void;
     label: string;
