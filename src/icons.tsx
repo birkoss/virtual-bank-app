@@ -20,6 +20,10 @@ export const UsersIcon = (props: any) => (
     <Icon {...props} name="person-outline" />
 );
 
+export const AdultIcon = (props: any) => (
+    <Icon {...props} name="people-outline" />
+);
+
 export const UserAddIcon = (props: any) => (
     <Icon {...props} name="person-add-outline" />
 );

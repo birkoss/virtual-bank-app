@@ -11,7 +11,7 @@ import {
 
 import Screen from "../../components/Screen";
 
-import { UserAddIcon, UsersIcon } from "../../icons";
+import { UserAddIcon, UsersIcon, AdultIcon } from "../../icons";
 import { APIListUsers, APIDeleteUser } from "../../api";
 
 import { UsersScreenNavigationProp, User } from "../../types";
@@ -60,7 +60,7 @@ export default function UsersListScreen({ navigation }: Props) {
             <ListItem
                 title={`${item.firstname} ${item.lastname}`}
                 description={item.email}
-                accessoryLeft={UsersIcon}
+                accessoryLeft={item.is_children ? UsersIcon : AdultIcon}
                 accessoryRight={() => (
                     <Button
                         size="tiny"
