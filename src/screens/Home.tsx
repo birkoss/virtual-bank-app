@@ -42,7 +42,7 @@ export default function HomeScreen({ navigation }: Props) {
     }, [navigation]);
 
     return (
-        <Screen isLoading={isLoading} title="Dashboard">
+        <Screen isLoading={isLoading} title="Dashboard" navigation={navigation}>
             <Card
                 style={styles.cardContainer}
                 header={(props) => (

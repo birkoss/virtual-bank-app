@@ -7,6 +7,8 @@ import {
     StyleService,
     useStyleSheet,
     Text,
+    TopNavigationAction,
+    Icon,
 } from "@ui-kitten/components";
 import { View } from "react-native";
 import LoadingScreen from "../screens/Loading";
@@ -15,10 +17,26 @@ type Props = {
     title: string;
     children: any;
     isLoading: boolean;
+    navigation: any;
 };
 
-export default function Screen({ title, children, isLoading }: Props) {
+const BackIcon = (props: any) => <Icon {...props} name="menu-outline" />;
+
+export default function Screen({
+    title,
+    children,
+    isLoading,
+    navigation,
+}: Props) {
     const styles = useStyleSheet(themeStyles);
+
+    const toggleMenu = () => {
+        navigation.toggleDrawer();
+    };
+
+    const BackAction = () => (
+        <TopNavigationAction onPress={toggleMenu} icon={BackIcon} />
+    );
 
     return (
         <SafeAreaView style={styles.container}>
@@ -26,6 +44,7 @@ export default function Screen({ title, children, isLoading }: Props) {
                 alignment="center"
                 title={() => <Text style={styles.title}>{title}</Text>}
                 style={styles.topNavigation}
+                accessoryLeft={BackAction}
             />
             <Divider />
             <View style={styles.componentContainer}>
