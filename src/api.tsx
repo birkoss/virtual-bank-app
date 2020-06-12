@@ -77,6 +77,20 @@ export function APIAddUser(token: string, user: object) {
     });
 }
 
+export function APIDeleteUser(token: string, userID: string) {
+    let request = APICreateRequest(
+        "users/" + userID.toString(),
+        "DELETE",
+        null,
+        token
+    );
+    console.log("RRRR");
+    return fetchRequest(request, (data: any) => {
+        console.log("RRRR2");
+        return {};
+    });
+}
+
 export function APIListUsers(token: string) {
     let request = APICreateRequest("users", "GET", null, token);
 

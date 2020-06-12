@@ -5,7 +5,6 @@ import {
     useStyleSheet,
     ListItem,
     List,
-    Icon,
     Button,
     TopNavigationAction,
 } from "@ui-kitten/components";
@@ -13,19 +12,16 @@ import {
 import Screen from "../../components/Screen";
 
 import { UserAddIcon, UsersIcon } from "../../icons";
-import { APIListUsers } from "../../api";
+import { APIListUsers, APIDeleteUser } from "../../api";
 
 import { UsersScreenNavigationProp, User } from "../../types";
 import { Alert } from "react-native";
 import { UserContext } from "../../contexts";
+import EmptyList from "../../components/EmptyList";
 
 type Props = {
     navigation: UsersScreenNavigationProp;
 };
-
-export const renderItemAction = (props: any) => (
-    <Button size="tiny">DELETE</Button>
-);
 
 export default function UsersListScreen({ navigation }: Props) {
     const styles = useStyleSheet(themeStyles);
@@ -33,16 +29,52 @@ export default function UsersListScreen({ navigation }: Props) {
     const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const renderItem = ({ item }: { item: User }) => (
-        <ListItem
-            title={`${item.firstname} ${item.lastname}`}
-            description={item.email}
-            accessoryLeft={UsersIcon}
-            accessoryRight={renderItemAction}
-        />
-    );
+    const askConfirmation = (userID: string) => {
+        Alert.alert(
+            "Confirmation",
+            "Are you sure you want to delete this user?",
+            [
+                {
+                    text: "No",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                },
+                { text: "Yes", onPress: () => deleteUser(userID) },
+            ],
+            { cancelable: false }
+        );
+    };
+
+    const addUser = () => {
+        navigation.push("Add");
+    };
+
+    const deleteUser = (userID: string) => {
+        APIDeleteUser(state.token, userID)
+            .then(() => getList())
+            .catch((error) => Alert.alert(error));
+    };
+
+    const renderItem = ({ item }: { item: User }) => {
+        return (
+            <ListItem
+                title={`${item.firstname} ${item.lastname}`}
+                description={item.email}
+                accessoryLeft={UsersIcon}
+                accessoryRight={() => (
+                    <Button
+                        size="tiny"
+                        onPress={() => askConfirmation(item.id)}
+                    >
+                        DELETE
+                    </Button>
+                )}
+            />
+        );
+    };
 
     const getList = () => {
+        setIsLoading(true);
         APIListUsers(state.token)
             .then((data) => {
                 let newUsers: User[] = [];
@@ -63,6 +95,16 @@ export default function UsersListScreen({ navigation }: Props) {
         return unsubscribe;
     }, [navigation]);
 
+    if (users.length === 0) {
+        return (
+            <EmptyList
+                text="No users"
+                buttonText="Add a new user"
+                buttonAction={() => addUser()}
+            />
+        );
+    }
+
     return (
         <Screen
             isLoading={isLoading}
@@ -70,7 +112,7 @@ export default function UsersListScreen({ navigation }: Props) {
             title="Users"
             secondaryAction={() => (
                 <TopNavigationAction
-                    onPress={() => navigation.push("Add")}
+                    onPress={() => addUser()}
                     icon={UserAddIcon}
                 />
             )}
