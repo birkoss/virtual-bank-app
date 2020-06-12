@@ -12,6 +12,8 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { BottomNavigation, BottomNavigationTab } from "@ui-kitten/components";
 
+import { SideMenu } from "../components/SideMenu";
+
 import LoginScreen from "../screens/Login";
 import HomeScreen from "../screens/Home";
 import RegisterScreen from "../screens/Register";
@@ -117,17 +119,11 @@ export default function Navigation() {
     return (
         <NavigationContainer>
             {state.isAuthenticated ? (
-                <Drawer.Navigator>
-                    <Drawer.Screen
-                        name="Home"
-                        component={TabsScreen}
-                        options={{
-                            drawerLabel: "Home",
-                            drawerIcon: ({ color }) => (
-                                <Ionicons name="ios-home" color={color} />
-                            ),
-                        }}
-                    />
+                <Drawer.Navigator
+                    drawerContent={(props) => <SideMenu {...props} />}
+                >
+                    <Drawer.Screen name="Home" component={TabsScreen} />
+                    <Drawer.Screen name="Users" component={TabsScreen} />
                 </Drawer.Navigator>
             ) : (
                 <AuthStack.Navigator headerMode="none">

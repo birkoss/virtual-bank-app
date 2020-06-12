@@ -15,3 +15,12 @@ export const SendMoneyIcon = (props: any) => (
 export const ReceiveMoney = (props: any) => (
     <Icon {...props} name="person-add-outline" />
 );
+
+export const UsersIcon = (props: any) => (
+    <Icon {...props} name="person-outline" />
+);
+
+export const ForwardIcon = (props: any) => {
+    console.log(props);
+    return <Icon {...props} name="arrow-ios-forward" />;
+};
