@@ -2,13 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 
 import { useForm, Controller } from "react-hook-form";
 
-import {
-    StyleService,
-    useStyleSheet,
-    Layout,
-    CheckBox,
-    Text,
-} from "@ui-kitten/components";
+import { useStyleSheet, Layout, CheckBox, Text } from "@ui-kitten/components";
 
 import Screen from "../../components/Screen";
 import Input from "../../components/Input";
@@ -48,7 +42,6 @@ const defaultValues = {
 export default function UsersAddScreen({ navigation }: Props) {
     const { state } = useContext(UserContext);
     const formStyles = useStyleSheet(FormStyles);
-    const styles = useStyleSheet(themeStyles);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -70,8 +63,6 @@ export default function UsersAddScreen({ navigation }: Props) {
                 setIsSubmitting(false);
                 Alert.alert(error.message);
             });
-
-        console.log(data);
     };
 
     useEffect(() => {
@@ -168,13 +159,3 @@ export default function UsersAddScreen({ navigation }: Props) {
         </Screen>
     );
 }
-
-const themeStyles = StyleService.create({
-    container: {
-        flex: 1,
-        backgroundColor: "yellow",
-        borderColor: "red",
-        borderWith: 10,
-        color: "color-success-default",
-    },
-});
