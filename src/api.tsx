@@ -67,13 +67,39 @@ function fetchRequest(request: Request, response: Function) {
         });
 }
 
+export function APIAddTransactionsCategories(token: string, category: object) {
+    let request = APICreateRequest(
+        "transactionsCategories",
+        "POST",
+        category,
+        token
+    );
+
+    return fetchRequest(request, (data: any) => {
+        return {};
+    });
+}
+
 export function APIAddUser(token: string, user: object) {
     let request = APICreateRequest("users", "POST", user, token);
 
     return fetchRequest(request, (data: any) => {
-        return {
-            token: data["token"],
-        };
+        return {};
+    });
+}
+
+export function APIDeleteTransactionsCategories(
+    token: string,
+    categoryID: string
+) {
+    let request = APICreateRequest(
+        "transactionsCategories/" + categoryID.toString(),
+        "DELETE",
+        null,
+        token
+    );
+    return fetchRequest(request, (data: any) => {
+        return {};
     });
 }
 
@@ -88,6 +114,21 @@ export function APIDeleteUser(token: string, userID: string) {
     return fetchRequest(request, (data: any) => {
         console.log("RRRR2");
         return {};
+    });
+}
+
+export function APIListTransactionsCategories(token: string) {
+    let request = APICreateRequest(
+        "transactionsCategories",
+        "GET",
+        null,
+        token
+    );
+
+    return fetchRequest(request, (data: any) => {
+        return {
+            transactionsCategories: data["transactionsCategories"],
+        };
     });
 }
 

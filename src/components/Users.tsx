@@ -5,8 +5,6 @@ import { List, ListItem } from "@ui-kitten/components";
 import { UsersIcon, AdultIcon } from "../icons";
 
 import { User } from "../types";
-import { RenderProp } from "@ui-kitten/components/devsupport";
-import { ViewProps } from "react-native";
 
 type Props = {
     users: User[];

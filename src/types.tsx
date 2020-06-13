@@ -38,6 +38,16 @@ export type UsersScreenNavigationProp = CompositeNavigationProp<
     StackNavigationProp<UsersStackParamList>
 >;
 
+export type TransactionsCategoriesStackParamList = {
+    List: undefined;
+    Add: undefined;
+    Edit: undefined;
+};
+export type TransactionsCategoriesScreenNavigationProp = CompositeNavigationProp<
+    DrawerNavigationProp<DrawerParamList>,
+    StackNavigationProp<UsersStackParamList>
+>;
+
 export type TransactionsStackParamList = {
     Transactions: undefined;
 };
@@ -81,4 +91,10 @@ export type User = {
     firstname: string;
     lastname: string;
     is_children: boolean;
+};
+
+export type TransactionCategory = {
+    id: string;
+    name: string;
+    transactions: number;
 };

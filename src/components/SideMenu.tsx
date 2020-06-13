@@ -20,7 +20,12 @@ import {
 } from "@react-navigation/native";
 import { DrawerNavigationEventMap } from "@react-navigation/drawer/lib/typescript/src/types";
 
-import { UsersIcon, HomeIcon, ForwardIcon } from "../icons";
+import {
+    UsersIcon,
+    HomeIcon,
+    ForwardIcon,
+    TransactionsCategoriesIcon,
+} from "../icons";
 
 const Header = (props: any) => {
     return (
@@ -61,6 +66,11 @@ export const SideMenu = ({ navigation, state }: Props) => {
             <DrawerItem
                 title="Users"
                 accessoryLeft={UsersIcon}
+                accessoryRight={ForwardIcon}
+            />
+            <DrawerItem
+                title="Transactions Categories"
+                accessoryLeft={TransactionsCategoriesIcon}
                 accessoryRight={ForwardIcon}
             />
         </Drawer>

@@ -37,3 +37,11 @@ export const MenuIcon = (props: any) => <Icon {...props} name="menu-outline" />;
 export const BackIcon = (props: any) => (
     <Icon {...props} name="arrow-ios-back-outline" />
 );
+
+export const TransactionsCategoriesIcon = (props: any) => (
+    <Icon {...props} name="pricetags-outline" />
+);
+
+export const AddIcon = (props: any) => (
+    <Icon {...props} name="plus-circle-outline" />
+);

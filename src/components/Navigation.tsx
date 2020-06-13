@@ -20,16 +20,19 @@ import RegisterScreen from "../screens/Register";
 import TransactionsScreen from "../screens/Transactions";
 import SendMoneyScreen from "../screens/SendMoney";
 import ChangeUserScreen from "../screens/ChangeUser";
-//import ChangeUserScreen from "../screens/ChangeUser";
-// import ChangeUserScreen from "../screens/ChangeUser";
+
 import UsersListScreen from "../screens/users/List";
 import UsersAddScreen from "../screens/users/Add";
+
+import TransactionsCategoriesAddScreen from "../screens/transactions-categories/Add";
+import TransactionsCategoriesListScreen from "../screens/transactions-categories/List";
 
 import {
     HomeIcon,
     TransactionsIcon,
     SendMoneyIcon,
     ReceiveMoney,
+    TransactionsCategoriesIcon,
 } from "../icons";
 
 import {
@@ -38,6 +41,7 @@ import {
     TransactionsStackParamList,
     SendMoneyStackParamList,
     UsersStackParamList,
+    TransactionsCategoriesStackParamList,
 } from "../types";
 import { UserContext } from "../contexts";
 
@@ -59,6 +63,24 @@ const UsersStackScreen = () => {
             <UsersStack.Screen name="List" component={UsersListScreen} />
             <UsersStack.Screen name="Add" component={UsersAddScreen} />
         </UsersStack.Navigator>
+    );
+};
+
+const TransactionsCategoriesStack = createStackNavigator<
+    TransactionsCategoriesStackParamList
+>();
+const TransactionsCategoriesStackScreen = () => {
+    return (
+        <TransactionsCategoriesStack.Navigator headerMode="none">
+            <TransactionsCategoriesStack.Screen
+                name="List"
+                component={TransactionsCategoriesListScreen}
+            />
+            <TransactionsCategoriesStack.Screen
+                name="Add"
+                component={TransactionsCategoriesAddScreen}
+            />
+        </TransactionsCategoriesStack.Navigator>
     );
 };
 
@@ -148,6 +170,10 @@ export default function Navigation() {
                 >
                     <Drawer.Screen name="Home" component={TabsScreen} />
                     <Drawer.Screen name="Users" component={UsersStackScreen} />
+                    <Drawer.Screen
+                        name="Transactions Categories"
+                        component={TransactionsCategoriesStackScreen}
+                    />
                 </Drawer.Navigator>
             ) : (
                 <AuthStack.Navigator headerMode="none">

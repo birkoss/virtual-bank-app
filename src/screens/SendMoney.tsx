@@ -20,13 +20,13 @@ import { APIListUsers } from "../api";
 
 import { User } from "../types";
 
+import { TransactionsCategoriesIcon, UsersIcon } from "../icons";
+
 import {
     SendMoneyScreenNavigationProp,
     SendMoneyScreenRouteProp,
 } from "../types";
 import { UserContext } from "../contexts";
-import Users from "../components/Users";
-import NavigationSelector from "../components/NavigationSelector";
 
 type Props = {
     navigation: SendMoneyScreenNavigationProp;
@@ -116,9 +116,7 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                             ? "nobody..."
                             : currentUser.firstname + " " + currentUser.lastname
                     }
-                    accessoryLeft={(props) => (
-                        <Icon {...props} name="person-outline" />
-                    )}
+                    accessoryLeft={UsersIcon}
                     accessoryRight={changeUser}
                 />
 
@@ -126,9 +124,7 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                     style={styles.box}
                     title="Category:"
                     description="Rewards"
-                    accessoryLeft={(props) => (
-                        <Icon {...props} name="pricetags-outline" />
-                    )}
+                    accessoryLeft={TransactionsCategoriesIcon}
                     accessoryRight={() => <Button size="tiny">CHANGE</Button>}
                 />
 

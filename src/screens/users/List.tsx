@@ -4,7 +4,7 @@ import { Button, TopNavigationAction } from "@ui-kitten/components";
 
 import Screen from "../../components/Screen";
 
-import { UserAddIcon } from "../../icons";
+import { AddIcon } from "../../icons";
 import { APIListUsers, APIDeleteUser } from "../../api";
 
 import { UsersScreenNavigationProp, User } from "../../types";
@@ -30,7 +30,6 @@ export default function UsersListScreen({ navigation }: Props) {
             [
                 {
                     text: "No",
-                    onPress: () => console.log("Cancel Pressed"),
                     style: "cancel",
                 },
                 {
@@ -93,10 +92,7 @@ export default function UsersListScreen({ navigation }: Props) {
             navigation={navigation}
             title="Users"
             secondaryAction={() => (
-                <TopNavigationAction
-                    onPress={() => addUser()}
-                    icon={UserAddIcon}
-                />
+                <TopNavigationAction onPress={() => addUser()} icon={AddIcon} />
             )}
         >
             <Users users={users} action={deleteUser} />
