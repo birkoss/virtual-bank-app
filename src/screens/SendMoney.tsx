@@ -11,7 +11,7 @@ import {
     Layout,
 } from "@ui-kitten/components";
 
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 import Input from "../components/Input";
 import ButtonLoading from "../components/ButtonLoading";
@@ -36,13 +36,13 @@ import ErrorMessage from "../components/ErrorMessage";
 type formData = {
     userID: string;
     categoryID: string;
-    amount: number;
+    amount: string;
 };
 
 const defaultValues = {
     userID: "",
     categoryID: "",
-    amount: 0,
+    amount: "0",
 };
 
 type Props = {
@@ -56,9 +56,15 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { errors, register, setValue, handleSubmit, getValues } = useForm<
-        formData
-    >({
+    const {
+        errors,
+        register,
+        setValue,
+        handleSubmit,
+        getValues,
+        control,
+        formState,
+    } = useForm<formData>({
         defaultValues,
     });
 
@@ -103,7 +109,7 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
     const onSubmit = (data: formData) => {
         setIsSubmitting(true);
 
-        console.log("YES");
+        console.log("YES", data);
 
         /*
         APILogin(data.email, data.password)
@@ -145,10 +151,6 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
             {
                 required: "You need to select a category",
             }
-        );
-        register(
-            { name: "amount" },
-            { validate: (value) => validateAmount(value) || true }
         );
     }, [register]);
 
@@ -221,6 +223,11 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
         return unsubscribe;
     }, [navigation]);
 
+    const increaseAmount = (amount: number) => {
+        const currentAmount: number = parseInt(getValues("amount"));
+        setValue("amount", (currentAmount + amount).toString(), true);
+    };
+
     const currentUser = getUser(getValues("userID"));
     const currentCategory = getCategory(getValues("categoryID"));
 
@@ -271,30 +278,35 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                     footer={(props) => (
                         <View {...props} style={styles.inputsContainer}>
                             <Button
+                                onPress={() => increaseAmount(1)}
                                 size="tiny"
                                 style={styles.inputAdjustAmount}
                             >
                                 +1
                             </Button>
                             <Button
+                                onPress={() => increaseAmount(2)}
                                 size="tiny"
                                 style={styles.inputAdjustAmount}
                             >
                                 +2
                             </Button>
                             <Button
+                                onPress={() => increaseAmount(5)}
                                 size="tiny"
                                 style={styles.inputAdjustAmount}
                             >
                                 +5
                             </Button>
                             <Button
+                                onPress={() => increaseAmount(10)}
                                 size="tiny"
                                 style={styles.inputAdjustAmount}
                             >
                                 +10
                             </Button>
                             <Button
+                                onPress={() => increaseAmount(20)}
                                 size="tiny"
                                 style={styles.inputAdjustAmount}
                             >
@@ -303,15 +315,18 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                         </View>
                     )}
                 >
-                    <Input
-                        error={errors.amount}
-                        returnKeyType="go"
-                        style={styles.input}
+                    <Controller
+                        style={styles.debug}
+                        as={Input}
+                        control={control}
+                        name="amount"
                         keyboardType="number-pad"
-                        placeholder="Amount"
-                        onChangeText={(amount: number) =>
-                            setValue("amount", amount, true)
-                        }
+                        onChange={(args) => args[0].nativeEvent.text}
+                        defaultValue=""
+                        error={errors.amount}
+                        rules={{
+                            validate: (value) => validateAmount(value) || true,
+                        }}
                     />
                 </Card>
 

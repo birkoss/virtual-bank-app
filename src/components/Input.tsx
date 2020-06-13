@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 
 import { Input as KittenInput, useStyleSheet } from "@ui-kitten/components";
 
@@ -7,7 +7,6 @@ import ErrorMessage from "./ErrorMessage";
 import { FormStyles } from "../styles";
 
 export default function Input(props: any) {
-    const inputRef = useRef();
     const formStyles = useStyleSheet(FormStyles);
 
     return (
@@ -16,7 +15,6 @@ export default function Input(props: any) {
                 autoCapitalize="none"
                 autoCorrect={false}
                 hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
-                ref={inputRef}
                 style={formStyles.input}
                 {...props}
             />
