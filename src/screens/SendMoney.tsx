@@ -26,6 +26,7 @@ import {
 } from "../types";
 import { UserContext } from "../contexts";
 import Users from "../components/Users";
+import NavigationSelector from "../components/NavigationSelector";
 
 type Props = {
     navigation: SendMoneyScreenNavigationProp;
@@ -107,7 +108,6 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
             navigation={navigation}
         >
             <KeyboardAvoidingView style={styles.container}>
-                {/* Todo: New Component with title, subtitle, action and NOTHING state ... */}
                 <ListItem
                     style={styles.box}
                     title="To:"
@@ -119,19 +119,7 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                     accessoryLeft={(props) => (
                         <Icon {...props} name="person-outline" />
                     )}
-                    accessoryRight={() => (
-                        <Button
-                            size="tiny"
-                            onPress={() =>
-                                navigation.push("ChangeUser", {
-                                    userID,
-                                    users,
-                                })
-                            }
-                        >
-                            CHANGE
-                        </Button>
-                    )}
+                    accessoryRight={changeUser}
                 />
 
                 <ListItem
