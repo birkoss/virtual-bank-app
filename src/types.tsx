@@ -52,7 +52,7 @@ export type SendMoneyStackParamList = {
     };
     ChangeUser: {
         userID: string;
-        users: string[];
+        users: User[];
     };
     ChangeCategory: undefined;
 };

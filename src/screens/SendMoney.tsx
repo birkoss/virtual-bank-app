@@ -1,5 +1,5 @@
-import React from "react";
-import { View } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { View, Alert } from "react-native";
 
 import {
     Text,
@@ -16,10 +16,15 @@ import ButtonLoading from "../components/ButtonLoading";
 import { KeyboardAvoidingView } from "../components/KeyboardAvoidingView";
 import Screen from "../components/Screen";
 
+import { APIListUsers } from "../api";
+
+import { User } from "../types";
+
 import {
     SendMoneyScreenNavigationProp,
     SendMoneyScreenRouteProp,
 } from "../types";
+import { UserContext } from "../contexts";
 
 type Props = {
     navigation: SendMoneyScreenNavigationProp;
@@ -27,25 +32,69 @@ type Props = {
 };
 
 export default function SendMoneyScreen({ navigation, route }: Props) {
+    const { state } = useContext(UserContext);
     const styles = useStyleSheet(themeStyles);
+    const [isLoading, setIsLoading] = useState(true);
+    const [userID, setUserID] = useState("");
+    const [users, setUsers] = useState<User[]>([]);
 
-    const changeUser = (userID: string) => {
-        console.log("New UserID: ", userID);
-    };
-
-    React.useEffect(() => {
+    // Load the new userID from the ChangeUser screen
+    useEffect(() => {
         if (route.params?.newUserID) {
-            changeUser(route.params.newUserID);
+            setUserID(route.params.newUserID);
         }
     }, [route.params?.newUserID]);
 
+    const getUser = (userID: string): User => {
+        return users.filter((user) => user.id === userID)[0];
+    };
+
+    const getUsers = () => {
+        setIsLoading(true);
+        APIListUsers(state.token)
+            .then((data) => {
+                let newUsers: User[] = [];
+                data["users"].forEach((user: User) => {
+                    newUsers.push(user);
+                });
+                setUsers(newUsers);
+
+                // Validate that the current userID is valid
+                if (
+                    newUsers.length > 0 &&
+                    newUsers.filter((user) => userID === user.id).length === 0
+                ) {
+                    setUserID(newUsers[0].id);
+                }
+
+                setIsLoading(false);
+            })
+            .catch((error) => Alert.alert(error.message));
+    };
+
+    // Load the users list from the API on each page reload
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", () => {
+            setIsLoading(true);
+            getUsers();
+        });
+        return unsubscribe;
+    }, [navigation]);
+
+    const currentUser = getUser(userID);
     return (
-        <Screen title="Send Money" navigation={navigation}>
+        <Screen
+            isLoading={isLoading}
+            title="Send Money"
+            navigation={navigation}
+        >
             <KeyboardAvoidingView style={styles.container}>
                 <ListItem
                     style={styles.box}
                     title="To:"
-                    description="Mathieu Robichaud"
+                    description={
+                        currentUser.firstname + " " + currentUser.lastname
+                    }
                     accessoryLeft={(props) => (
                         <Icon {...props} name="person-outline" />
                     )}
@@ -54,8 +103,8 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                             size="tiny"
                             onPress={() =>
                                 navigation.push("ChangeUser", {
-                                    userID: "moi",
-                                    users: ["toi", "moi"],
+                                    userID,
+                                    users,
                                 })
                             }
                         >
