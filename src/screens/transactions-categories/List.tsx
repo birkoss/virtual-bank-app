@@ -86,16 +86,6 @@ export default function TransactionsCategoriesListScreen({
         return unsubscribe;
     }, [navigation]);
 
-    if (categories.length === 0) {
-        return (
-            <EmptyList
-                text="No categories"
-                buttonText="Add a new categories"
-                buttonAction={() => addCategory()}
-            />
-        );
-    }
-
     return (
         <Screen
             isLoading={isLoading}
@@ -108,10 +98,20 @@ export default function TransactionsCategoriesListScreen({
                 />
             )}
         >
-            <TransactionsCategories
-                categories={categories}
-                action={deleteCategory}
-            />
+            {categories.length === 0 && (
+                <EmptyList
+                    text="No categories"
+                    buttonText="Add a new categories"
+                    buttonAction={() => addCategory()}
+                />
+            )}
+
+            {categories.length !== 0 && (
+                <TransactionsCategories
+                    categories={categories}
+                    action={deleteCategory}
+                />
+            )}
         </Screen>
     );
 }

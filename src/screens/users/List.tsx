@@ -76,16 +76,6 @@ export default function UsersListScreen({ navigation }: Props) {
         return unsubscribe;
     }, [navigation]);
 
-    if (users.length === 0) {
-        return (
-            <EmptyList
-                text="No users"
-                buttonText="Add a new user"
-                buttonAction={() => addUser()}
-            />
-        );
-    }
-
     return (
         <Screen
             isLoading={isLoading}
@@ -95,7 +85,15 @@ export default function UsersListScreen({ navigation }: Props) {
                 <TopNavigationAction onPress={() => addUser()} icon={AddIcon} />
             )}
         >
-            <Users users={users} action={deleteUser} />
+            {users.length === 0 && (
+                <EmptyList
+                    text="No users"
+                    buttonText="Add a new user"
+                    buttonAction={() => addUser()}
+                />
+            )}
+
+            {users.length !== 0 && <Users users={users} action={deleteUser} />}
         </Screen>
     );
 }
