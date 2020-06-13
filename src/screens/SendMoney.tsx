@@ -37,12 +37,14 @@ type formData = {
     userID: string;
     categoryID: string;
     amount: string;
+    description: string;
 };
 
 const defaultValues = {
     userID: "",
     categoryID: "",
     amount: "0",
+    description: "",
 };
 
 type Props = {
@@ -150,6 +152,12 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
             { name: "categoryID" },
             {
                 required: "You need to select a category",
+            }
+        );
+        register(
+            { name: "description" },
+            {
+                max: 200,
             }
         );
     }, [register]);
@@ -316,7 +324,6 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                     )}
                 >
                     <Controller
-                        style={styles.debug}
                         as={Input}
                         control={control}
                         name="amount"
@@ -329,6 +336,16 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                         }}
                     />
                 </Card>
+
+                <Input
+                    style={styles.box}
+                    multiline
+                    textStyle={{ minHeight: 64 }}
+                    onChangeText={(text: string) =>
+                        setValue("description", text, true)
+                    }
+                    placeholder="Description"
+                />
 
                 <ButtonLoading
                     isSubmitting={isSubmitting}
