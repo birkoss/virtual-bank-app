@@ -16,21 +16,28 @@ import ButtonLoading from "../components/ButtonLoading";
 import { KeyboardAvoidingView } from "../components/KeyboardAvoidingView";
 import Screen from "../components/Screen";
 
-import { HomeScreenNavigationProp } from "../types";
+import {
+    SendMoneyScreenNavigationProp,
+    SendMoneyScreenRouteProp,
+} from "../types";
 
 type Props = {
-    navigation: HomeScreenNavigationProp;
+    navigation: SendMoneyScreenNavigationProp;
+    route: SendMoneyScreenRouteProp;
 };
 
-export default function SendMoneyScreen({ navigation }: Props) {
+export default function SendMoneyScreen({ navigation, route }: Props) {
     const styles = useStyleSheet(themeStyles);
 
-    const InstallButton = (props: any) => <Button size="tiny">CHANGE</Button>;
+    const changeUser = (userID: string) => {
+        console.log("New UserID: ", userID);
+    };
 
-    const ItemImage = (props: any) => <Icon {...props} name="person-outline" />;
-    const RequestTypeIcon = (props: any) => (
-        <Icon {...props} name="pricetags-outline" />
-    );
+    React.useEffect(() => {
+        if (route.params?.newUserID) {
+            changeUser(route.params.newUserID);
+        }
+    }, [route.params?.newUserID]);
 
     return (
         <Screen title="Send Money" navigation={navigation}>
@@ -39,16 +46,32 @@ export default function SendMoneyScreen({ navigation }: Props) {
                     style={styles.box}
                     title="To:"
                     description="Mathieu Robichaud"
-                    accessoryLeft={ItemImage}
-                    accessoryRight={InstallButton}
+                    accessoryLeft={(props) => (
+                        <Icon {...props} name="person-outline" />
+                    )}
+                    accessoryRight={() => (
+                        <Button
+                            size="tiny"
+                            onPress={() =>
+                                navigation.push("ChangeUser", {
+                                    userID: "moi",
+                                    users: ["toi", "moi"],
+                                })
+                            }
+                        >
+                            CHANGE
+                        </Button>
+                    )}
                 />
 
                 <ListItem
                     style={styles.box}
                     title="Type:"
                     description="Rewards"
-                    accessoryLeft={RequestTypeIcon}
-                    accessoryRight={InstallButton}
+                    accessoryLeft={(props) => (
+                        <Icon {...props} name="pricetags-outline" />
+                    )}
+                    accessoryRight={() => <Button size="tiny">CHANGE</Button>}
                 />
 
                 <Card

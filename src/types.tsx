@@ -1,3 +1,4 @@
+import { RouteProp } from "@react-navigation/native";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
@@ -46,11 +47,27 @@ export type TransactionsScreenNavigationProp = CompositeNavigationProp<
 >;
 
 export type SendMoneyStackParamList = {
-    SendMoney: undefined;
+    SendMoney: {
+        newUserID: string;
+    };
+    ChangeUser: {
+        userID: string;
+        users: string[];
+    };
+    ChangeCategory: undefined;
 };
 export type SendMoneyScreenNavigationProp = CompositeNavigationProp<
     DrawerNavigationProp<DrawerParamList>,
-    StackNavigationProp<TransactionsStackParamList>
+    StackNavigationProp<SendMoneyStackParamList>
+>;
+
+export type SendMoneyChangeUserScreenRouteProp = RouteProp<
+    SendMoneyStackParamList,
+    "ChangeUser"
+>;
+export type SendMoneyScreenRouteProp = RouteProp<
+    SendMoneyStackParamList,
+    "SendMoney"
 >;
 
 export type Account = {

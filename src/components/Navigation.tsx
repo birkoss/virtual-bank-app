@@ -19,6 +19,9 @@ import HomeScreen from "../screens/Home";
 import RegisterScreen from "../screens/Register";
 import TransactionsScreen from "../screens/Transactions";
 import SendMoneyScreen from "../screens/SendMoney";
+import ChangeUserScreen from "../screens/ChangeUser";
+//import ChangeUserScreen from "../screens/ChangeUser";
+// import ChangeUserScreen from "../screens/ChangeUser";
 import UsersListScreen from "../screens/users/List";
 import UsersAddScreen from "../screens/users/Add";
 
@@ -77,6 +80,14 @@ const SendMoneyStackScreen = () => {
         <SendMoneyStack.Navigator headerMode="none">
             <SendMoneyStack.Screen
                 name="SendMoney"
+                component={SendMoneyScreen}
+            />
+            <SendMoneyStack.Screen
+                name="ChangeUser"
+                component={ChangeUserScreen}
+            />
+            <SendMoneyStack.Screen
+                name="ChangeCategory"
                 component={SendMoneyScreen}
             />
         </SendMoneyStack.Navigator>
