@@ -12,3 +12,7 @@ export const validatePasswordConfirmation = (
         ? ""
         : "Password and Confirmation must match";
 };
+
+export const validateAmount = (amount: number): string => {
+    return amount > 0 ? "" : "Amount must be greater than 0";
+};

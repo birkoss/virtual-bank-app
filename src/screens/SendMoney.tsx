@@ -8,7 +8,10 @@ import {
     useStyleSheet,
     ListItem,
     Button,
+    Layout,
 } from "@ui-kitten/components";
+
+import { useForm } from "react-hook-form";
 
 import Input from "../components/Input";
 import ButtonLoading from "../components/ButtonLoading";
@@ -27,6 +30,20 @@ import {
 } from "../types";
 
 import { UserContext } from "../contexts";
+import { validateAmount } from "../validations";
+import ErrorMessage from "../components/ErrorMessage";
+
+type formData = {
+    userID: string;
+    categoryID: string;
+    amount: number;
+};
+
+const defaultValues = {
+    userID: "",
+    categoryID: "",
+    amount: 0,
+};
 
 type Props = {
     navigation: SendMoneyScreenNavigationProp;
@@ -37,11 +54,16 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
     const { state } = useContext(UserContext);
     const styles = useStyleSheet(themeStyles);
     const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const [userID, setUserID] = useState("");
+    const { errors, register, setValue, handleSubmit, getValues } = useForm<
+        formData
+    >({
+        defaultValues,
+    });
+
     const [users, setUsers] = useState<User[]>([]);
 
-    const [categoryID, setCategoryID] = useState("");
     const [categories, setCategories] = useState<TransactionCategory[]>([]);
 
     const changeCategory = () => {
@@ -51,7 +73,7 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                 size="tiny"
                 onPress={() =>
                     navigation.push("ChangeCategory", {
-                        categoryID,
+                        categoryID: getValues("categoryID"),
                         categories,
                     })
                 }
@@ -68,7 +90,7 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                 disabled={users.length === 0 ? true : false}
                 onPress={() =>
                     navigation.push("ChangeUser", {
-                        userID,
+                        userID: getValues("userID"),
                         users,
                     })
                 }
@@ -78,15 +100,57 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
         );
     };
 
+    const onSubmit = (data: formData) => {
+        setIsSubmitting(true);
+
+        console.log("YES");
+
+        /*
+        APILogin(data.email, data.password)
+            .then(onSubmitSuccess)
+            .catch((error) => {
+                onSubmitFailed(error);
+            });
+            */
+    };
+
+    const onSubmitSuccess = (data: any) => {
+        setIsSubmitting(false);
+    };
+
+    const onSubmitFailed = (error: any) => {
+        setIsSubmitting(false);
+        Alert.alert(error.message);
+    };
+
     // Load the new userID or categoryID from the Change Screen
     useEffect(() => {
         if (route.params?.newUserID) {
-            setUserID(route.params.newUserID);
+            setValue("userID", route.params.newUserID, true);
         }
         if (route.params?.newCategoryID) {
-            setCategoryID(route.params.newCategoryID);
+            setValue("categoryID", route.params.newCategoryID, true);
         }
     }, [route.params?.newUserID, route.params?.newCategoryID]);
+
+    useEffect(() => {
+        register(
+            { name: "userID" },
+            {
+                required: "You need to select an user",
+            }
+        );
+        register(
+            { name: "categoryID" },
+            {
+                required: "You need to select a category",
+            }
+        );
+        register(
+            { name: "amount" },
+            { validate: (value) => validateAmount(value) || true }
+        );
+    }, [register]);
 
     const getUser = (userID: string): User => {
         return users.filter((user) => user.id === userID)[0];
@@ -109,9 +173,10 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                 // Select the first userID
                 if (
                     newUsers.length > 0 &&
-                    newUsers.filter((user) => userID === user.id).length === 0
+                    newUsers.filter((user) => getValues("userID") === user.id)
+                        .length === 0
                 ) {
-                    setUserID(newUsers[0].id);
+                    setValue("userID", newUsers[0].id, true);
                 }
 
                 // Get the transactions categories
@@ -135,10 +200,10 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                 if (
                     newCategories.length > 0 &&
                     newCategories.filter(
-                        (category) => categoryID === category.id
+                        (category) => getValues("categoryID") === category.id
                     ).length === 0
                 ) {
-                    setCategoryID(newCategories[0].id);
+                    setValue("categoryID", newCategories[0].id, true);
                 }
 
                 setIsLoading(false);
@@ -150,13 +215,14 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", () => {
             setIsLoading(true);
+            setIsSubmitting(false);
             getUsers();
         });
         return unsubscribe;
     }, [navigation]);
 
-    const currentUser = getUser(userID);
-    const currentCategory = getCategory(categoryID);
+    const currentUser = getUser(getValues("userID"));
+    const currentCategory = getCategory(getValues("categoryID"));
 
     return (
         <Screen
@@ -165,29 +231,35 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
             navigation={navigation}
         >
             <KeyboardAvoidingView style={styles.container}>
-                <ListItem
-                    style={styles.box}
-                    title="To:"
-                    description={
-                        currentUser === undefined
-                            ? "Nobody"
-                            : currentUser.firstname + " " + currentUser.lastname
-                    }
-                    accessoryLeft={UsersIcon}
-                    accessoryRight={changeUser}
-                />
+                <Layout style={styles.box}>
+                    <ListItem
+                        title="To:"
+                        description={
+                            currentUser === undefined
+                                ? "Nobody"
+                                : currentUser.firstname +
+                                  " " +
+                                  currentUser.lastname
+                        }
+                        accessoryLeft={UsersIcon}
+                        accessoryRight={changeUser}
+                    />
+                    <ErrorMessage field={errors.userID} />
+                </Layout>
 
-                <ListItem
-                    style={styles.box}
-                    title="Category:"
-                    description={
-                        currentCategory === undefined
-                            ? "None"
-                            : currentCategory.name
-                    }
-                    accessoryLeft={TransactionsCategoriesIcon}
-                    accessoryRight={changeCategory}
-                />
+                <Layout style={styles.box}>
+                    <ListItem
+                        title="Category:"
+                        description={
+                            currentCategory === undefined
+                                ? "None"
+                                : currentCategory.name
+                        }
+                        accessoryLeft={TransactionsCategoriesIcon}
+                        accessoryRight={changeCategory}
+                    />
+                    <ErrorMessage field={errors.categoryID} />
+                </Layout>
 
                 <Card
                     style={styles.box}
@@ -232,14 +304,23 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                     )}
                 >
                     <Input
+                        error={errors.amount}
                         returnKeyType="go"
                         style={styles.input}
                         keyboardType="number-pad"
                         placeholder="Amount"
+                        onChangeText={(amount: number) =>
+                            setValue("amount", amount, true)
+                        }
                     />
                 </Card>
 
-                <ButtonLoading label="Send Money" style={styles.box} />
+                <ButtonLoading
+                    isSubmitting={isSubmitting}
+                    label="Send Money"
+                    style={styles.box}
+                    onPress={handleSubmit(onSubmit)}
+                />
             </KeyboardAvoidingView>
         </Screen>
     );
