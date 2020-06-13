@@ -100,9 +100,9 @@ export default function LoginScreen({ navigation }: Props) {
                     onChangeText={(text: string) =>
                         setValue("email", text, true)
                     }
+                    error={errors.email}
                 />
 
-                <ErrorMessage field={errors.email} />
                 <Input
                     returnKeyType="go"
                     onSubmitEditing={handleSubmit(onSubmit)}
@@ -112,8 +112,9 @@ export default function LoginScreen({ navigation }: Props) {
                         setValue("password", text, true)
                     }
                     placeholder="Password"
+                    error={errors.password}
                 />
-                <ErrorMessage field={errors.password} />
+
                 <View style={styles.forgotPasswordContainer}>
                     <Button
                         style={styles.forgotPasswordButton}

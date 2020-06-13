@@ -126,8 +126,8 @@ export default function RegisterScreen({ navigation }: Props) {
                     onChangeText={(text: string) =>
                         setValue("email", text, true)
                     }
+                    error={errors.email}
                 />
-                <ErrorMessage field={errors.email} />
 
                 <Input
                     style={styles.input}
@@ -136,8 +136,8 @@ export default function RegisterScreen({ navigation }: Props) {
                         setValue("password", text, true)
                     }
                     placeholder="Password"
+                    error={errors.password}
                 />
-                <ErrorMessage field={errors.password} />
 
                 <Input
                     style={styles.input}
@@ -146,8 +146,8 @@ export default function RegisterScreen({ navigation }: Props) {
                         setValue("passwordConfirmation", text, true)
                     }
                     placeholder="Password Confirmation"
+                    error={errors.passwordConfirmation}
                 />
-                <ErrorMessage field={errors.passwordConfirmation} />
 
                 <Input
                     placeholder="Firstname"
@@ -155,8 +155,8 @@ export default function RegisterScreen({ navigation }: Props) {
                     onChangeText={(text: string) =>
                         setValue("firstname", text, true)
                     }
+                    error={errors.firstname}
                 />
-                <ErrorMessage field={errors.firstname} />
 
                 <Input
                     placeholder="Lastname"
@@ -164,8 +164,8 @@ export default function RegisterScreen({ navigation }: Props) {
                     onChangeText={(text: string) =>
                         setValue("lastname", text, true)
                     }
+                    error={errors.lastname}
                 />
-                <ErrorMessage field={errors.lastname} />
             </Layout>
             <ButtonLoading
                 isSubmitting={isSubmitting}
