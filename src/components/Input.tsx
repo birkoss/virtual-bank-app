@@ -17,8 +17,8 @@ export default function Input(props: any) {
                 autoCorrect={false}
                 hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
                 ref={inputRef}
-                {...props}
                 style={formStyles.input}
+                {...props}
             />
             {props.error !== undefined && <ErrorMessage field={props.error} />}
         </>

@@ -33,7 +33,7 @@ export default function SendMoneyScreen({ navigation }: Props) {
     );
 
     return (
-        <Screen title="Send Money">
+        <Screen title="Send Money" navigation={navigation}>
             <KeyboardAvoidingView style={styles.container}>
                 <ListItem
                     style={styles.box}
@@ -101,10 +101,7 @@ export default function SendMoneyScreen({ navigation }: Props) {
                     />
                 </Card>
 
-                <ButtonLoading
-                    label="Send Money"
-                    style={styles.primaryActionButton}
-                />
+                <ButtonLoading label="Send Money" style={styles.box} />
             </KeyboardAvoidingView>
         </Screen>
     );
@@ -120,7 +117,6 @@ const themeStyles = StyleService.create({
     },
     input: {
         fontSize: 40,
-        color: "red",
     },
     inputsContainer: {
         padding: 10,
