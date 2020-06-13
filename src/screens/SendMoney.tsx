@@ -25,6 +25,7 @@ import {
     SendMoneyScreenRouteProp,
 } from "../types";
 import { UserContext } from "../contexts";
+import Users from "../components/Users";
 
 type Props = {
     navigation: SendMoneyScreenNavigationProp;
@@ -37,6 +38,22 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
     const [isLoading, setIsLoading] = useState(true);
     const [userID, setUserID] = useState("");
     const [users, setUsers] = useState<User[]>([]);
+
+    const changeUser = () => {
+        return (
+            <Button
+                size="tiny"
+                onPress={() =>
+                    navigation.push("ChangeUser", {
+                        userID,
+                        users,
+                    })
+                }
+            >
+                CHANGE
+            </Button>
+        );
+    };
 
     // Load the new userID from the ChangeUser screen
     useEffect(() => {
@@ -90,6 +107,7 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
             navigation={navigation}
         >
             <KeyboardAvoidingView style={styles.container}>
+                {/* Todo: New Component with title, subtitle, action and NOTHING state ... */}
                 <ListItem
                     style={styles.box}
                     title="To:"
@@ -118,7 +136,7 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
 
                 <ListItem
                     style={styles.box}
-                    title="Type:"
+                    title="Category:"
                     description="Rewards"
                     accessoryLeft={(props) => (
                         <Icon {...props} name="pricetags-outline" />

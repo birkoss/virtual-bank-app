@@ -10,17 +10,17 @@ import { ViewProps } from "react-native";
 
 type Props = {
     users: User[];
-    actions: any;
+    action: any;
 };
 
-export default function Users({ users, actions }: Props) {
+export default function Users({ users, action }: Props) {
     const renderItem = ({ item }: { item: User }) => {
         return (
             <ListItem
                 title={`${item.firstname} ${item.lastname}`}
                 description={item.email}
                 accessoryLeft={item.is_children ? UsersIcon : AdultIcon}
-                accessoryRight={() => actions(item.id)}
+                accessoryRight={() => action(item.id)}
             />
         );
     };

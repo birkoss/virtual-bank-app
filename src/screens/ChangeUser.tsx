@@ -1,10 +1,8 @@
 import React from "react";
 
-import { useStyleSheet, Layout, Button } from "@ui-kitten/components";
+import { useStyleSheet, Button } from "@ui-kitten/components";
 
 import Screen from "../components/Screen";
-
-import { KeyboardAvoidingView } from "../components/KeyboardAvoidingView";
 
 import {
     SendMoneyScreenNavigationProp,
@@ -43,7 +41,7 @@ export default function ChangeUserScreen({ navigation, route }: Props) {
             navigation={navigation}
             title="Change User"
         >
-            <Users users={route.params.users} actions={chooseUser} />
+            <Users users={route.params.users} action={chooseUser} />
         </Screen>
     );
 }

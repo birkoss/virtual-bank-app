@@ -99,7 +99,7 @@ export default function UsersListScreen({ navigation }: Props) {
                 />
             )}
         >
-            <Users users={users} actions={deleteUser} />
+            <Users users={users} action={deleteUser} />
         </Screen>
     );
 }
