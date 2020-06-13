@@ -11,6 +11,8 @@ import {
     SendMoneyChangeUserScreenRouteProp,
 } from "../types";
 
+import Users from "../components/Users";
+
 import { FormStyles } from "../styles";
 
 type Props = {
@@ -20,7 +22,20 @@ type Props = {
 
 export default function ChangeUserScreen({ navigation, route }: Props) {
     const formStyles = useStyleSheet(FormStyles);
-    console.log(route.params);
+
+    const chooseUser = (userID: string) => {
+        return (
+            <Button
+                size="tiny"
+                onPress={() =>
+                    navigation.navigate("SendMoney", { newUserID: userID })
+                }
+            >
+                SELECT
+            </Button>
+        );
+    };
+
     return (
         <Screen
             mainActionType="back"
@@ -28,19 +43,7 @@ export default function ChangeUserScreen({ navigation, route }: Props) {
             navigation={navigation}
             title="Change User"
         >
-            <KeyboardAvoidingView>
-                <Layout style={formStyles.formContainerButtons} level="1">
-                    <Button
-                        onPress={() => {
-                            navigation.navigate("SendMoney", {
-                                newUserID: "NEW USER ICITTE",
-                            });
-                        }}
-                    >
-                        {route.params.userID}
-                    </Button>
-                </Layout>
-            </KeyboardAvoidingView>
+            <Users users={route.params.users} actions={chooseUser} />
         </Screen>
     );
 }

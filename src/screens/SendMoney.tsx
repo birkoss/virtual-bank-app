@@ -82,6 +82,7 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
     }, [navigation]);
 
     const currentUser = getUser(userID);
+
     return (
         <Screen
             isLoading={isLoading}
@@ -93,7 +94,9 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                     style={styles.box}
                     title="To:"
                     description={
-                        currentUser.firstname + " " + currentUser.lastname
+                        currentUser === undefined
+                            ? "nobody..."
+                            : currentUser.firstname + " " + currentUser.lastname
                     }
                     accessoryLeft={(props) => (
                         <Icon {...props} name="person-outline" />
