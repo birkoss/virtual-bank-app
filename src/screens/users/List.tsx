@@ -1,17 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 
-import {
-    StyleService,
-    useStyleSheet,
-    ListItem,
-    List,
-    Button,
-    TopNavigationAction,
-} from "@ui-kitten/components";
+import { Button, TopNavigationAction } from "@ui-kitten/components";
 
 import Screen from "../../components/Screen";
 
-import { UserAddIcon, UsersIcon, AdultIcon } from "../../icons";
+import { UserAddIcon } from "../../icons";
 import { APIListUsers, APIDeleteUser } from "../../api";
 
 import { UsersScreenNavigationProp, User } from "../../types";
@@ -19,12 +12,13 @@ import { Alert } from "react-native";
 import { UserContext } from "../../contexts";
 import EmptyList from "../../components/EmptyList";
 
+import Users from "../../components/Users";
+
 type Props = {
     navigation: UsersScreenNavigationProp;
 };
 
 export default function UsersListScreen({ navigation }: Props) {
-    const styles = useStyleSheet(themeStyles);
     const { state } = useContext(UserContext);
     const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -39,7 +33,13 @@ export default function UsersListScreen({ navigation }: Props) {
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel",
                 },
-                { text: "Yes", onPress: () => deleteUser(userID) },
+                {
+                    text: "Yes",
+                    onPress: () =>
+                        APIDeleteUser(state.token, userID)
+                            .then(() => getList())
+                            .catch((error) => Alert.alert(error)),
+                },
             ],
             { cancelable: false }
         );
@@ -49,29 +49,11 @@ export default function UsersListScreen({ navigation }: Props) {
         navigation.push("Add");
     };
 
-    const deleteUser = (userID: string) => {
-        APIDeleteUser(state.token, userID)
-            .then(() => getList())
-            .catch((error) => Alert.alert(error));
-    };
-
-    const renderItem = ({ item }: { item: User }) => {
-        return (
-            <ListItem
-                title={`${item.firstname} ${item.lastname}`}
-                description={item.email}
-                accessoryLeft={item.is_children ? UsersIcon : AdultIcon}
-                accessoryRight={() => (
-                    <Button
-                        size="tiny"
-                        onPress={() => askConfirmation(item.id)}
-                    >
-                        DELETE
-                    </Button>
-                )}
-            />
-        );
-    };
+    const deleteUser = (userID: string) => (
+        <Button size="tiny" onPress={() => askConfirmation(userID)}>
+            DELETE
+        </Button>
+    );
 
     const getList = () => {
         setIsLoading(true);
@@ -117,11 +99,7 @@ export default function UsersListScreen({ navigation }: Props) {
                 />
             )}
         >
-            <List data={users} style={styles.list} renderItem={renderItem} />
+            <Users users={users} actions={deleteUser} />
         </Screen>
     );
 }
-
-const themeStyles = StyleService.create({
-    list: {},
-});
