@@ -44,6 +44,7 @@ import {
     TransactionsCategoriesStackParamList,
 } from "../types";
 import { UserContext } from "../contexts";
+import ChangeCategoryScreen from "../screens/ChangeCategory";
 
 const AuthStack = createStackNavigator<AuthStackParamList>();
 
@@ -110,7 +111,7 @@ const SendMoneyStackScreen = () => {
             />
             <SendMoneyStack.Screen
                 name="ChangeCategory"
-                component={SendMoneyScreen}
+                component={ChangeCategoryScreen}
             />
         </SendMoneyStack.Navigator>
     );

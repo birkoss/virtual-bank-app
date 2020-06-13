@@ -58,19 +58,27 @@ export type TransactionsScreenNavigationProp = CompositeNavigationProp<
 
 export type SendMoneyStackParamList = {
     SendMoney: {
-        newUserID: string;
+        newUserID?: string;
+        newCategoryID?: string;
     };
     ChangeUser: {
         userID: string;
         users: User[];
     };
-    ChangeCategory: undefined;
+    ChangeCategory: {
+        categoryID: string;
+        categories: TransactionCategory[];
+    };
 };
 export type SendMoneyScreenNavigationProp = CompositeNavigationProp<
     DrawerNavigationProp<DrawerParamList>,
     StackNavigationProp<SendMoneyStackParamList>
 >;
 
+export type SendMoneyChangeCategoryScreenRouteProp = RouteProp<
+    SendMoneyStackParamList,
+    "ChangeCategory"
+>;
 export type SendMoneyChangeUserScreenRouteProp = RouteProp<
     SendMoneyStackParamList,
     "ChangeUser"
