@@ -103,7 +103,7 @@ export function APIDeleteTransactionsCategories(
     categoryID: string
 ) {
     let request = APICreateRequest(
-        "transactionsCategories/" + categoryID.toString(),
+        "transactionsCategories/" + categoryID,
         "DELETE",
         null,
         token

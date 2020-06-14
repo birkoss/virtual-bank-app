@@ -31,11 +31,13 @@ export default function TransactionsCategoriesListScreen({
     const [categories, setCategories] = useState<TransactionCategory[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // @TODO : Delete in RED (and same wording as when we delete an app)
-    const askConfirmation = (categoryID: string) => {
+    const askConfirmation = (category: TransactionCategory) => {
+        console.log(category);
         Alert.alert(
             "Confirmation",
-            "Are you sure you want to delete this categories?",
+            'Deleting  "' +
+                category.name +
+                '" will also delete all of its data.',
             [
                 {
                     text: "No",
@@ -43,8 +45,12 @@ export default function TransactionsCategoriesListScreen({
                 },
                 {
                     text: "Yes",
+                    style: "destructive",
                     onPress: () =>
-                        APIDeleteTransactionsCategories(state.token, categoryID)
+                        APIDeleteTransactionsCategories(
+                            state.token,
+                            category.id
+                        )
                             .then(() => getList())
                             .catch((error) => Alert.alert(error)),
                 },
@@ -57,8 +63,8 @@ export default function TransactionsCategoriesListScreen({
         navigation.push("Add");
     };
 
-    const deleteCategory = (categoryID: string) => (
-        <Button size="tiny" onPress={() => askConfirmation(categoryID)}>
+    const deleteCategory = (category: TransactionCategory) => (
+        <Button size="tiny" onPress={() => askConfirmation(category)}>
             DELETE
         </Button>
     );
