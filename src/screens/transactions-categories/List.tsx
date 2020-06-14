@@ -32,7 +32,6 @@ export default function TransactionsCategoriesListScreen({
     const [isLoading, setIsLoading] = useState(true);
 
     const askConfirmation = (category: TransactionCategory) => {
-        console.log(category);
         Alert.alert(
             "Confirmation",
             'Deleting  "' +

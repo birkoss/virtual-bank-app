@@ -128,8 +128,18 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
     };
 
     const onSubmitSuccess = (data: any) => {
-        Alert.alert("YES SIR");
         setIsSubmitting(false);
+        Alert.alert(
+            "Confirmation",
+            "Transfer completed with success!",
+            [
+                {
+                    text: "OK",
+                    onPress: () => navigation.navigate("Home"),
+                },
+            ],
+            { cancelable: false }
+        );
     };
 
     const onSubmitFailed = (error: any) => {
