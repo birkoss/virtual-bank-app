@@ -30,6 +30,7 @@ import {
     SendMoneyScreenNavigationProp,
     SendMoneyScreenRouteProp,
     User,
+    Account,
     TransactionCategory,
 } from "../types";
 
@@ -38,14 +39,14 @@ import { validateAmount } from "../validations";
 import ErrorMessage from "../components/ErrorMessage";
 
 type formData = {
-    userID: string;
+    accountID: string;
     categoryID: string;
     amount: string;
     description: string;
 };
 
 const defaultValues = {
-    userID: "",
+    accountID: "",
     categoryID: "",
     amount: "0",
     description: "",
@@ -69,7 +70,6 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
         handleSubmit,
         getValues,
         control,
-        formState,
     } = useForm<formData>({
         defaultValues,
     });
@@ -102,7 +102,7 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                 disabled={users.length === 0 ? true : false}
                 onPress={() =>
                     navigation.push("ChangeUser", {
-                        userID: getValues("userID"),
+                        accountID: getValues("accountID"),
                         users,
                     })
                 }
@@ -119,8 +119,7 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
 
         APIAddTransactions(state.token, {
             category: data["categoryID"],
-            // account_to: data["userID"],
-            account_to: "4821e8e0-f11e-4abf-b13c-ac075d5df410",
+            account_to: data["accountID"],
             description: data["description"],
             amount: data["amount"],
         })
@@ -140,21 +139,21 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
         Alert.alert(error.message);
     };
 
-    // Load the new userID or categoryID from the Change Screen
+    // Load the new accountID or categoryID from the Change Screen
     useEffect(() => {
-        if (route.params?.newUserID) {
-            setValue("userID", route.params.newUserID, true);
+        if (route.params?.newAccountID) {
+            setValue("accountID", route.params.newAccountID, true);
         }
         if (route.params?.newCategoryID) {
             setValue("categoryID", route.params.newCategoryID, true);
         }
-    }, [route.params?.newUserID, route.params?.newCategoryID]);
+    }, [route.params?.newAccountID, route.params?.newCategoryID]);
 
     useEffect(() => {
         register(
-            { name: "userID" },
+            { name: "accountID" },
             {
-                required: "You need to select an user",
+                required: "You need to select an account",
             }
         );
         register(
@@ -171,8 +170,20 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
         );
     }, [register]);
 
-    const getUser = (userID: string): User => {
-        return users.filter((user) => user.id === userID)[0];
+    const getUser = (accountID: string): User | undefined => {
+        let user = undefined;
+
+        users.forEach((single_user: User) => {
+            if (
+                single_user.accounts.filter(
+                    (account: Account) => accountID === account.id
+                ).length === 1
+            ) {
+                user = single_user;
+            }
+        });
+
+        return user;
     };
 
     const getCategory = (categoryID: string): TransactionCategory => {
@@ -188,15 +199,6 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                     newUsers.push(user);
                 });
                 setUsers(newUsers);
-
-                // Select the first userID
-                if (
-                    newUsers.length > 0 &&
-                    newUsers.filter((user) => getValues("userID") === user.id)
-                        .length === 0
-                ) {
-                    setValue("userID", newUsers[0].id, true);
-                }
 
                 // Get the transactions categories
                 getCategories();
@@ -216,6 +218,7 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                 setCategories(newCategories);
 
                 // Select the first categoryID
+                // @TODO : use hook instead
                 if (
                     newCategories.length > 0 &&
                     newCategories.filter(
@@ -240,12 +243,22 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
         return unsubscribe;
     }, [navigation]);
 
+    // Assure that the current accountID is still from a valid user
+    useEffect(() => {
+        if (getUser(getValues("accountID")) === undefined && users.length > 0) {
+            setValue("accountID", users[0].accounts[0].id, true);
+        }
+    }, [users]);
+
     const increaseAmount = (amount: number) => {
-        const currentAmount: number = parseInt(getValues("amount"));
+        let currentAmount: number = parseInt(getValues("amount"));
+        if (isNaN(currentAmount)) {
+            currentAmount = 0;
+        }
         setValue("amount", (currentAmount + amount).toString(), true);
     };
 
-    const currentUser = getUser(getValues("userID"));
+    const currentUser = getUser(getValues("accountID"));
     const currentCategory = getCategory(getValues("categoryID"));
 
     return (
@@ -268,7 +281,7 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                         accessoryLeft={UsersIcon}
                         accessoryRight={changeUser}
                     />
-                    <ErrorMessage field={errors.userID} />
+                    <ErrorMessage field={errors.accountID} />
                 </Layout>
 
                 <Layout style={styles.box}>

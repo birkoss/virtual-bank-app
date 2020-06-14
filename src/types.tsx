@@ -58,11 +58,11 @@ export type TransactionsScreenNavigationProp = CompositeNavigationProp<
 
 export type SendMoneyStackParamList = {
     SendMoney: {
-        newUserID?: string;
+        newAccountID?: string;
         newCategoryID?: string;
     };
     ChangeUser: {
-        userID: string;
+        accountID: string;
         users: User[];
     };
     ChangeCategory: {
@@ -99,6 +99,7 @@ export type User = {
     firstname: string;
     lastname: string;
     is_children: boolean;
+    accounts: Account[];
 };
 
 export type TransactionCategory = {

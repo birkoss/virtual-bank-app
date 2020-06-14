@@ -18,7 +18,7 @@ export default function Users({ users, action }: Props) {
                 title={`${item.firstname} ${item.lastname}`}
                 description={item.email}
                 accessoryLeft={item.is_children ? UsersIcon : AdultIcon}
-                accessoryRight={() => action(item.id)}
+                accessoryRight={() => action(item)}
             />
         );
     };

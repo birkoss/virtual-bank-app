@@ -24,6 +24,7 @@ export default function UsersListScreen({ navigation }: Props) {
     const [isLoading, setIsLoading] = useState(true);
 
     // @TODO : Delete in RED (and same wording as when we delete an app)
+    // @TODO : Prevent deletion of the current user
     const askConfirmation = (userID: string) => {
         Alert.alert(
             "Confirmation",
@@ -49,8 +50,8 @@ export default function UsersListScreen({ navigation }: Props) {
         navigation.push("Add");
     };
 
-    const deleteUser = (userID: string) => (
-        <Button size="tiny" onPress={() => askConfirmation(userID)}>
+    const deleteUser = (user: User) => (
+        <Button size="tiny" onPress={() => askConfirmation(user.id)}>
             DELETE
         </Button>
     );
