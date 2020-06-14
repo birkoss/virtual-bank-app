@@ -18,7 +18,11 @@ import ButtonLoading from "../components/ButtonLoading";
 import { KeyboardAvoidingView } from "../components/KeyboardAvoidingView";
 import Screen from "../components/Screen";
 
-import { APIListUsers, APIListTransactionsCategories } from "../api";
+import {
+    APIListUsers,
+    APIListTransactionsCategories,
+    APIAddTransactions,
+} from "../api";
 
 import { TransactionsCategoriesIcon, UsersIcon } from "../icons";
 
@@ -113,16 +117,21 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
 
         console.log("YES", data);
 
-        /*
-        APILogin(data.email, data.password)
+        APIAddTransactions(state.token, {
+            category: data["categoryID"],
+            // account_to: data["userID"],
+            account_to: "4821e8e0-f11e-4abf-b13c-ac075d5df410",
+            description: data["description"],
+            amount: data["amount"],
+        })
             .then(onSubmitSuccess)
             .catch((error) => {
                 onSubmitFailed(error);
             });
-            */
     };
 
     const onSubmitSuccess = (data: any) => {
+        Alert.alert("YES SIR");
         setIsSubmitting(false);
     };
 

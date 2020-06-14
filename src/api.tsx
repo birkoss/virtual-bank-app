@@ -67,6 +67,14 @@ function fetchRequest(request: Request, response: Function) {
         });
 }
 
+export function APIAddTransactions(token: string, transaction: object) {
+    let request = APICreateRequest("transactions", "POST", transaction, token);
+
+    return fetchRequest(request, (data: any) => {
+        return {};
+    });
+}
+
 export function APIAddTransactionsCategories(token: string, category: object) {
     let request = APICreateRequest(
         "transactionsCategories",
@@ -114,6 +122,16 @@ export function APIDeleteUser(token: string, userID: string) {
     return fetchRequest(request, (data: any) => {
         console.log("RRRR2");
         return {};
+    });
+}
+
+export function APIListTransactions(token: string) {
+    let request = APICreateRequest("transactions", "GET", null, token);
+
+    return fetchRequest(request, (data: any) => {
+        return {
+            transactions: data["transactions"],
+        };
     });
 }
 

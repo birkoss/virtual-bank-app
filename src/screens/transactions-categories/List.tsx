@@ -31,6 +31,7 @@ export default function TransactionsCategoriesListScreen({
     const [categories, setCategories] = useState<TransactionCategory[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    // @TODO : Delete in RED (and same wording as when we delete an app)
     const askConfirmation = (categoryID: string) => {
         Alert.alert(
             "Confirmation",
