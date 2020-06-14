@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import "intl";
+import "intl/locale-data/jsonp/en";
 
-import { View } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+
+import { View, Alert } from "react-native";
 
 import { PieChart } from "react-native-svg-charts";
 
@@ -11,13 +14,14 @@ import {
     Card,
     List,
     ListItem,
-    Button,
     Icon,
 } from "@ui-kitten/components";
 
 import Screen from "../components/Screen";
 
-import { TransactionsScreenNavigationProp } from "../types";
+import { TransactionsScreenNavigationProp, Transaction } from "../types";
+import { UserContext } from "../contexts";
+import { APIListTransactions } from "../api";
 
 type Props = {
     navigation: TransactionsScreenNavigationProp;
@@ -25,15 +29,14 @@ type Props = {
 
 export default function TransactionsScreen({ navigation }: Props) {
     const styles = useStyleSheet(themeStyles);
+    const { state } = useContext(UserContext);
+
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [selectedSlice, setSelectedSlice] = useState({
         label: "",
         value: 0,
-    });
-
-    const transactionsData = new Array(8).fill({
-        title: "Title for Item",
-        description: "Description for Item",
     });
 
     const renderItemAccessory = (props: any) => (
@@ -44,12 +47,41 @@ export default function TransactionsScreen({ navigation }: Props) {
         <Icon {...props} name="person-add-outline" />
     );
 
-    const renderItem = ({ item, index }: { item: any; index: number }) => (
+    const renderItem = ({
+        item,
+        index,
+    }: {
+        item: Transaction;
+        index: number;
+    }) => (
         <ListItem
-            title={`${item.title} ${index + 1}`}
-            description={`${item.description} ${index + 1}`}
+            title={
+                item.account_to.id !== state.userID
+                    ? item.account_to.user.firstname +
+                      " " +
+                      item.account_to.user.lastname
+                    : item.account_from.user.firstname +
+                      " " +
+                      item.account_from.user.lastname
+            }
+            description={new Intl.DateTimeFormat("en-CA", {
+                year: "numeric",
+                month: "long",
+                day: "2-digit",
+            }).format(Date.parse(item.date_added))}
             accessoryLeft={renderItemIcon}
-            accessoryRight={renderItemAccessory}
+            accessoryRight={() => (
+                <Text
+                    style={
+                        item.account_to.id === state.userID
+                            ? styles.amountIn
+                            : styles.amountOut
+                    }
+                >
+                    {item.account_to.id === state.userID ? "" : "-"}
+                    {item.amount}$
+                </Text>
+            )}
         />
     );
 
@@ -81,8 +113,36 @@ export default function TransactionsScreen({ navigation }: Props) {
         };
     });
 
+    const getTransactions = () => {
+        setIsLoading(true);
+        APIListTransactions(state.token)
+            .then((data) => {
+                let newTransactions: Transaction[] = [];
+                data["transactions"].forEach((transaction: Transaction) => {
+                    newTransactions.push(transaction);
+                });
+                setTransactions(newTransactions);
+
+                setIsLoading(false);
+            })
+            .catch((error) => Alert.alert(error.message));
+    };
+
+    // Load the transactions list from the API on each page reload
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", () => {
+            setIsLoading(true);
+            getTransactions();
+        });
+        return unsubscribe;
+    }, [navigation]);
+
     return (
-        <Screen title="Transactions">
+        <Screen
+            isLoading={isLoading}
+            navigation={navigation}
+            title="Transactions"
+        >
             <Card
                 style={styles.cardContainer}
                 header={(props) => (
@@ -106,7 +166,7 @@ export default function TransactionsScreen({ navigation }: Props) {
             </Card>
 
             <List
-                data={transactionsData}
+                data={transactions}
                 style={styles.transactionsList}
                 renderItem={renderItem}
             />

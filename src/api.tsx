@@ -129,6 +129,7 @@ export function APIListTransactions(token: string) {
     let request = APICreateRequest("transactions", "GET", null, token);
 
     return fetchRequest(request, (data: any) => {
+        console.log(data);
         return {
             transactions: data["transactions"],
         };

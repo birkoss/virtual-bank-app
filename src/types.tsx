@@ -91,6 +91,7 @@ export type SendMoneyScreenRouteProp = RouteProp<
 export type Account = {
     id: string;
     balance: number;
+    user: User;
 };
 
 export type User = {
@@ -106,4 +107,12 @@ export type TransactionCategory = {
     id: string;
     name: string;
     transactions: number;
+};
+
+export type Transaction = {
+    id: string;
+    amount: number;
+    date_added: string;
+    account_to: Account;
+    account_from: Account;
 };
