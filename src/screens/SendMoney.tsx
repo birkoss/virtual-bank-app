@@ -215,17 +215,6 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
                 );
                 setCategories(newCategories);
 
-                // Select the first categoryID
-                // @TODO : use hook instead
-                if (
-                    newCategories.length > 0 &&
-                    newCategories.filter(
-                        (category) => getValues("categoryID") === category.id
-                    ).length === 0
-                ) {
-                    setValue("categoryID", newCategories[0].id, true);
-                }
-
                 setIsLoading(false);
             })
             .catch((error) => Alert.alert(error.message));
@@ -247,6 +236,16 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
             setValue("accountID", users[0].accounts[0].id, true);
         }
     }, [users]);
+
+    // Select the first categoryID the the category list refresh
+    useEffect(() => {
+        if (
+            getCategory(getValues("categoryID")) === undefined &&
+            categories.length > 0
+        ) {
+            setValue("categoryID", categories[0].id, true);
+        }
+    }, [categories]);
 
     const increaseAmount = (amount: number) => {
         let currentAmount: number = parseInt(getValues("amount"));

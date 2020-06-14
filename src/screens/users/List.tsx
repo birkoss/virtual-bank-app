@@ -23,8 +23,6 @@ export default function UsersListScreen({ navigation }: Props) {
     const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // @TODO : Delete in RED (and same wording as when we delete an app)
-    // @TODO : Prevent deletion of the current user
     const askConfirmation = (user: User) => {
         Alert.alert(
             "Confirmation",
