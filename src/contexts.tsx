@@ -3,13 +3,13 @@ import { AsyncStorage } from "react-native";
 
 type UserContextInitialStateType = {
     isAuthenticated: boolean;
-    userID: number;
+    userID: string;
     token: string;
 };
 
 export const UserContextInitialValues = {
     isAuthenticated: false,
-    userID: 0,
+    userID: "",
     token: "",
 };
 

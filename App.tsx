@@ -7,7 +7,6 @@ import {
     ApplicationProvider,
     IconRegistry,
     Layout,
-    Text,
 } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
@@ -53,6 +52,7 @@ export default function App() {
         getTokenFromStorage();
     }, []);
 
+    // Wait until everything is fine before rendering the App
     if (isLoading) {
         return (
             <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>

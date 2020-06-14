@@ -120,9 +120,7 @@ export function APIDeleteUser(token: string, userID: string) {
         null,
         token
     );
-    console.log("RRRR");
     return fetchRequest(request, (data: any) => {
-        console.log("RRRR2");
         return {};
     });
 }

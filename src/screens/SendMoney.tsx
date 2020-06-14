@@ -259,6 +259,9 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
     const currentUser = getUser(getValues("accountID"));
     const currentCategory = getCategory(getValues("categoryID"));
 
+    // @TODO ChangeUser -> Select the selected used and disable the button
+    // @TODO ChangeCategory -> Select the selected category and disable the button
+
     return (
         <Screen
             isLoading={isLoading}

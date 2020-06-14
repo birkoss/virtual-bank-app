@@ -25,21 +25,26 @@ export default function UsersListScreen({ navigation }: Props) {
 
     // @TODO : Delete in RED (and same wording as when we delete an app)
     // @TODO : Prevent deletion of the current user
-    const askConfirmation = (userID: string) => {
+    const askConfirmation = (user: User) => {
         Alert.alert(
             "Confirmation",
-            "Are you sure you want to delete this user?",
+            'Deleting  "' +
+                user.firstname +
+                " " +
+                user.lastname +
+                '" will also delete all of its data.',
             [
                 {
-                    text: "No",
+                    text: "Cancel",
                     style: "cancel",
                 },
                 {
-                    text: "Yes",
+                    text: "Delete",
+                    style: "destructive",
                     onPress: () =>
-                        APIDeleteUser(state.token, userID)
+                        APIDeleteUser(state.token, user.id)
                             .then(() => getList())
-                            .catch((error) => Alert.alert(error)),
+                            .catch((error) => Alert.alert(error.message)),
                 },
             ],
             { cancelable: false }
@@ -51,7 +56,7 @@ export default function UsersListScreen({ navigation }: Props) {
     };
 
     const deleteUser = (user: User) => (
-        <Button size="tiny" onPress={() => askConfirmation(user.id)}>
+        <Button size="tiny" onPress={() => askConfirmation(user)}>
             DELETE
         </Button>
     );
@@ -67,7 +72,7 @@ export default function UsersListScreen({ navigation }: Props) {
                 setUsers(newUsers);
                 setIsLoading(false);
             })
-            .catch((error) => Alert.alert(error.message));
+            .catch((error) => console.log(error));
     };
 
     useEffect(() => {
