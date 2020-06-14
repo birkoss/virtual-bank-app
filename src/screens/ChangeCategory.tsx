@@ -7,6 +7,7 @@ import Screen from "../components/Screen";
 import {
     SendMoneyScreenNavigationProp,
     SendMoneyChangeCategoryScreenRouteProp,
+    TransactionCategory,
 } from "../types";
 
 import TransactionsCategories from "../components/TransactionsCategories";
@@ -21,13 +22,14 @@ type Props = {
 export default function ChangeCategoryScreen({ navigation, route }: Props) {
     const formStyles = useStyleSheet(FormStyles);
 
-    const chooseCategory = (categoryID: string) => {
+    const chooseCategory = (category: TransactionCategory) => {
         return (
             <Button
+                disabled={route.params.categoryID === category.id}
                 size="tiny"
                 onPress={() =>
                     navigation.navigate("SendMoney", {
-                        newCategoryID: categoryID,
+                        newCategoryID: category.id,
                     })
                 }
             >

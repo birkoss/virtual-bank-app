@@ -18,9 +18,7 @@ export default function TransactionsCategories({ categories, action }: Props) {
                 title={item.name}
                 description={item.transactions + " transaction(s)"}
                 accessoryLeft={TransactionsCategoriesIcon}
-                accessoryRight={() =>
-                    item.transactions === 0 ? action(item) : null
-                }
+                accessoryRight={() => action(item)}
             />
         );
     };

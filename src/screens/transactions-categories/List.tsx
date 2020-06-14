@@ -63,11 +63,17 @@ export default function TransactionsCategoriesListScreen({
         navigation.push("Add");
     };
 
-    const deleteCategory = (category: TransactionCategory) => (
-        <Button size="tiny" onPress={() => askConfirmation(category)}>
-            DELETE
-        </Button>
-    );
+    const deleteCategory = (category: TransactionCategory) => {
+        if (category.transactions === 0) {
+            return null;
+        }
+
+        return (
+            <Button size="tiny" onPress={() => askConfirmation(category)}>
+                DELETE
+            </Button>
+        );
+    };
 
     const getList = () => {
         setIsLoading(true);
