@@ -71,7 +71,9 @@ export function APIAddTransactions(token: string, transaction: object) {
     let request = APICreateRequest("transactions", "POST", transaction, token);
 
     return fetchRequest(request, (data: any) => {
-        return {};
+        return {
+            balance: data["balance"],
+        };
     });
 }
 

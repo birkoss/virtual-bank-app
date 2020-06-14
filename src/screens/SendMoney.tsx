@@ -115,8 +115,6 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
     const onSubmit = (data: formData) => {
         setIsSubmitting(true);
 
-        console.log("YES", data);
-
         APIAddTransactions(state.token, {
             category: data["categoryID"],
             account_to: data["accountID"],
