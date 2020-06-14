@@ -136,6 +136,16 @@ export function APIListTransactions(token: string) {
     });
 }
 
+export function APITransactionsStats(token: string) {
+    let request = APICreateRequest("transactionsStats", "GET", null, token);
+
+    return fetchRequest(request, (data: any) => {
+        return {
+            transactionsCategories: data["transactionsCategories"],
+        };
+    });
+}
+
 export function APIListTransactionsCategories(token: string) {
     let request = APICreateRequest(
         "transactionsCategories",

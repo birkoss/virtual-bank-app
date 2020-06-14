@@ -5,7 +5,7 @@ import React, { useState, useEffect, useContext } from "react";
 
 import { View, Alert } from "react-native";
 
-import { PieChart } from "react-native-svg-charts";
+import { PieChart, PieChartData } from "react-native-svg-charts";
 
 import {
     useStyleSheet,
@@ -19,9 +19,13 @@ import {
 
 import Screen from "../components/Screen";
 
-import { TransactionsScreenNavigationProp, Transaction } from "../types";
+import {
+    TransactionsScreenNavigationProp,
+    Transaction,
+    TransactionCategory,
+} from "../types";
 import { UserContext } from "../contexts";
-import { APIListTransactions } from "../api";
+import { APIListTransactions, APITransactionsStats } from "../api";
 
 type Props = {
     navigation: TransactionsScreenNavigationProp;
@@ -33,27 +37,14 @@ export default function TransactionsScreen({ navigation }: Props) {
 
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [expensesStats, setExpensesStats] = useState<PieChartData[]>([]);
 
     const [selectedSlice, setSelectedSlice] = useState({
         label: "",
         value: 0,
     });
 
-    const renderItemAccessory = (props: any) => (
-        <Text style={styles.amountIn}>-10$</Text>
-    );
-
-    const renderItemIcon = (props: any) => (
-        <Icon {...props} name="person-add-outline" />
-    );
-
-    const renderItem = ({
-        item,
-        index,
-    }: {
-        item: Transaction;
-        index: number;
-    }) => (
+    const renderItem = ({ item }: { item: Transaction }) => (
         <ListItem
             title={
                 item.account_to.id !== state.userID
@@ -69,7 +60,9 @@ export default function TransactionsScreen({ navigation }: Props) {
                 month: "long",
                 day: "2-digit",
             }).format(Date.parse(item.date_added))}
-            accessoryLeft={renderItemIcon}
+            accessoryLeft={(props) => (
+                <Icon {...props} name="person-add-outline" />
+            )}
             accessoryRight={() => (
                 <Text
                     style={
@@ -113,6 +106,37 @@ export default function TransactionsScreen({ navigation }: Props) {
         };
     });
 
+    const getStats = () => {
+        APITransactionsStats(state.token)
+            .then((data) => {
+                let stats: PieChartData[] = [];
+                data["transactionsCategories"].forEach(
+                    (transaction: TransactionCategory, index: number) => {
+                        stats.push({
+                            key: transaction.name,
+                            value: transaction.transactions,
+                            svg: {
+                                fill: colors[index],
+                                onPress: () =>
+                                    setSelectedSlice({
+                                        label: transaction.name,
+                                        value: transaction.transactions,
+                                    }),
+                            },
+                            arc: {
+                                outerRadius:
+                                    70 + transaction.transactions + "%",
+                            },
+                        });
+                    }
+                );
+                setExpensesStats(stats);
+
+                setIsLoading(false);
+            })
+            .catch((error) => Alert.alert(error.message));
+    };
+
     const getTransactions = () => {
         setIsLoading(true);
         APIListTransactions(state.token)
@@ -123,7 +147,7 @@ export default function TransactionsScreen({ navigation }: Props) {
                 });
                 setTransactions(newTransactions);
 
-                setIsLoading(false);
+                getStats();
             })
             .catch((error) => Alert.alert(error.message));
     };
@@ -161,7 +185,7 @@ export default function TransactionsScreen({ navigation }: Props) {
                     style={styles.pieChart}
                     outerRadius={"80%"}
                     innerRadius={"45%"}
-                    data={expensesData}
+                    data={expensesStats}
                 />
             </Card>
 
