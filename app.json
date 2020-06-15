@@ -3,7 +3,7 @@
         "name": "KidBux",
         "slug": "kidbux",
         "platforms": ["ios", "android", "web"],
-        "version": "1.0.0",
+        "version": "0.1",
         "orientation": "portrait",
         "icon": "./src/assets/icon.png",
         "splash": {
@@ -16,7 +16,13 @@
         },
         "assetBundlePatterns": ["**/*"],
         "ios": {
+            "bundleIdentifier": "com.birkoss.kidbux",
+            "buildNumber": "1",
             "supportsTablet": false
+        },
+        "android": {
+            "package": "com.birkoss.kidbux",
+            "versionCode": 1
         }
     }
 }
