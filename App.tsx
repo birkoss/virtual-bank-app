@@ -60,8 +60,6 @@ export default function App() {
                         token,
                     },
                 });
-
-                getAccountData();
             } else {
                 setIsLoading(false);
             }
@@ -73,6 +71,10 @@ export default function App() {
     useEffect(() => {
         getTokenFromStorage();
     }, []);
+
+    useEffect(() => {
+        getAccountData();
+    }, [state.token]);
 
     // Wait until everything is fine before rendering the App
     if (isLoading) {
