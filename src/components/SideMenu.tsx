@@ -29,18 +29,13 @@ const Header = (props: any) => {
 };
 
 type Props = {
-    navigation: NavigationHelpers<
-        Record<string, object | undefined>,
-        DrawerNavigationEventMap
-    >;
+    navigation: any;
     state: DrawerNavigationState;
 };
 
 export const SideMenu = ({ navigation, state }: Props) => {
     const [selectedIndex, setSelectedIndex] = React.useState<IndexPath>();
     const { state: contextState, dispatch } = useContext(UserContext);
-
-    // @TODO : Close the drawer when we logout
 
     let tabs = [];
     tabs.push(
@@ -73,11 +68,12 @@ export const SideMenu = ({ navigation, state }: Props) => {
             title="Logout"
             accessoryLeft={LogoutIcon}
             accessoryRight={ForwardIcon}
-            onPress={() =>
+            onPress={() => {
+                navigation.toggleDrawer();
                 dispatch({
                     type: "LOGOUT",
-                })
-            }
+                });
+            }}
         />
     );
 
