@@ -79,8 +79,7 @@ export default function TransactionsScreen({ navigation }: Props) {
     );
 
     const { label, value } = selectedSlice;
-    const keys = ["google", "facebook", "linkedin", "youtube", "Twitter"];
-    const values = [15, 25, 35, 45, 55];
+
     const colors = [
         "#FFE5DB",
         "#FFC5B7",
@@ -92,19 +91,6 @@ export default function TransactionsScreen({ navigation }: Props) {
         "#931841",
         "#7A0E3C",
     ];
-    const expensesData = keys.map((key, index) => {
-        return {
-            key,
-            value: values[index],
-            svg: { fill: colors[index] },
-            arc: {
-                outerRadius: 70 + values[index] + "%",
-                padAngle: label === key ? 0.1 : 0,
-            },
-            onPress: () =>
-                setSelectedSlice({ label: key, value: values[index] }),
-        };
-    });
 
     const getStats = () => {
         APITransactionsStats(state.token)
