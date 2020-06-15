@@ -204,7 +204,9 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
             .then((data) => {
                 let newUsers: User[] = [];
                 data["users"].forEach((user: User) => {
-                    newUsers.push(user);
+                    if (user.id !== state.account?.id) {
+                        newUsers.push(user);
+                    }
                 });
                 setUsers(newUsers);
 
