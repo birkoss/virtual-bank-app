@@ -45,3 +45,7 @@ export const TransactionsCategoriesIcon = (props: any) => (
 export const AddIcon = (props: any) => (
     <Icon {...props} name="plus-circle-outline" />
 );
+
+export const LogoutIcon = (props: any) => (
+    <Icon {...props} name="log-out-outline" />
+);

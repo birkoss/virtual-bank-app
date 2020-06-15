@@ -1,19 +1,6 @@
-import React from "react";
-import {
-    ImageBackground,
-    StyleSheet,
-    View,
-    ViewProps,
-    StyleProp,
-    ViewStyle,
-} from "react-native";
-import {
-    Divider,
-    Drawer,
-    DrawerItem,
-    IndexPath,
-    DrawerProps,
-} from "@ui-kitten/components";
+import React, { useContext } from "react";
+import { ImageBackground, StyleSheet } from "react-native";
+import { Divider, Drawer, DrawerItem, IndexPath } from "@ui-kitten/components";
 import {
     NavigationHelpers,
     DrawerNavigationState,
@@ -25,7 +12,9 @@ import {
     HomeIcon,
     ForwardIcon,
     TransactionsCategoriesIcon,
+    LogoutIcon,
 } from "../icons";
+import { UserContext } from "../contexts";
 
 const Header = (props: any) => {
     return (
@@ -49,6 +38,7 @@ type Props = {
 
 export const SideMenu = ({ navigation, state }: Props) => {
     const [selectedIndex, setSelectedIndex] = React.useState<IndexPath>();
+    const { dispatch } = useContext(UserContext);
     return (
         <Drawer
             header={Header}
@@ -72,6 +62,16 @@ export const SideMenu = ({ navigation, state }: Props) => {
                 title="Transactions Categories"
                 accessoryLeft={TransactionsCategoriesIcon}
                 accessoryRight={ForwardIcon}
+            />
+            <DrawerItem
+                title="Logout"
+                accessoryLeft={LogoutIcon}
+                accessoryRight={ForwardIcon}
+                onPress={() =>
+                    dispatch({
+                        type: "LOGOUT",
+                    })
+                }
             />
         </Drawer>
     );
