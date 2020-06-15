@@ -47,7 +47,7 @@ export default function TransactionsScreen({ navigation }: Props) {
     const renderItem = ({ item }: { item: Transaction }) => (
         <ListItem
             title={
-                item.account_to.id !== state.userID
+                item.account_to.id !== state.account?.id
                     ? item.account_to.user.firstname +
                       " " +
                       item.account_to.user.lastname
@@ -66,12 +66,12 @@ export default function TransactionsScreen({ navigation }: Props) {
             accessoryRight={() => (
                 <Text
                     style={
-                        item.account_to.id === state.userID
+                        item.account_to.id === state.account?.id
                             ? styles.amountIn
                             : styles.amountOut
                     }
                 >
-                    {item.account_to.id === state.userID ? "" : "-"}
+                    {item.account_to.id === state.account?.id ? "" : "-"}
                     {item.amount}$
                 </Text>
             )}
@@ -160,6 +160,8 @@ export default function TransactionsScreen({ navigation }: Props) {
         });
         return unsubscribe;
     }, [navigation]);
+
+    // @TODO Show no transactions instead of an empty List continer
 
     return (
         <Screen

@@ -20,6 +20,7 @@ import {
 
 import { default as theme } from "./src/assets/theme.json";
 import Loading from "./src/components/Loading";
+import { APIAccountData } from "./src/api";
 
 export default function App() {
     const [isLoading, setIsLoading] = useState(true);
@@ -27,6 +28,27 @@ export default function App() {
         UserContextReducer,
         UserContextInitialValues
     );
+
+    const getAccountData = () => {
+        if (state.token === "") {
+            return;
+        }
+
+        APIAccountData(state.token)
+            .then((data) => {
+                dispatch({
+                    type: "SETDATA",
+                    payload: {
+                        account: data["account"],
+                    },
+                });
+
+                //registerForPushNotifications();
+
+                setIsLoading(false);
+            })
+            .catch((error) => console.log("GetData.catch", error));
+    };
 
     const getTokenFromStorage = async () => {
         try {
@@ -39,7 +61,7 @@ export default function App() {
                     },
                 });
 
-                setIsLoading(false);
+                getAccountData();
             } else {
                 setIsLoading(false);
             }

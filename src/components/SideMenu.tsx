@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, Children } from "react";
 import { ImageBackground, StyleSheet } from "react-native";
 import { Divider, Drawer, DrawerItem, IndexPath } from "@ui-kitten/components";
 import {
@@ -38,7 +38,49 @@ type Props = {
 
 export const SideMenu = ({ navigation, state }: Props) => {
     const [selectedIndex, setSelectedIndex] = React.useState<IndexPath>();
-    const { dispatch } = useContext(UserContext);
+    const { state: contextState, dispatch } = useContext(UserContext);
+
+    // @TODO : Close the drawer when we logout
+
+    let tabs = [];
+    tabs.push(
+        <DrawerItem
+            title="Home"
+            accessoryLeft={HomeIcon}
+            accessoryRight={ForwardIcon}
+        />
+    );
+
+    if (contextState.account?.is_children === false) {
+        tabs.push(
+            <DrawerItem
+                title="Users"
+                accessoryLeft={UsersIcon}
+                accessoryRight={ForwardIcon}
+            />
+        );
+
+        tabs.push(
+            <DrawerItem
+                title="Transactions Categories"
+                accessoryLeft={TransactionsCategoriesIcon}
+                accessoryRight={ForwardIcon}
+            />
+        );
+    }
+    tabs.push(
+        <DrawerItem
+            title="Logout"
+            accessoryLeft={LogoutIcon}
+            accessoryRight={ForwardIcon}
+            onPress={() =>
+                dispatch({
+                    type: "LOGOUT",
+                })
+            }
+        />
+    );
+
     return (
         <Drawer
             header={Header}
@@ -47,33 +89,8 @@ export const SideMenu = ({ navigation, state }: Props) => {
                 setSelectedIndex(index);
                 navigation.navigate(state.routeNames[index.row]);
             }}
-        >
-            <DrawerItem
-                title="Home"
-                accessoryLeft={HomeIcon}
-                accessoryRight={ForwardIcon}
-            />
-            <DrawerItem
-                title="Users"
-                accessoryLeft={UsersIcon}
-                accessoryRight={ForwardIcon}
-            />
-            <DrawerItem
-                title="Transactions Categories"
-                accessoryLeft={TransactionsCategoriesIcon}
-                accessoryRight={ForwardIcon}
-            />
-            <DrawerItem
-                title="Logout"
-                accessoryLeft={LogoutIcon}
-                accessoryRight={ForwardIcon}
-                onPress={() =>
-                    dispatch({
-                        type: "LOGOUT",
-                    })
-                }
-            />
-        </Drawer>
+            children={tabs}
+        />
     );
 };
 

@@ -163,6 +163,8 @@ const Drawer = createDrawerNavigator();
 export default function Navigation() {
     const { state } = useContext(UserContext);
 
+    console.log(state.account?.is_children === false);
+
     return (
         <NavigationContainer>
             {state.isAuthenticated ? (
@@ -170,11 +172,20 @@ export default function Navigation() {
                     drawerContent={(props) => <SideMenu {...props} />}
                 >
                     <Drawer.Screen name="Home" component={TabsScreen} />
-                    <Drawer.Screen name="Users" component={UsersStackScreen} />
-                    <Drawer.Screen
-                        name="Transactions Categories"
-                        component={TransactionsCategoriesStackScreen}
-                    />
+
+                    {state.account?.is_children === false && (
+                        <Drawer.Screen
+                            name="Users"
+                            component={UsersStackScreen}
+                        />
+                    )}
+
+                    {state.account?.is_children === false && (
+                        <Drawer.Screen
+                            name="Transactions Categories"
+                            component={TransactionsCategoriesStackScreen}
+                        />
+                    )}
                 </Drawer.Navigator>
             ) : (
                 <AuthStack.Navigator headerMode="none">

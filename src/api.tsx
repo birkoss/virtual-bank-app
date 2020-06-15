@@ -210,3 +210,13 @@ export function APIRegister(
         };
     });
 }
+
+export function APIAccountData(token: string) {
+    let request = APICreateRequest("account", "GET", null, token);
+
+    return fetchRequest(request, (data: any) => {
+        return {
+            account: data["account"],
+        };
+    });
+}

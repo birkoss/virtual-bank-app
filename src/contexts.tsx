@@ -1,16 +1,17 @@
 import React from "react";
 import { AsyncStorage } from "react-native";
+import { User } from "./types";
 
 type UserContextInitialStateType = {
     isAuthenticated: boolean;
-    userID: string;
     token: string;
+    account: User | undefined;
 };
 
 export const UserContextInitialValues = {
     isAuthenticated: false,
-    userID: "",
     token: "",
+    account: undefined,
 };
 
 export const UserContext = React.createContext<{
@@ -29,7 +30,7 @@ export const UserContextReducer = (
         case "SETDATA":
             return {
                 ...state,
-                userID: action.payload.id,
+                account: action.payload.account,
             };
         case "LOGIN":
             try {
