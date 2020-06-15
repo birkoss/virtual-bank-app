@@ -1,4 +1,4 @@
-const APIUrl = "http://localhost:8000/api/";
+const APIUrl = "https://api.kidbux.app/v1/";
 
 class ApiError extends Error {
     constructor(...params: any[]) {
@@ -30,7 +30,7 @@ function APICreateRequest(
     return request;
 }
 
-function fetchRequest(request: Request, response: Function) {
+function APIFetchRequest(request: Request, response: Function) {
     return fetch(request)
         .then((response) => response.json())
         .then((data: any) => {
@@ -55,6 +55,11 @@ function fetchRequest(request: Request, response: Function) {
                 }
             }
 
+            // Special case for Token error (to logout the user)
+            if (data["detail"] && data["detail"] == "Invalid token.") {
+                throw new ApiError(data["detail"]);
+            }
+
             // Generic error
             throw new ApiError("An error occurred please try again later.");
         })
@@ -70,7 +75,7 @@ function fetchRequest(request: Request, response: Function) {
 export function APIAddTransactions(token: string, transaction: object) {
     let request = APICreateRequest("transactions", "POST", transaction, token);
 
-    return fetchRequest(request, (data: any) => {
+    return APIFetchRequest(request, (data: any) => {
         return {
             balance: data["balance"],
         };
@@ -85,7 +90,7 @@ export function APIAddTransactionsCategories(token: string, category: object) {
         token
     );
 
-    return fetchRequest(request, (data: any) => {
+    return APIFetchRequest(request, (data: any) => {
         return {};
     });
 }
@@ -93,7 +98,7 @@ export function APIAddTransactionsCategories(token: string, category: object) {
 export function APIAddUser(token: string, user: object) {
     let request = APICreateRequest("users", "POST", user, token);
 
-    return fetchRequest(request, (data: any) => {
+    return APIFetchRequest(request, (data: any) => {
         return {};
     });
 }
@@ -108,7 +113,7 @@ export function APIDeleteTransactionsCategories(
         null,
         token
     );
-    return fetchRequest(request, (data: any) => {
+    return APIFetchRequest(request, (data: any) => {
         return {};
     });
 }
@@ -120,7 +125,7 @@ export function APIDeleteUser(token: string, userID: string) {
         null,
         token
     );
-    return fetchRequest(request, (data: any) => {
+    return APIFetchRequest(request, (data: any) => {
         return {};
     });
 }
@@ -128,8 +133,7 @@ export function APIDeleteUser(token: string, userID: string) {
 export function APIListTransactions(token: string) {
     let request = APICreateRequest("transactions", "GET", null, token);
 
-    return fetchRequest(request, (data: any) => {
-        console.log(data);
+    return APIFetchRequest(request, (data: any) => {
         return {
             transactions: data["transactions"],
         };
@@ -139,7 +143,7 @@ export function APIListTransactions(token: string) {
 export function APITransactionsStats(token: string) {
     let request = APICreateRequest("transactionsStats", "GET", null, token);
 
-    return fetchRequest(request, (data: any) => {
+    return APIFetchRequest(request, (data: any) => {
         return {
             transactionsCategories: data["transactionsCategories"],
         };
@@ -154,7 +158,7 @@ export function APIListTransactionsCategories(token: string) {
         token
     );
 
-    return fetchRequest(request, (data: any) => {
+    return APIFetchRequest(request, (data: any) => {
         return {
             transactionsCategories: data["transactionsCategories"],
         };
@@ -164,7 +168,7 @@ export function APIListTransactionsCategories(token: string) {
 export function APIListUsers(token: string) {
     let request = APICreateRequest("users", "GET", null, token);
 
-    return fetchRequest(request, (data: any) => {
+    return APIFetchRequest(request, (data: any) => {
         return {
             users: data["users"],
         };
@@ -174,7 +178,7 @@ export function APIListUsers(token: string) {
 export function APILogin(email: string, password: string) {
     let request = APICreateRequest("login", "POST", { email, password });
 
-    return fetchRequest(request, (data: any) => {
+    return APIFetchRequest(request, (data: any) => {
         return {
             token: data["token"],
         };
@@ -184,7 +188,7 @@ export function APILogin(email: string, password: string) {
 export function APIStats(token: string) {
     let request = APICreateRequest("stats", "GET", null, token);
 
-    return fetchRequest(request, (data: any) => {
+    return APIFetchRequest(request, (data: any) => {
         return {
             accounts: data["accounts"],
         };
@@ -204,7 +208,7 @@ export function APIRegister(
         lastname,
     });
 
-    return fetchRequest(request, (data: any) => {
+    return APIFetchRequest(request, (data: any) => {
         return {
             token: data["token"],
         };
@@ -214,7 +218,7 @@ export function APIRegister(
 export function APIAccountData(token: string) {
     let request = APICreateRequest("account", "GET", null, token);
 
-    return fetchRequest(request, (data: any) => {
+    return APIFetchRequest(request, (data: any) => {
         return {
             account: data["account"],
         };

@@ -1,7 +1,7 @@
 {
     "expo": {
-        "name": "Virtual Bank",
-        "slug": "virtual-bank",
+        "name": "KidBux",
+        "slug": "kidbux",
         "platforms": ["ios", "android", "web"],
         "version": "1.0.0",
         "orientation": "portrait",

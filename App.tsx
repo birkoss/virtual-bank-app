@@ -47,7 +47,15 @@ export default function App() {
 
                 setIsLoading(false);
             })
-            .catch((error) => console.log("GetData.catch", error));
+            .catch((error) => {
+                console.log("GetData.catch", error);
+
+                if (error.message == "Invalid token.") {
+                    dispatch({
+                        type: "LOGOUT",
+                    });
+                }
+            });
     };
 
     const getTokenFromStorage = async () => {
