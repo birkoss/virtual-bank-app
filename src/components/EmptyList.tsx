@@ -10,8 +10,8 @@ import {
 
 type Props = {
     text: string;
-    buttonText: string;
-    buttonAction: any;
+    buttonText?: string;
+    buttonAction?: any;
 };
 
 export default function EmptyList({ text, buttonText, buttonAction }: Props) {
@@ -23,13 +23,15 @@ export default function EmptyList({ text, buttonText, buttonAction }: Props) {
                 {text}
             </Text>
 
-            <Button
-                appearance="ghost"
-                style={styles.link}
-                onPress={buttonAction}
-            >
-                {buttonText}
-            </Button>
+            {buttonText && buttonAction && (
+                <Button
+                    appearance="ghost"
+                    style={styles.link}
+                    onPress={buttonAction}
+                >
+                    {buttonText}
+                </Button>
+            )}
         </Layout>
     );
 }

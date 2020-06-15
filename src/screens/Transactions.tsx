@@ -26,6 +26,7 @@ import {
 } from "../types";
 import { UserContext } from "../contexts";
 import { APIListTransactions, APITransactionsStats } from "../api";
+import EmptyList from "../components/EmptyList";
 
 type Props = {
     navigation: TransactionsScreenNavigationProp;
@@ -147,41 +148,45 @@ export default function TransactionsScreen({ navigation }: Props) {
         return unsubscribe;
     }, [navigation]);
 
-    // @TODO Show no transactions instead of an empty List continer
-
     return (
         <Screen
             isLoading={isLoading}
             navigation={navigation}
             title="Transactions"
         >
-            <Card
-                style={styles.cardContainer}
-                header={(props) => (
-                    <View {...props}>
-                        <Text category="h6">Expenses</Text>
+            {transactions.length === 0 && <EmptyList text="No transactions" />}
 
-                        {label !== "" && (
-                            <Text category="s1">
-                                {label} : {value}
-                            </Text>
+            {transactions.length > 0 && (
+                <>
+                    <Card
+                        style={styles.cardContainer}
+                        header={(props) => (
+                            <View {...props}>
+                                <Text category="h6">Expenses</Text>
+
+                                {label !== "" && (
+                                    <Text category="s1">
+                                        {label} : {value}
+                                    </Text>
+                                )}
+                            </View>
                         )}
-                    </View>
-                )}
-            >
-                <PieChart
-                    style={styles.pieChart}
-                    outerRadius={"80%"}
-                    innerRadius={"45%"}
-                    data={expensesStats}
-                />
-            </Card>
+                    >
+                        <PieChart
+                            style={styles.pieChart}
+                            outerRadius={"80%"}
+                            innerRadius={"45%"}
+                            data={expensesStats}
+                        />
+                    </Card>
 
-            <List
-                data={transactions}
-                style={styles.transactionsList}
-                renderItem={renderItem}
-            />
+                    <List
+                        data={transactions}
+                        style={styles.transactionsList}
+                        renderItem={renderItem}
+                    />
+                </>
+            )}
         </Screen>
     );
 }
