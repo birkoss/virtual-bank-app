@@ -118,28 +118,45 @@ const SendMoneyStackScreen = () => {
 };
 
 const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => {
-    return (
-        <BottomNavigation
-            selectedIndex={state.index}
-            onSelect={(index) => navigation.navigate(state.routeNames[index])}
-        >
-            <BottomNavigationTab
-                title={state.index === 0 ? "Home" : undefined}
-                icon={HomeIcon}
-            />
-            <BottomNavigationTab
-                title={state.index === 1 ? "Transactions" : undefined}
-                icon={TransactionsIcon}
-            />
-            <BottomNavigationTab
-                title={state.index === 2 ? "Send" : undefined}
-                icon={SendMoneyIcon}
-            />
+    const { state: contextState } = useContext(UserContext);
+    let children = [];
+
+    children.push(
+        <BottomNavigationTab
+            title={state.index === 0 ? "Home" : undefined}
+            icon={HomeIcon}
+        />
+    );
+
+    children.push(
+        <BottomNavigationTab
+            title={state.index === 1 ? "Transactions" : undefined}
+            icon={TransactionsIcon}
+        />
+    );
+
+    children.push(
+        <BottomNavigationTab
+            title={state.index === 2 ? "Send" : undefined}
+            icon={SendMoneyIcon}
+        />
+    );
+
+    if (contextState.account?.is_children === false) {
+        children.push(
             <BottomNavigationTab
                 title={state.index === 3 ? "Receive" : undefined}
                 icon={ReceiveMoney}
             />
-        </BottomNavigation>
+        );
+    }
+
+    return (
+        <BottomNavigation
+            selectedIndex={state.index}
+            onSelect={(index) => navigation.navigate(state.routeNames[index])}
+            children={children}
+        />
     );
 };
 
