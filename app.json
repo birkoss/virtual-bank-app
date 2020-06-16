@@ -17,7 +17,7 @@
         "assetBundlePatterns": ["**/*"],
         "ios": {
             "bundleIdentifier": "com.birkoss.kidbux",
-            "buildNumber": "1",
+            "buildNumber": "2",
             "supportsTablet": false
         },
         "android": {

@@ -165,6 +165,16 @@ export function APIListTransactionsCategories(token: string) {
     });
 }
 
+export function APIListFamilyMembers(token: string) {
+    let request = APICreateRequest("familyMembers", "GET", null, token);
+
+    return APIFetchRequest(request, (data: any) => {
+        return {
+            users: data["users"],
+        };
+    });
+}
+
 export function APIListUsers(token: string) {
     let request = APICreateRequest("users", "GET", null, token);
 

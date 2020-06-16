@@ -61,6 +61,7 @@ export default function UsersListScreen({ navigation }: Props) {
 
     const getList = () => {
         setIsLoading(true);
+
         APIListUsers(state.token)
             .then((data) => {
                 let newUsers: User[] = [];

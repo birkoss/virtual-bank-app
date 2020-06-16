@@ -19,7 +19,7 @@ import { KeyboardAvoidingView } from "../components/KeyboardAvoidingView";
 import Screen from "../components/Screen";
 
 import {
-    APIListUsers,
+    APIListFamilyMembers,
     APIListTransactionsCategories,
     APIAddTransactions,
 } from "../api";
@@ -200,13 +200,12 @@ export default function SendMoneyScreen({ navigation, route }: Props) {
 
     const getUsers = () => {
         setIsLoading(true);
-        APIListUsers(state.token)
+
+        APIListFamilyMembers(state.token)
             .then((data) => {
                 let newUsers: User[] = [];
                 data["users"].forEach((user: User) => {
-                    if (user.id !== state.account?.id) {
-                        newUsers.push(user);
-                    }
+                    newUsers.push(user);
                 });
                 setUsers(newUsers);
 
