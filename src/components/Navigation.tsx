@@ -1,7 +1,5 @@
 import React, { useContext } from "react";
 
-import { Ionicons } from "@expo/vector-icons";
-
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import {
@@ -10,7 +8,13 @@ import {
 } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
-import { BottomNavigation, BottomNavigationTab } from "@ui-kitten/components";
+import {
+    BottomNavigation,
+    BottomNavigationTab,
+    useStyleSheet,
+} from "@ui-kitten/components";
+
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import { SideMenu } from "../components/SideMenu";
 
@@ -45,6 +49,7 @@ import {
 } from "../types";
 import { UserContext } from "../contexts";
 import ChangeCategoryScreen from "../screens/ChangeCategory";
+import { ThemeStyles } from "../styles";
 
 const AuthStack = createStackNavigator<AuthStackParamList>();
 
@@ -119,6 +124,7 @@ const SendMoneyStackScreen = () => {
 
 const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => {
     const { state: contextState } = useContext(UserContext);
+
     let children = [];
 
     children.push(
@@ -180,37 +186,44 @@ const Drawer = createDrawerNavigator();
 export default function Navigation() {
     const { state } = useContext(UserContext);
 
+    const styles = useStyleSheet(ThemeStyles);
+
     return (
-        <NavigationContainer>
-            {state.isAuthenticated ? (
-                <Drawer.Navigator
-                    drawerContent={(props) => <SideMenu {...props} />}
-                >
-                    <Drawer.Screen name="Home" component={TabsScreen} />
-                    <Drawer.Screen name="Users" component={UsersStackScreen} />
-                    <Drawer.Screen
-                        name="Transactions Categories"
-                        component={TransactionsCategoriesStackScreen}
-                    />
-                </Drawer.Navigator>
-            ) : (
-                <AuthStack.Navigator headerMode="none">
-                    <AuthStack.Screen
-                        name="Login"
-                        component={LoginScreen}
-                        options={{
-                            animationEnabled: false,
-                        }}
-                    />
-                    <AuthStack.Screen
-                        name="Register"
-                        component={RegisterScreen}
-                        options={{
-                            animationEnabled: false,
-                        }}
-                    />
-                </AuthStack.Navigator>
-            )}
-        </NavigationContainer>
+        <SafeAreaView style={styles.container}>
+            <NavigationContainer>
+                {state.isAuthenticated ? (
+                    <Drawer.Navigator
+                        drawerContent={(props) => <SideMenu {...props} />}
+                    >
+                        <Drawer.Screen name="Home" component={TabsScreen} />
+                        <Drawer.Screen
+                            name="Users"
+                            component={UsersStackScreen}
+                        />
+                        <Drawer.Screen
+                            name="Transactions Categories"
+                            component={TransactionsCategoriesStackScreen}
+                        />
+                    </Drawer.Navigator>
+                ) : (
+                    <AuthStack.Navigator headerMode="none">
+                        <AuthStack.Screen
+                            name="Login"
+                            component={LoginScreen}
+                            options={{
+                                animationEnabled: false,
+                            }}
+                        />
+                        <AuthStack.Screen
+                            name="Register"
+                            component={RegisterScreen}
+                            options={{
+                                animationEnabled: false,
+                            }}
+                        />
+                    </AuthStack.Navigator>
+                )}
+            </NavigationContainer>
+        </SafeAreaView>
     );
 }

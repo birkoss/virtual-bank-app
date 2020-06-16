@@ -1,5 +1,5 @@
 import { StyleService } from "@ui-kitten/components";
-
+// @TODO: Remove and merge with styles.tsx
 export const onePagerStyles = StyleService.create({
     container: {
         backgroundColor: "background-basic-color-1",

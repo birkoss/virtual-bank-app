@@ -9,6 +9,7 @@ import {
     Text,
     TopNavigationAction,
     Icon,
+    Layout,
 } from "@ui-kitten/components";
 import { View, ViewProps } from "react-native";
 import LoadingScreen from "../screens/Loading";
@@ -56,7 +57,7 @@ export default function Screen({
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <Layout style={styles.container}>
             <TopNavigation
                 alignment="center"
                 title={() => <Text style={styles.title}>{title}</Text>}
@@ -68,7 +69,7 @@ export default function Screen({
             <View style={styles.componentContainer}>
                 {isLoading ? <LoadingScreen /> : [children]}
             </View>
-        </SafeAreaView>
+        </Layout>
     );
 }
 

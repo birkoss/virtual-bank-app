@@ -21,3 +21,10 @@ export const FormStyles = StyleService.create({
         marginTop: 20,
     },
 });
+
+export const ThemeStyles = StyleService.create({
+    container: {
+        backgroundColor: "background-basic-color-1",
+        flex: 1,
+    },
+});

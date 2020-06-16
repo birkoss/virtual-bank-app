@@ -1,3 +1,5 @@
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+
 import React, { useEffect, useState } from "react";
 
 import { AsyncStorage, StatusBar } from "react-native";
@@ -21,6 +23,8 @@ import {
 import { default as theme } from "./src/assets/theme.json";
 import Loading from "./src/components/Loading";
 import { APIAccountData } from "./src/api";
+
+import { ThemeStyles } from "./src/styles";
 
 export default function App() {
     const [isLoading, setIsLoading] = useState(true);
@@ -104,12 +108,14 @@ export default function App() {
     }
 
     return (
-        <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
-            <IconRegistry icons={EvaIconsPack} />
-            <StatusBar barStyle="light-content" />
-            <UserContext.Provider value={{ state, dispatch }}>
-                <Navigation />
-            </UserContext.Provider>
-        </ApplicationProvider>
+        <SafeAreaProvider>
+            <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
+                <IconRegistry icons={EvaIconsPack} />
+                <StatusBar barStyle="light-content" />
+                <UserContext.Provider value={{ state, dispatch }}>
+                    <Navigation />
+                </UserContext.Provider>
+            </ApplicationProvider>
+        </SafeAreaProvider>
     );
 }
