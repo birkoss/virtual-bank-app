@@ -23,6 +23,7 @@ import {
     TransactionsScreenNavigationProp,
     Transaction,
     TransactionCategory,
+    User,
 } from "../types";
 import { UserContext } from "../contexts";
 import { APIListTransactions, APITransactionsStats } from "../api";
@@ -45,6 +46,10 @@ export default function TransactionsScreen({ navigation }: Props) {
         value: 0,
     });
 
+    const getFullname = (user: User): string => {
+        return user.firstname + " " + user.lastname;
+    };
+
     // @TODO : Watch for account_to === account_from (system transfer)
     // @TODO : Add the category (if available)
     // @TODO : New color for system transaction
@@ -52,12 +57,8 @@ export default function TransactionsScreen({ navigation }: Props) {
         <ListItem
             title={
                 item.account_to.id !== state.account?.id
-                    ? item.account_to.user.firstname +
-                      " " +
-                      item.account_to.user.lastname
-                    : item.account_from.user.firstname +
-                      " " +
-                      item.account_from.user.lastname
+                    ? getFullname(item.account_to.user)
+                    : getFullname(item.account_from.user)
             }
             description={new Intl.DateTimeFormat("en-CA", {
                 year: "numeric",
@@ -157,38 +158,42 @@ export default function TransactionsScreen({ navigation }: Props) {
             navigation={navigation}
             title="Transactions"
         >
+            <Card
+                style={styles.cardContainer}
+                header={(props) => (
+                    <View {...props}>
+                        <Text category="h6">Expenses</Text>
+
+                        {label !== "" && (
+                            <Text category="s1">
+                                {label} : {value}
+                            </Text>
+                        )}
+                    </View>
+                )}
+            >
+                {expensesStats.length === 0 && (
+                    <Text>No expense at the moment</Text>
+                )}
+
+                {expensesStats.length > 0 && (
+                    <PieChart
+                        style={styles.pieChart}
+                        outerRadius={"80%"}
+                        innerRadius={"45%"}
+                        data={expensesStats}
+                    />
+                )}
+            </Card>
+
             {transactions.length === 0 && <EmptyList text="No transactions" />}
 
             {transactions.length > 0 && (
-                <>
-                    <Card
-                        style={styles.cardContainer}
-                        header={(props) => (
-                            <View {...props}>
-                                <Text category="h6">Expenses</Text>
-
-                                {label !== "" && (
-                                    <Text category="s1">
-                                        {label} : {value}
-                                    </Text>
-                                )}
-                            </View>
-                        )}
-                    >
-                        <PieChart
-                            style={styles.pieChart}
-                            outerRadius={"80%"}
-                            innerRadius={"45%"}
-                            data={expensesStats}
-                        />
-                    </Card>
-
-                    <List
-                        data={transactions}
-                        style={styles.transactionsList}
-                        renderItem={renderItem}
-                    />
-                </>
+                <List
+                    data={transactions}
+                    style={styles.transactionsList}
+                    renderItem={renderItem}
+                />
             )}
         </Screen>
     );
