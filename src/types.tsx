@@ -112,7 +112,9 @@ export type TransactionCategory = {
 export type Transaction = {
     id: string;
     amount: number;
+    category: TransactionCategory;
     date_added: string;
     account_to: Account;
     account_from: Account;
+    description: string;
 };

@@ -50,7 +50,6 @@ export default function TransactionsScreen({ navigation }: Props) {
         return user.firstname + " " + user.lastname;
     };
 
-    // @TODO : Add the category (if available)
     const renderItem = ({ item }: { item: Transaction }) => {
         let userFullname =
             item.account_to.id !== state.account?.id
@@ -62,6 +61,13 @@ export default function TransactionsScreen({ navigation }: Props) {
             month: "long",
             day: "2-digit",
         }).format(Date.parse(item.date_added));
+
+        if (item.category !== null) {
+            description += "\n" + item.category.name;
+        }
+        if (item.description !== null && item.description !== "") {
+            description += "\n" + item.description;
+        }
 
         let style = styles.amountIn;
         let amount: string = item.amount.toString();
