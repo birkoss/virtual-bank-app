@@ -1,4 +1,5 @@
 const APIUrl = "https://api.kidbux.app/v1/";
+//const APIUrl = "http://localhost:8000/v1/";
 
 class ApiError extends Error {
     constructor(...params: any[]) {

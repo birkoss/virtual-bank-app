@@ -45,6 +45,9 @@ export default function TransactionsScreen({ navigation }: Props) {
         value: 0,
     });
 
+    // @TODO : Watch for account_to === account_from (system transfer)
+    // @TODO : Add the category (if available)
+    // @TODO : New color for system transaction
     const renderItem = ({ item }: { item: Transaction }) => (
         <ListItem
             title={
