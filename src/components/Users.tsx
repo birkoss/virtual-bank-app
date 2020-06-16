@@ -13,10 +13,15 @@ type Props = {
 
 export default function Users({ users, action }: Props) {
     const renderItem = ({ item }: { item: User }) => {
+        let description: string = item.email;
+        if (item.accounts[0].balance !== undefined) {
+            description += "\nBalance: " + item.accounts[0].balance + " $";
+        }
+
         return (
             <ListItem
                 title={`${item.firstname} ${item.lastname}`}
-                description={item.email}
+                description={description}
                 accessoryLeft={item.is_children ? UsersIcon : AdultIcon}
                 accessoryRight={() => action(item)}
             />
