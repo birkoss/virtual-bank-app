@@ -63,10 +63,6 @@ export default function TransactionsCategoriesListScreen({
     };
 
     const deleteCategory = (category: TransactionCategory) => {
-        if (category.transactions !== 0) {
-            return null;
-        }
-
         return (
             <Button size="tiny" onPress={() => askConfirmation(category)}>
                 DELETE
