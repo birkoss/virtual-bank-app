@@ -63,7 +63,7 @@ export default function TransactionsCategoriesListScreen({
     };
 
     const deleteCategory = (category: TransactionCategory) => {
-        if (category.transactions === 0) {
+        if (category.transactions !== 0) {
             return null;
         }
 
