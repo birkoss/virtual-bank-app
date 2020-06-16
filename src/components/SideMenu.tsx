@@ -1,11 +1,15 @@
-import React, { useContext, Children } from "react";
+import React, { useContext } from "react";
 import { ImageBackground, StyleSheet } from "react-native";
-import { Divider, Drawer, DrawerItem, IndexPath } from "@ui-kitten/components";
 import {
-    NavigationHelpers,
-    DrawerNavigationState,
-} from "@react-navigation/native";
-import { DrawerNavigationEventMap } from "@react-navigation/drawer/lib/typescript/src/types";
+    Divider,
+    Drawer,
+    DrawerItem,
+    IndexPath,
+    useStyleSheet,
+    StyleService,
+    Layout,
+} from "@ui-kitten/components";
+import { DrawerNavigationState } from "@react-navigation/native";
 
 import {
     UsersIcon,
@@ -17,14 +21,16 @@ import {
 import { UserContext } from "../contexts";
 
 const Header = (props: any) => {
+    const styles = useStyleSheet(themeStyles);
+
     return (
-        <React.Fragment>
+        <Layout style={styles.container}>
             <ImageBackground
                 style={[props.style, styles.header]}
                 source={require("../assets/icon.png")}
             />
             <Divider />
-        </React.Fragment>
+        </Layout>
     );
 };
 
@@ -90,10 +96,14 @@ export const SideMenu = ({ navigation, state }: Props) => {
     );
 };
 
-const styles = StyleSheet.create({
+const themeStyles = StyleService.create({
+    container: {
+        backgroundColor: "color-primary-default",
+    },
     header: {
         height: 128,
+        width: 128,
         flexDirection: "row",
-        alignItems: "center",
+        alignSelf: "center",
     },
 });
