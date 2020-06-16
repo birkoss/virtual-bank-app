@@ -46,42 +46,48 @@ export default function TransactionsScreen({ navigation }: Props) {
         value: 0,
     });
 
-    const getFullname = (user: User): string => {
+    const getUserFullname = (user: User): string => {
         return user.firstname + " " + user.lastname;
     };
 
-    // @TODO : Watch for account_to === account_from (system transfer)
     // @TODO : Add the category (if available)
-    // @TODO : New color for system transaction
-    const renderItem = ({ item }: { item: Transaction }) => (
-        <ListItem
-            title={
-                item.account_to.id !== state.account?.id
-                    ? getFullname(item.account_to.user)
-                    : getFullname(item.account_from.user)
-            }
-            description={new Intl.DateTimeFormat("en-CA", {
-                year: "numeric",
-                month: "long",
-                day: "2-digit",
-            }).format(Date.parse(item.date_added))}
-            accessoryLeft={(props) => (
-                <Icon {...props} name="person-add-outline" />
-            )}
-            accessoryRight={() => (
-                <Text
-                    style={
-                        item.account_to.id === state.account?.id
-                            ? styles.amountIn
-                            : styles.amountOut
-                    }
-                >
-                    {item.account_to.id === state.account?.id ? "" : "-"}
-                    {item.amount}$
-                </Text>
-            )}
-        />
-    );
+    const renderItem = ({ item }: { item: Transaction }) => {
+        let userFullname =
+            item.account_to.id !== state.account?.id
+                ? getUserFullname(item.account_to.user)
+                : getUserFullname(item.account_from.user);
+
+        let description = new Intl.DateTimeFormat("en-CA", {
+            year: "numeric",
+            month: "long",
+            day: "2-digit",
+        }).format(Date.parse(item.date_added));
+
+        let style = styles.amountIn;
+        let amount: string = item.amount.toString();
+
+        if (
+            item.account_to.id === state.account?.accounts[0].id &&
+            item.account_from.id === state.account?.accounts[0].id
+        ) {
+            style = styles.amountSystem;
+            userFullname = "System";
+        } else if (item.account_to.id !== state.account?.accounts[0].id) {
+            style = styles.amountOut;
+            amount = "-" + amount;
+        }
+
+        return (
+            <ListItem
+                title={userFullname}
+                description={description}
+                accessoryLeft={(props) => (
+                    <Icon {...props} name="person-add-outline" />
+                )}
+                accessoryRight={() => <Text style={style}>{amount} $</Text>}
+            />
+        );
+    };
 
     const { label, value } = selectedSlice;
 
@@ -205,6 +211,9 @@ const themeStyles = StyleService.create({
     },
     amountOut: {
         color: "color-danger-default",
+    },
+    amountSystem: {
+        color: "color-info-default",
     },
     cardContainer: {
         margin: 20,
