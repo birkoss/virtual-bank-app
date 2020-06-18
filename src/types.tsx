@@ -48,6 +48,16 @@ export type TransactionsCategoriesScreenNavigationProp = CompositeNavigationProp
     StackNavigationProp<UsersStackParamList>
 >;
 
+export type GoalsStackParamList = {
+    List: undefined;
+    Add: undefined;
+    Edit: undefined;
+};
+export type GoalsScreenNavigationProp = CompositeNavigationProp<
+    DrawerNavigationProp<DrawerParamList>,
+    StackNavigationProp<UsersStackParamList>
+>;
+
 export type TransactionsStackParamList = {
     Transactions: undefined;
 };
@@ -123,4 +133,10 @@ export type Transaction = {
     account_to: Account;
     account_from: Account;
     description: string;
+};
+
+export type Goal = {
+    id: string;
+    name: string;
+    amount: number;
 };

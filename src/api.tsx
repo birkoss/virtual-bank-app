@@ -1,5 +1,5 @@
-const APIUrl = "https://api.walleteur.app/v1/";
-//const APIUrl = "http://localhost:8000/v1/";
+//const APIUrl = "https://api.walleteur.app/v1/";
+const APIUrl = "http://localhost:8000/v1/";
 
 class ApiError extends Error {
     constructor(...params: any[]) {
@@ -106,6 +106,14 @@ export function APIAddTransactionsCategories(token: string, category: object) {
     });
 }
 
+export function APIAddGoal(token: string, goal: object) {
+    let request = APICreateRequest("goals", "POST", goal, token);
+
+    return APIFetchRequest(request, (data: any) => {
+        return {};
+    });
+}
+
 export function APIAddUser(token: string, user: object) {
     let request = APICreateRequest("users", "POST", user, token);
 
@@ -124,6 +132,13 @@ export function APIDeleteTransactionsCategories(
         null,
         token
     );
+    return APIFetchRequest(request, (data: any) => {
+        return {};
+    });
+}
+
+export function APIDeleteGoals(token: string, goalID: string) {
+    let request = APICreateRequest("goals/" + goalID, "DELETE", null, token);
     return APIFetchRequest(request, (data: any) => {
         return {};
     });
@@ -172,6 +187,16 @@ export function APIListTransactionsCategories(token: string) {
     return APIFetchRequest(request, (data: any) => {
         return {
             transactionsCategories: data["transactionsCategories"],
+        };
+    });
+}
+
+export function APIListGoals(token: string) {
+    let request = APICreateRequest("goals", "GET", null, token);
+
+    return APIFetchRequest(request, (data: any) => {
+        return {
+            goals: data["goals"],
         };
     });
 }

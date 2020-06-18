@@ -15,6 +15,7 @@ import {
     UsersIcon,
     HomeIcon,
     ForwardIcon,
+    GoalIcon,
     TransactionsCategoriesIcon,
     LogoutIcon,
 } from "../icons";
@@ -69,6 +70,15 @@ export const SideMenu = ({ navigation, state }: Props) => {
             />
         );
     }
+
+    tabs.push(
+        <DrawerItem
+            title="Goals"
+            accessoryLeft={GoalIcon}
+            accessoryRight={ForwardIcon}
+        />
+    );
+
     tabs.push(
         <DrawerItem
             title="Logout"

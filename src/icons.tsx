@@ -28,6 +28,10 @@ export const UserAddIcon = (props: any) => (
     <Icon {...props} name="person-add-outline" />
 );
 
+export const GoalIcon = (props: any) => (
+    <Icon {...props} name="pie-chart-outline" />
+);
+
 export const ForwardIcon = (props: any) => {
     return <Icon {...props} name="arrow-ios-forward" />;
 };

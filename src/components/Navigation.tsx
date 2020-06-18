@@ -14,7 +14,7 @@ import {
     useStyleSheet,
 } from "@ui-kitten/components";
 
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { SideMenu } from "../components/SideMenu";
 
@@ -32,6 +32,9 @@ import UsersAddScreen from "../screens/users/Add";
 import TransactionsCategoriesAddScreen from "../screens/transactions-categories/Add";
 import TransactionsCategoriesListScreen from "../screens/transactions-categories/List";
 
+import GoalsAddScreen from "../screens/goals/Add";
+import GoalsListScreen from "../screens/goals/List";
+
 import {
     HomeIcon,
     TransactionsIcon,
@@ -46,6 +49,7 @@ import {
     SendMoneyStackParamList,
     UsersStackParamList,
     TransactionsCategoriesStackParamList,
+    GoalsStackParamList,
 } from "../types";
 import { UserContext } from "../contexts";
 import ChangeCategoryScreen from "../screens/ChangeCategory";
@@ -87,6 +91,16 @@ const TransactionsCategoriesStackScreen = () => {
                 component={TransactionsCategoriesAddScreen}
             />
         </TransactionsCategoriesStack.Navigator>
+    );
+};
+
+const GoalsStack = createStackNavigator<GoalsStackParamList>();
+const GoalsStackScreen = () => {
+    return (
+        <GoalsStack.Navigator headerMode="none">
+            <GoalsStack.Screen name="List" component={GoalsListScreen} />
+            <GoalsStack.Screen name="Add" component={GoalsAddScreen} />
+        </GoalsStack.Navigator>
     );
 };
 
@@ -223,6 +237,10 @@ export default function Navigation() {
                         <Drawer.Screen
                             name="Transactions Categories"
                             component={TransactionsCategoriesStackScreen}
+                        />
+                        <Drawer.Screen
+                            name="Goals"
+                            component={GoalsStackScreen}
                         />
                     </Drawer.Navigator>
                 ) : (
