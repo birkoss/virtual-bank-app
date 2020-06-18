@@ -1,4 +1,4 @@
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import React, { useEffect, useState } from "react";
 
@@ -23,8 +23,6 @@ import {
 import { default as theme } from "./src/assets/theme.json";
 import Loading from "./src/components/Loading";
 import { APIAccountData } from "./src/api";
-
-import { ThemeStyles } from "./src/styles";
 
 export default function App() {
     const [isLoading, setIsLoading] = useState(true);
@@ -54,13 +52,12 @@ export default function App() {
             .catch((error) => {
                 console.log("GetData.catch", error);
 
-                // @TODO : Force a reload to logout
-                // @TODO : Logout on every error, not only invalid token
-                if (error.message == "Invalid token.") {
-                    dispatch({
-                        type: "LOGOUT",
-                    });
-                }
+                // Logout on every error. Let the login handle errors
+                dispatch({
+                    type: "LOGOUT",
+                });
+
+                setIsLoading(false);
             });
     };
 
