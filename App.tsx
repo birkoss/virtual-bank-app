@@ -55,7 +55,7 @@ export default function App() {
                 console.log("GetData.catch", error);
 
                 // @TODO : Force a reload to logout
-                // @TODO : Logout on every error, not onlu invalid token
+                // @TODO : Logout on every error, not only invalid token
                 if (error.message == "Invalid token.") {
                     dispatch({
                         type: "LOGOUT",

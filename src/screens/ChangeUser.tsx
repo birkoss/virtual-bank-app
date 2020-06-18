@@ -28,7 +28,7 @@ export default function ChangeUserScreen({ navigation, route }: Props) {
                 disabled={user.accounts[0].id === route.params.accountID}
                 size="tiny"
                 onPress={() =>
-                    navigation.navigate("SendMoney", {
+                    navigation.navigate(route.params.screenName as any, {
                         newAccountID: user.accounts[0].id,
                     })
                 }

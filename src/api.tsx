@@ -1,4 +1,4 @@
-const APIUrl = "https://api.kidbux.app/v1/";
+const APIUrl = "https://api.walleteur.app/v1/";
 //const APIUrl = "http://localhost:8000/v1/";
 
 class ApiError extends Error {
@@ -73,8 +73,18 @@ function APIFetchRequest(request: Request, response: Function) {
         });
 }
 
-export function APIAddTransactions(token: string, transaction: object) {
-    let request = APICreateRequest("transactions", "POST", transaction, token);
+export function APISendMoney(token: string, transaction: object) {
+    let request = APICreateRequest("sendMoney", "POST", transaction, token);
+
+    return APIFetchRequest(request, (data: any) => {
+        return {
+            balance: data["balance"],
+        };
+    });
+}
+
+export function APIWithdrawMoney(token: string, transaction: object) {
+    let request = APICreateRequest("withdrawMoney", "POST", transaction, token);
 
     return APIFetchRequest(request, (data: any) => {
         return {

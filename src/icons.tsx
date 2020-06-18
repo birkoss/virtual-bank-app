@@ -12,7 +12,7 @@ export const SendMoneyIcon = (props: any) => (
     <Icon {...props} name="person-remove-outline" />
 );
 
-export const ReceiveMoney = (props: any) => (
+export const WithdrawMoneyIcon = (props: any) => (
     <Icon {...props} name="person-add-outline" />
 );
 

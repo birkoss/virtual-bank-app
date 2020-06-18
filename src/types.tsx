@@ -61,12 +61,18 @@ export type SendMoneyStackParamList = {
         newAccountID?: string;
         newCategoryID?: string;
     };
+    WithdrawMoney: {
+        newAccountID?: string;
+        newCategoryID?: string;
+    };
     ChangeUser: {
         accountID: string;
+        screenName: string;
         users: User[];
     };
     ChangeCategory: {
         categoryID: string;
+        screenName: string;
         categories: TransactionCategory[];
     };
 };

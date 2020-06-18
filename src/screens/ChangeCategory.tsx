@@ -28,7 +28,7 @@ export default function ChangeCategoryScreen({ navigation, route }: Props) {
                 disabled={route.params.categoryID === category.id}
                 size="tiny"
                 onPress={() =>
-                    navigation.navigate("SendMoney", {
+                    navigation.navigate(route.params.screenName as any, {
                         newCategoryID: category.id,
                     })
                 }

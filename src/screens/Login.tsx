@@ -87,7 +87,7 @@ export default function LoginScreen({ navigation }: Props) {
         <KeyboardAvoidingView style={styles.container}>
             <View style={styles.headerContainer}>
                 <Text category="h1" status="control">
-                    Virtual Bank
+                    Walleteur
                 </Text>
                 <Text style={styles.subtitle} category="s1" status="control">
                     Sign in to your account

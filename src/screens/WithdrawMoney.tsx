@@ -12,15 +12,15 @@ type Props = {
     route: SendMoneyScreenRouteProp;
 };
 
-export default function SendMoneyScreen({ navigation, route }: Props) {
+export default function WithdrawMoneyScreen({ navigation, route }: Props) {
     return (
         <MoneyTransfer
             navigation={navigation}
             route={route}
-            type="send"
-            button="Send Money"
-            title="Send Money"
-            userLabel="To"
+            type="withdraw"
+            button="Withdraw Money"
+            title="Withdraw Money"
+            userLabel="From"
         />
     );
 }

@@ -23,6 +23,7 @@ import HomeScreen from "../screens/Home";
 import RegisterScreen from "../screens/Register";
 import TransactionsScreen from "../screens/Transactions";
 import SendMoneyScreen from "../screens/SendMoney";
+import WithdrawMoneyScreen from "../screens/WithdrawMoney";
 import ChangeUserScreen from "../screens/ChangeUser";
 
 import UsersListScreen from "../screens/users/List";
@@ -35,8 +36,7 @@ import {
     HomeIcon,
     TransactionsIcon,
     SendMoneyIcon,
-    ReceiveMoney,
-    TransactionsCategoriesIcon,
+    WithdrawMoneyIcon,
 } from "../icons";
 
 import {
@@ -122,6 +122,26 @@ const SendMoneyStackScreen = () => {
     );
 };
 
+const WithdrawMoneyStack = createStackNavigator<SendMoneyStackParamList>();
+const WithdrawMoneyStackScreen = () => {
+    return (
+        <WithdrawMoneyStack.Navigator headerMode="none">
+            <WithdrawMoneyStack.Screen
+                name="WithdrawMoney"
+                component={WithdrawMoneyScreen}
+            />
+            <WithdrawMoneyStack.Screen
+                name="ChangeUser"
+                component={ChangeUserScreen}
+            />
+            <WithdrawMoneyStack.Screen
+                name="ChangeCategory"
+                component={ChangeCategoryScreen}
+            />
+        </WithdrawMoneyStack.Navigator>
+    );
+};
+
 const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => {
     const { state: contextState } = useContext(UserContext);
 
@@ -151,8 +171,8 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => {
     if (contextState.account?.is_children === false) {
         children.push(
             <BottomNavigationTab
-                title={state.index === 3 ? "Receive" : undefined}
-                icon={ReceiveMoney}
+                title={state.index === 3 ? "Withdraw" : undefined}
+                icon={WithdrawMoneyIcon}
             />
         );
     }
@@ -176,7 +196,7 @@ const TabsScreen = () => {
                 component={TransactionsStackScreen}
             />
             <Tabs.Screen name="Send" component={SendMoneyStackScreen} />
-            <Tabs.Screen name="Receive" component={HomeStackScreen} />
+            <Tabs.Screen name="Withdraw" component={WithdrawMoneyStackScreen} />
         </Tabs.Navigator>
     );
 };

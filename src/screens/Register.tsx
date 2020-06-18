@@ -113,7 +113,7 @@ export default function RegisterScreen({ navigation }: Props) {
         <KeyboardAvoidingView style={styles.container}>
             <View style={styles.headerContainer}>
                 <Text category="h1" status="control">
-                    Virtual Bank
+                    Walleteur
                 </Text>
                 <Text style={styles.subtitle} category="s1" status="control">
                     Create a new account for free
