@@ -237,6 +237,7 @@ export function APIStats(token: string) {
     return APIFetchRequest(request, (data: any) => {
         return {
             accounts: data["accounts"],
+            goals: data["goals"],
         };
     });
 }

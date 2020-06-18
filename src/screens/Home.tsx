@@ -8,7 +8,7 @@ import { ProgressCircle } from "react-native-svg-charts";
 import Screen from "../components/Screen";
 
 import { APIStats } from "../api";
-import { HomeScreenNavigationProp, Account } from "../types";
+import { HomeScreenNavigationProp, Account, Goal } from "../types";
 import { UserContext } from "../contexts";
 
 type Props = {
@@ -20,13 +20,17 @@ export default function HomeScreen({ navigation }: Props) {
     const { state } = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(true);
     const [balance, setBalance] = useState(0);
-    const [goal, setGoal] = useState(150);
+    const [goal, setGoal] = useState<Goal | undefined>(undefined);
 
     const getStats = () => {
         APIStats(state.token)
             .then((data) => {
                 data["accounts"].forEach((account: Account) => {
                     setBalance(account.balance);
+                });
+                setGoal(undefined);
+                data["goals"].forEach((goal: Goal) => {
+                    setGoal(goal);
                 });
                 setIsLoading(false);
             })
@@ -57,27 +61,34 @@ export default function HomeScreen({ navigation }: Props) {
                     </Text>
                 </Card>
 
-                <Card
-                    style={styles.cardContainer}
-                    header={(props) => (
-                        <View {...props}>
-                            <Text category="h6">Your goal</Text>
+                {goal !== undefined && (
+                    <Card
+                        style={styles.cardContainer}
+                        header={(props) => (
+                            <View {...props}>
+                                <Text category="h6">Your goal</Text>
+                            </View>
+                        )}
+                        footer={(props) => (
+                            <View {...props}>
+                                <Text category="h6">{goal.name}</Text>
+                            </View>
+                        )}
+                    >
+                        <View style={styles.goalAmountsContainer}>
+                            <Text category="h5">
+                                {balance} / {goal.amount} $
+                            </Text>
                         </View>
-                    )}
-                >
-                    <View style={styles.goalAmountsContainer}>
-                        <Text category="h5">
-                            {balance} / {goal} $
-                        </Text>
-                    </View>
-                    <ProgressCircle
-                        progressColor="#FF4C58"
-                        startAngle={-Math.PI * 0.8}
-                        endAngle={Math.PI * 0.8}
-                        style={styles.goalChart}
-                        progress={balance / goal}
-                    />
-                </Card>
+                        <ProgressCircle
+                            progressColor="#FF4C58"
+                            startAngle={-Math.PI * 0.8}
+                            endAngle={Math.PI * 0.8}
+                            style={styles.goalChart}
+                            progress={balance / goal.amount}
+                        />
+                    </Card>
+                )}
             </View>
         </Screen>
     );

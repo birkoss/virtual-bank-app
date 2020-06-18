@@ -1,3 +1,13 @@
+// @TODO : Wizards for first login of parents (maybe when no users and categories)
+// @TODO : Allow the creation of children without email and lastname
+// @TODO : Allow the login with the UUID for children, and not their email
+// @TODO : Fix the users list render when a children is there, to remove the email
+// @TODO : Better login screen with children access (once approuved)
+// @TODO : Allow push notification on login, save the expo token
+// @TODO : On logout, remove the expo token in the server
+// @TODO : Tests without internet connexion (once approuved)
+// @TODO : Add goal (Limit and text)
+
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import React, { useEffect, useState } from "react";
