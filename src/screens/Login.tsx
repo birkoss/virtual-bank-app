@@ -12,7 +12,7 @@ import ButtonLoading from "../components/ButtonLoading";
 
 import { LoginScreenNavigationProp } from "../types";
 
-import { onePagerStyles } from "../styles/onePagerStyles";
+import { LandingStyles } from "../styles";
 
 import { validateEmail } from "../validations";
 
@@ -40,7 +40,7 @@ export default function LoginScreen({ navigation }: Props) {
         defaultValues,
     });
 
-    const styles = useStyleSheet(onePagerStyles);
+    const styles = useStyleSheet(LandingStyles);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 

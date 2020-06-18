@@ -7,12 +7,11 @@ import { useForm } from "react-hook-form";
 
 import { KeyboardAvoidingView } from "../components/KeyboardAvoidingView";
 import Input from "../components/Input";
-import ErrorMessage from "../components/ErrorMessage";
 import ButtonLoading from "../components/ButtonLoading";
 
 import { RegisterScreenNavigationProp } from "../types";
 
-import { onePagerStyles } from "../styles/onePagerStyles";
+import { LandingStyles } from "../styles";
 
 import { validateEmail, validatePasswordConfirmation } from "../validations";
 
@@ -48,7 +47,7 @@ export default function RegisterScreen({ navigation }: Props) {
         defaultValues,
     });
 
-    const styles = useStyleSheet(onePagerStyles);
+    const styles = useStyleSheet(LandingStyles);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
