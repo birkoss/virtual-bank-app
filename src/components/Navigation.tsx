@@ -35,6 +35,8 @@ import TransactionsCategoriesListScreen from "../screens/transactions-categories
 import GoalsAddScreen from "../screens/goals/Add";
 import GoalsListScreen from "../screens/goals/List";
 
+import WizardScreen from "../screens/Wizard";
+
 import {
     HomeIcon,
     TransactionsIcon,
@@ -50,6 +52,7 @@ import {
     UsersStackParamList,
     TransactionsCategoriesStackParamList,
     GoalsStackParamList,
+    WizardStackParamList,
 } from "../types";
 import { UserContext } from "../contexts";
 import ChangeCategoryScreen from "../screens/ChangeCategory";
@@ -63,6 +66,15 @@ const HomeStackScreen = () => {
         <HomeStack.Navigator headerMode="none">
             <HomeStack.Screen name="Home" component={HomeScreen} />
         </HomeStack.Navigator>
+    );
+};
+
+const WizardStack = createStackNavigator<WizardStackParamList>();
+const WizardStackScreen = () => {
+    return (
+        <WizardStack.Navigator headerMode="none">
+            <WizardStack.Screen name="Wizard" component={WizardScreen} />
+        </WizardStack.Navigator>
     );
 };
 
@@ -202,6 +214,8 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => {
 
 const Tabs = createBottomTabNavigator();
 const TabsScreen = () => {
+    return <WizardStackScreen />;
+
     return (
         <Tabs.Navigator tabBar={(props) => <BottomTabBar {...props} />}>
             <Tabs.Screen name="Home" component={HomeStackScreen} />
@@ -230,6 +244,7 @@ export default function Navigation() {
                         drawerContent={(props) => <SideMenu {...props} />}
                     >
                         <Drawer.Screen name="Home" component={TabsScreen} />
+
                         <Drawer.Screen
                             name="Users"
                             component={UsersStackScreen}

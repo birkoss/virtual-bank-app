@@ -1,6 +1,6 @@
 import React from "react";
 
-import { View, ImagePropTypes } from "react-native";
+import { View } from "react-native";
 
 import { FieldError } from "react-hook-form";
 

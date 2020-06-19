@@ -28,6 +28,14 @@ export type HomeScreenNavigationProp = CompositeNavigationProp<
     StackNavigationProp<HomeStackParamList>
 >;
 
+export type WizardStackParamList = {
+    Wizard: undefined;
+};
+export type WizardScreenNavigationProp = CompositeNavigationProp<
+    DrawerNavigationProp<DrawerParamList>,
+    StackNavigationProp<WizardStackParamList>
+>;
+
 export type UsersStackParamList = {
     List: undefined;
     Add: undefined;
