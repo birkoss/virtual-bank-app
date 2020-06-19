@@ -6,7 +6,6 @@
 // @TODO : Allow push notification on login, save the expo token
 // @TODO : On logout, remove the expo token in the server
 // @TODO : Tests without internet connexion (once approuved)
-// @TODO : Add goal (Limit and text)
 
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
