@@ -214,7 +214,10 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => {
 
 const Tabs = createBottomTabNavigator();
 const TabsScreen = () => {
-    return <WizardStackScreen />;
+    const { state } = useContext(UserContext);
+    if (!state.wizardCompleted) {
+        return <WizardStackScreen />;
+    }
 
     return (
         <Tabs.Navigator tabBar={(props) => <BottomTabBar {...props} />}>

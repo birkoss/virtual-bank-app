@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { View } from "react-native";
+import { View, Alert } from "react-native";
 
 import {
     Text,
@@ -7,12 +7,17 @@ import {
     StyleService,
     useStyleSheet,
     Button,
+    Icon,
 } from "@ui-kitten/components";
 
 import Screen from "../components/Screen";
 
-import { APIStats } from "../api";
-import { WizardScreenNavigationProp, Account, Goal } from "../types";
+import { APIListTransactionsCategories, APIListFamilyMembers } from "../api";
+import {
+    WizardScreenNavigationProp,
+    User,
+    TransactionCategory,
+} from "../types";
 import { UserContext } from "../contexts";
 import { MenuIcon, UsersIcon } from "../icons";
 
@@ -22,30 +27,56 @@ type Props = {
 
 export default function WizardScreen({ navigation }: Props) {
     const styles = useStyleSheet(themeStyles);
-    const { state } = useContext(UserContext);
+    const { state, dispatch } = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(true);
-    const [balance, setBalance] = useState(0);
-    const [goal, setGoal] = useState<Goal | undefined>(undefined);
 
-    const getStats = () => {
-        APIStats(state.token)
+    const [users, setUsers] = useState<User[]>([]);
+
+    const [categories, setCategories] = useState<TransactionCategory[]>([]);
+
+    const closeWizard = () => {
+        dispatch({
+            type: "CLOSE_WIZARD",
+        });
+    };
+
+    const getUsers = () => {
+        setIsLoading(true);
+
+        APIListFamilyMembers(state.token)
             .then((data) => {
-                data["accounts"].forEach((account: Account) => {
-                    setBalance(account.balance);
+                let newUsers: User[] = [];
+                data["users"].forEach((user: User) => {
+                    newUsers.push(user);
                 });
-                setGoal(undefined);
-                data["goals"].forEach((goal: Goal) => {
-                    setGoal(goal);
-                });
+                setUsers(newUsers);
+
+                // Get the transactions categories
+                getCategories();
+            })
+            .catch((error) => Alert.alert(error.message));
+    };
+
+    const getCategories = () => {
+        APIListTransactionsCategories(state.token)
+            .then((data) => {
+                let newCategories: TransactionCategory[] = [];
+                data["transactionsCategories"].forEach(
+                    (category: TransactionCategory) => {
+                        newCategories.push(category);
+                    }
+                );
+                setCategories(newCategories);
+
                 setIsLoading(false);
             })
-            .catch((error) => console.log("error", error));
+            .catch((error) => Alert.alert(error.message));
     };
 
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", () => {
             setIsLoading(true);
-            getStats();
+            getUsers();
         });
         return unsubscribe;
     }, [navigation]);
@@ -64,17 +95,38 @@ export default function WizardScreen({ navigation }: Props) {
                         navigation.openDrawer();
                     }}
                 >
-                    <Text category="h6" style={styles.paragraph}>
-                        You must create users to be able to make transactions.
-                    </Text>
-                    <Button
-                        status="primary"
-                        onPress={() => {
-                            navigation.openDrawer();
-                        }}
-                    >
-                        Open the menu
-                    </Button>
+                    {users.length === 0 && (
+                        <>
+                            <Text category="h6" style={styles.paragraph}>
+                                You must create users to be able to make
+                                transactions.
+                            </Text>
+                            <Button
+                                status="primary"
+                                onPress={() => {
+                                    navigation.openDrawer();
+                                }}
+                            >
+                                Open the menu
+                            </Button>
+                        </>
+                    )}
+
+                    {users.length > 0 && (
+                        <Button
+                            status="success"
+                            appearance="ghost"
+                            size="large"
+                            accessoryLeft={(props) => (
+                                <Icon
+                                    {...props}
+                                    width={50}
+                                    height={50}
+                                    name="checkmark-circle-2-outline"
+                                />
+                            )}
+                        />
+                    )}
                 </Card>
 
                 <Card
@@ -87,24 +139,51 @@ export default function WizardScreen({ navigation }: Props) {
                         </View>
                     )}
                 >
-                    <Text category="h6" style={styles.paragraph}>
-                        You must create at least one categories to be able to
-                        make transactions.
-                    </Text>
-                    <Button
-                        status="primary"
-                        onPress={() => {
-                            navigation.openDrawer();
-                        }}
-                    >
-                        Open the menu
-                    </Button>
+                    {categories.length === 0 && (
+                        <>
+                            <Text category="h6" style={styles.paragraph}>
+                                You must create at least one categories to be
+                                able to make transactions.
+                            </Text>
+                            <Button
+                                status="primary"
+                                onPress={() => {
+                                    navigation.openDrawer();
+                                }}
+                            >
+                                Open the menu
+                            </Button>
+                        </>
+                    )}
+
+                    {categories.length > 0 && (
+                        <Button
+                            status="success"
+                            appearance="ghost"
+                            size="large"
+                            accessoryLeft={(props) => (
+                                <Icon
+                                    {...props}
+                                    width={50}
+                                    height={50}
+                                    name="checkmark-circle-2-outline"
+                                />
+                            )}
+                        />
+                    )}
                 </Card>
 
                 <View>
-                    <Button appearance="ghost" status="basic">
-                        I know what to do. Skip the wizard!
-                    </Button>
+                    {users.length === 0 && categories.length === 0 && (
+                        <Button appearance="ghost" status="basic">
+                            I know what to do. Skip the wizard!
+                        </Button>
+                    )}
+                    {users.length > 0 && categories.length > 0 && (
+                        <Button status="primary" onPress={closeWizard}>
+                            Close the Wizard
+                        </Button>
+                    )}
                 </View>
             </View>
         </Screen>

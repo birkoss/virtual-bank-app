@@ -23,6 +23,7 @@ export default function HomeScreen({ navigation }: Props) {
     const [goal, setGoal] = useState<Goal | undefined>(undefined);
 
     const getStats = () => {
+        setIsLoading(true);
         APIStats(state.token)
             .then((data) => {
                 data["accounts"].forEach((account: Account) => {
@@ -37,13 +38,18 @@ export default function HomeScreen({ navigation }: Props) {
             .catch((error) => console.log("error", error));
     };
 
+    // Refresh when the navigation changed
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", () => {
-            setIsLoading(true);
             getStats();
         });
         return unsubscribe;
     }, [navigation]);
+
+    // Refresh when the Wizard is Completed!
+    useEffect(() => {
+        getStats();
+    }, [state.wizardCompleted]);
 
     return (
         <Screen isLoading={isLoading} title="Dashboard" navigation={navigation}>

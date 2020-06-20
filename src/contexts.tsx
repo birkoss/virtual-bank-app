@@ -4,12 +4,14 @@ import { User } from "./types";
 
 type UserContextInitialStateType = {
     isAuthenticated: boolean;
+    wizardCompleted: boolean;
     token: string;
     account: User | undefined;
 };
 
 export const UserContextInitialValues = {
     isAuthenticated: false,
+    wizardCompleted: false,
     token: "",
     account: undefined,
 };
@@ -50,6 +52,20 @@ export const UserContextReducer = (
                 ...state,
                 isAuthenticated: false,
                 token: "",
+            };
+        case "CLOSE_WIZARD":
+            try {
+                /* await */ AsyncStorage.setItem("wizard_completed", "1");
+            } catch (error) {
+                console.log(
+                    "UserContextReducer/AsyncStorage.setItem - wizard_completed",
+                    error
+                );
+            }
+
+            return {
+                ...state,
+                wizardCompleted: true,
             };
         default:
             console.log("action.type:" + action.type);
