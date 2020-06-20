@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { View, Alert } from "react-native";
+import { View, Alert, AsyncStorage } from "react-native";
 
 import {
     Text,
@@ -19,7 +19,7 @@ import {
     TransactionCategory,
 } from "../types";
 import { UserContext } from "../contexts";
-import { MenuIcon, UsersIcon } from "../icons";
+import { UsersIcon } from "../icons";
 
 type Props = {
     navigation: WizardScreenNavigationProp;
@@ -35,8 +35,14 @@ export default function WizardScreen({ navigation }: Props) {
     const [categories, setCategories] = useState<TransactionCategory[]>([]);
 
     const closeWizard = () => {
+        try {
+            /* await */ AsyncStorage.setItem("wizard_completed", "1");
+        } catch (error) {
+            console.log("AsyncStorage.setItem - wizard_completed", error);
+        }
+
         dispatch({
-            type: "CLOSE_WIZARD",
+            type: "WIZARD_COMPLETED",
         });
     };
 

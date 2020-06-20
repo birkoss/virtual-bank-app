@@ -48,21 +48,14 @@ export const UserContextReducer = (
             };
         case "LOGOUT":
             AsyncStorage.removeItem("token");
+            AsyncStorage.removeItem("wizard_completed");
             return {
                 ...state,
                 isAuthenticated: false,
+                wizardCompleted: false,
                 token: "",
             };
-        case "CLOSE_WIZARD":
-            try {
-                /* await */ AsyncStorage.setItem("wizard_completed", "1");
-            } catch (error) {
-                console.log(
-                    "UserContextReducer/AsyncStorage.setItem - wizard_completed",
-                    error
-                );
-            }
-
+        case "WIZARD_COMPLETED":
             return {
                 ...state,
                 wizardCompleted: true,

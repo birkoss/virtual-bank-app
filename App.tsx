@@ -85,8 +85,23 @@ export default function App() {
         }
     };
 
+    const getWizardCompletedFromStorage = async () => {
+        try {
+            const token = await AsyncStorage.getItem("wizard_completed");
+            if (token === "1") {
+                dispatch({
+                    type: "WIZARD_COMPLETED",
+                });
+            }
+
+            getTokenFromStorage();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
-        getTokenFromStorage();
+        getWizardCompletedFromStorage();
     }, []);
 
     useEffect(() => {
