@@ -181,7 +181,11 @@ export default function WizardScreen({ navigation }: Props) {
 
                 <View>
                     {users.length === 0 && categories.length === 0 && (
-                        <Button appearance="ghost" status="basic">
+                        <Button
+                            appearance="ghost"
+                            status="basic"
+                            onPress={closeWizard}
+                        >
                             I know what to do. Skip the wizard!
                         </Button>
                     )}

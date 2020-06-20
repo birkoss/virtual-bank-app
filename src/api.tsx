@@ -268,6 +268,7 @@ export function APIAccountData(token: string) {
     return APIFetchRequest(request, (data: any) => {
         return {
             account: data["account"],
+            needWizard: data["need_wizard"],
         };
     });
 }

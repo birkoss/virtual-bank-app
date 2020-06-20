@@ -44,6 +44,12 @@ export default function App() {
 
         APIAccountData(state.token)
             .then((data) => {
+                if (!data["needWizard"]) {
+                    dispatch({
+                        type: "WIZARD_COMPLETED",
+                    });
+                }
+
                 dispatch({
                     type: "SETDATA",
                     payload: {
