@@ -1,4 +1,3 @@
-// @TODO : Wizards for first login of parents (maybe when no users and categories)
 // @TODO : Allow the creation of children without email and lastname
 // @TODO : Allow the login with the UUID for children, and not their email
 // @TODO : Fix the users list render when a children is there, to remove the email
@@ -106,10 +105,12 @@ export default function App() {
         }
     };
 
+    // Load the NeedWizard status from storage (and the user token from storage)
     useEffect(() => {
         getWizardCompletedFromStorage();
     }, []);
 
+    // When we get a new User Token, refresh the account
     useEffect(() => {
         getAccountData();
     }, [state.token]);

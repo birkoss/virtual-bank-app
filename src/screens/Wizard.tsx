@@ -88,8 +88,17 @@ export default function WizardScreen({ navigation }: Props) {
     }, [navigation]);
 
     return (
-        <Screen isLoading={isLoading} title="Wizard" navigation={navigation}>
+        <Screen
+            isLoading={isLoading}
+            title="Setup Wizard"
+            navigation={navigation}
+        >
             <View style={{ padding: 20 }}>
+                <Text style={{ marginBottom: 20 }}>
+                    To be able to use Walleteur correctly, you need to complete
+                    those steps :
+                </Text>
+
                 <Card
                     style={styles.cardContainer}
                     header={(props) => (
