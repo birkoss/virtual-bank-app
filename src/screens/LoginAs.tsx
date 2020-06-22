@@ -88,7 +88,12 @@ export default function LoginAsScreen({ navigation }: Props) {
     }, [navigation]);
 
     return (
-        <Screen isLoading={isLoading} title="Login As" navigation={navigation}>
+        <Screen
+            isLoading={isLoading}
+            title="Login As"
+            navigation={navigation}
+            mainActionType="none"
+        >
             <View style={{ padding: 20 }}>
                 <Text style={{ marginBottom: 20 }}>
                     To be able to use Walleteur correctly, you need to complete

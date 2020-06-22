@@ -78,6 +78,7 @@ export default function LoginScreen({ navigation }: Props) {
             type: "LOGIN",
             payload: {
                 token: data["token"],
+                loginAs: true,
             },
         });
     };

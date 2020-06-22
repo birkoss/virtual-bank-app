@@ -1,5 +1,4 @@
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
     TopNavigation,
@@ -8,14 +7,12 @@ import {
     useStyleSheet,
     Text,
     TopNavigationAction,
-    Icon,
     Layout,
 } from "@ui-kitten/components";
-import { View, ViewProps } from "react-native";
+import { View } from "react-native";
 import LoadingScreen from "../screens/Loading";
-import { RenderProp } from "@ui-kitten/components/devsupport";
 
-type ActionType = "menu" | "back";
+type ActionType = "menu" | "back" | "none";
 
 type Props = {
     title: string;
@@ -46,6 +43,10 @@ export default function Screen({
     };
 
     const mainAction = () => {
+        if (mainActionType === "none") {
+            return <React.Fragment />;
+        }
+
         return (
             <TopNavigationAction
                 onPress={

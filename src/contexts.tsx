@@ -43,10 +43,19 @@ export const UserContextReducer = (
                 console.log("UserContextReducer/AsyncStorage.setItem", error);
             }
 
+            let showLoginAs: boolean = false;
+            if (
+                action.payload.loginAs !== undefined &&
+                action.payload.loginAs === true
+            ) {
+                showLoginAs = true;
+            }
+
             return {
                 ...state,
                 isAuthenticated: true,
                 token: action.payload.token,
+                loginAs: showLoginAs,
             };
         case "LOGOUT":
             AsyncStorage.removeItem("token");
