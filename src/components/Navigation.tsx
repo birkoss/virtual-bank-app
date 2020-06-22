@@ -37,6 +37,7 @@ import GoalsAddScreen from "../screens/goals/Add";
 import GoalsListScreen from "../screens/goals/List";
 
 import WizardScreen from "../screens/Wizard";
+import LoginAsScreen from "../screens/LoginAs";
 
 import {
     HomeIcon,
@@ -54,6 +55,7 @@ import {
     TransactionsCategoriesStackParamList,
     GoalsStackParamList,
     WizardStackParamList,
+    LoginAsStackParamList,
 } from "../types";
 import { UserContext } from "../contexts";
 import ChangeCategoryScreen from "../screens/ChangeCategory";
@@ -76,6 +78,15 @@ const WizardStackScreen = () => {
         <WizardStack.Navigator headerMode="none">
             <WizardStack.Screen name="Wizard" component={WizardScreen} />
         </WizardStack.Navigator>
+    );
+};
+
+const LoginAsStack = createStackNavigator<LoginAsStackParamList>();
+const LoginAsStackScreen = () => {
+    return (
+        <LoginAsStack.Navigator headerMode="none">
+            <LoginAsStack.Screen name="LoginAs" component={LoginAsScreen} />
+        </LoginAsStack.Navigator>
     );
 };
 
@@ -223,6 +234,10 @@ const TabsScreen = () => {
 
     if (!state.wizardCompleted) {
         return <WizardStackScreen />;
+    }
+
+    if (state.loginAs) {
+        return <LoginAsStackScreen />;
     }
 
     return (

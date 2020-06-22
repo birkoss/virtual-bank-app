@@ -1,15 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { View, Alert } from "react-native";
 
-import {
-    Button,
-    Layout,
-    Text,
-    useStyleSheet,
-    CheckBox,
-} from "@ui-kitten/components";
+import { Button, Layout, Text, useStyleSheet } from "@ui-kitten/components";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { KeyboardAvoidingView } from "../components/KeyboardAvoidingView";
 import Input from "../components/Input";
@@ -31,13 +25,11 @@ type Props = {
 type formData = {
     email: string;
     password: string;
-    logInAsChildren: boolean;
 };
 
 const defaultValues = {
     email: "",
     password: "",
-    logInAsChildren: false,
 };
 
 export default function LoginScreen({ navigation }: Props) {
@@ -72,7 +64,7 @@ export default function LoginScreen({ navigation }: Props) {
     const onSubmit = (data: formData) => {
         setIsSubmitting(true);
 
-        APILogin(data.email, data.password, data.logInAsChildren)
+        APILogin(data.email, data.password)
             .then(onSubmitSuccess)
             .catch((error) => {
                 onSubmitFailed(error);
@@ -82,15 +74,12 @@ export default function LoginScreen({ navigation }: Props) {
     const onSubmitSuccess = (data: any) => {
         setIsSubmitting(false);
 
-        if (data["isChildren"] === true) {
-        } else {
-            dispatch({
-                type: "LOGIN",
-                payload: {
-                    token: data["token"],
-                },
-            });
-        }
+        dispatch({
+            type: "LOGIN",
+            payload: {
+                token: data["token"],
+            },
+        });
     };
 
     const onSubmitFailed = (error: any) => {
@@ -139,24 +128,6 @@ export default function LoginScreen({ navigation }: Props) {
                     >
                         Forgot your password?
                     </Button>
-                </View>
-
-                <View
-                    style={{
-                        flex: 1,
-                        alignItems: "flex-end",
-                        justifyContent: "flex-end",
-                    }}
-                >
-                    <Controller
-                        style={formStyles.checkbox}
-                        as={<CheckBox />}
-                        name="logInAsChildren"
-                        control={control}
-                        defaultValue={false}
-                    >
-                        Log in with a Children Account
-                    </Controller>
                 </View>
             </Layout>
             <ButtonLoading

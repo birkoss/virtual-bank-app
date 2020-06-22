@@ -5,6 +5,7 @@ import { User } from "./types";
 type UserContextInitialStateType = {
     isAuthenticated: boolean;
     wizardCompleted: boolean;
+    loginAs: boolean;
     token: string;
     account: User | undefined;
 };
@@ -12,6 +13,7 @@ type UserContextInitialStateType = {
 export const UserContextInitialValues = {
     isAuthenticated: false,
     wizardCompleted: false,
+    loginAs: false,
     token: "",
     account: undefined,
 };

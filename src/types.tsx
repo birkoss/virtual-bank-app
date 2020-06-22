@@ -36,6 +36,14 @@ export type WizardScreenNavigationProp = CompositeNavigationProp<
     StackNavigationProp<WizardStackParamList>
 >;
 
+export type LoginAsStackParamList = {
+    LoginAs: undefined;
+};
+export type LoginAsScreenNavigationProp = CompositeNavigationProp<
+    DrawerNavigationProp<DrawerParamList>,
+    StackNavigationProp<LoginAsStackParamList>
+>;
+
 export type UsersStackParamList = {
     List: undefined;
     Add: undefined;
