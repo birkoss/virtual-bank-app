@@ -224,12 +224,13 @@ export function APIListUsers(token: string) {
     });
 }
 
-export function APILogin(email: string, password: string) {
+export function APILogin(email: string, password: string, isChildren: boolean) {
     let request = APICreateRequest("login", "POST", { email, password });
 
     return APIFetchRequest(request, (data: any) => {
         return {
             token: data["token"],
+            isChildren,
         };
     });
 }
