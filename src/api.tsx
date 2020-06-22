@@ -1,5 +1,5 @@
-const APIUrl = "https://api.walleteur.app/v1/";
-//const APIUrl = "http://localhost:8000/v1/";
+//const APIUrl = "https://api.walleteur.app/v1/";
+const APIUrl = "http://localhost:8000/v1/";
 
 class ApiError extends Error {
     constructor(...params: any[]) {
@@ -56,6 +56,8 @@ function APIFetchRequest(request: Request, response: Function) {
                 }
             }
 
+            console.log(data);
+
             // Special case for Token error (to logout the user)
             if (data["detail"] && data["detail"] == "Invalid token.") {
                 throw new ApiError(data["detail"]);
@@ -65,6 +67,7 @@ function APIFetchRequest(request: Request, response: Function) {
             throw new ApiError("An error occurred please try again later.");
         })
         .catch((error) => {
+            console.log(error);
             if (error.name !== "ApiError") {
                 throw new Error("An error occurred please try again later.");
             }

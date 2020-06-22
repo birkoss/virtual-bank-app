@@ -98,3 +98,21 @@ export const LandingStyles = StyleService.create({
         paddingHorizontal: 0,
     },
 });
+
+export const TabStyles = StyleService.create({
+    container: {
+        flex: 1,
+    },
+    tab: {
+        padding: 10,
+    },
+});
+
+export const ModalStyles = StyleService.create({
+    container: {
+        minHeight: 192,
+    },
+    backdrop: {
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
+});

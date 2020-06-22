@@ -39,6 +39,7 @@ export type WizardScreenNavigationProp = CompositeNavigationProp<
 export type UsersStackParamList = {
     List: undefined;
     Add: undefined;
+    AddChildren: undefined;
     Edit: undefined;
 };
 export type UsersScreenNavigationProp = CompositeNavigationProp<

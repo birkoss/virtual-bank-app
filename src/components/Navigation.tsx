@@ -28,6 +28,7 @@ import ChangeUserScreen from "../screens/ChangeUser";
 
 import UsersListScreen from "../screens/users/List";
 import UsersAddScreen from "../screens/users/Add";
+import UsersAddChildrenScreen from "../screens/users/AddChildren";
 
 import TransactionsCategoriesAddScreen from "../screens/transactions-categories/Add";
 import TransactionsCategoriesListScreen from "../screens/transactions-categories/List";
@@ -84,6 +85,10 @@ const UsersStackScreen = () => {
         <UsersStack.Navigator headerMode="none">
             <UsersStack.Screen name="List" component={UsersListScreen} />
             <UsersStack.Screen name="Add" component={UsersAddScreen} />
+            <UsersStack.Screen
+                name="AddChildren"
+                component={UsersAddChildrenScreen}
+            />
         </UsersStack.Navigator>
     );
 };
