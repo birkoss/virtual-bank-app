@@ -20,6 +20,7 @@ import {
 } from "../types";
 import { UserContext } from "../contexts";
 import { UsersIcon } from "../icons";
+import { useFocusEffect } from "@react-navigation/native";
 
 type Props = {
     navigation: WizardScreenNavigationProp;
@@ -96,15 +97,12 @@ export default function WizardScreen({ navigation }: Props) {
         } catch (err) {}
     };
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener("focus", () => {
-            try {
-                setIsLoading(true);
-                getUsers();
-            } catch (err) {}
-        });
-        return unsubscribe;
-    }, [navigation]);
+    useFocusEffect(
+        React.useCallback(() => {
+            setIsLoading(true);
+            getUsers();
+        }, [])
+    );
 
     useEffect(() => {
         return function cleanup() {
