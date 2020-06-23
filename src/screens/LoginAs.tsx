@@ -28,9 +28,8 @@ type Props = {
     navigation: LoginAsScreenNavigationProp;
 };
 
-// @TODO : Bug when a menu item (users, etc..) is open
+// @TODO : Bug when a menu item (users, etc..) is open, after logout = navigate screen
 // @TODO : Bug when a children click on goals, => error
-// @TODO : Bug when loading the children after a parent is loaded, the dashbord is not refreshed for the children
 export default function LoginAsScreen({ navigation }: Props) {
     const styles = useStyleSheet(LandingStyles);
     const { state, dispatch } = useContext(UserContext);
@@ -62,16 +61,16 @@ export default function LoginAsScreen({ navigation }: Props) {
         setIsSubmitting(false);
 
         dispatch({
-            type: "LOGIN_AS",
+            type: "LOGIN",
             payload: {
-                loginAs: false,
+                token: data["token"],
             },
         });
 
         dispatch({
-            type: "LOGIN",
+            type: "LOGIN_AS",
             payload: {
-                token: data["token"],
+                loginAs: false,
             },
         });
     };

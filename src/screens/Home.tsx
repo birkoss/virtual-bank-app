@@ -10,6 +10,7 @@ import Screen from "../components/Screen";
 import { APIStats } from "../api";
 import { HomeScreenNavigationProp, Account, Goal } from "../types";
 import { UserContext } from "../contexts";
+import { useFocusEffect } from "@react-navigation/native";
 
 type Props = {
     navigation: HomeScreenNavigationProp;
@@ -38,18 +39,12 @@ export default function HomeScreen({ navigation }: Props) {
             .catch((error) => console.log("error", error));
     };
 
-    // Refresh when the navigation changed
-    useEffect(() => {
-        const unsubscribe = navigation.addListener("focus", () => {
+    // @TODO: Test full stack -> Empty user -> Wizards -> Login as
+    useFocusEffect(
+        React.useCallback(() => {
             getStats();
-        });
-        return unsubscribe;
-    }, [navigation]);
-
-    // Refresh when the Wizard is Completed!
-    useEffect(() => {
-        getStats();
-    }, [state.wizardCompleted]);
+        }, [])
+    );
 
     return (
         <Screen isLoading={isLoading} title="Dashboard" navigation={navigation}>
