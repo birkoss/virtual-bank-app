@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { ImageBackground, StyleSheet } from "react-native";
+import { ImageBackground } from "react-native";
 import {
     Divider,
     Drawer,

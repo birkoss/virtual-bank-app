@@ -261,28 +261,32 @@ export default function Navigation() {
 
     const styles = useStyleSheet(ThemeStyles);
 
+    // @TODO refactor this and sidemenu into a single array
+    let tabs = [];
+
+    tabs.push(<Drawer.Screen name="Home" component={TabsScreen} />);
+
+    if (state.account?.is_children === false) {
+        tabs.push(<Drawer.Screen name="Users" component={UsersStackScreen} />);
+
+        tabs.push(
+            <Drawer.Screen
+                name="Transactions Categories"
+                component={TransactionsCategoriesStackScreen}
+            />
+        );
+    }
+
+    tabs.push(<Drawer.Screen name="Goals" component={GoalsStackScreen} />);
+
     return (
         <SafeAreaView style={styles.container}>
             <NavigationContainer>
                 {state.isAuthenticated ? (
                     <Drawer.Navigator
+                        children={tabs}
                         drawerContent={(props) => <SideMenu {...props} />}
-                    >
-                        <Drawer.Screen name="Home" component={TabsScreen} />
-
-                        <Drawer.Screen
-                            name="Users"
-                            component={UsersStackScreen}
-                        />
-                        <Drawer.Screen
-                            name="Transactions Categories"
-                            component={TransactionsCategoriesStackScreen}
-                        />
-                        <Drawer.Screen
-                            name="Goals"
-                            component={GoalsStackScreen}
-                        />
-                    </Drawer.Navigator>
+                    ></Drawer.Navigator>
                 ) : (
                     <AuthStack.Navigator headerMode="none">
                         <AuthStack.Screen

@@ -1,35 +1,22 @@
-import React, { useContext, useState, useEffect } from "react";
-import { View, Alert, AsyncStorage } from "react-native";
+import React, { useContext, useState } from "react";
+import { View, Alert } from "react-native";
 
-import {
-    Text,
-    Card,
-    StyleService,
-    useStyleSheet,
-    Button,
-    Icon,
-} from "@ui-kitten/components";
+import { Text, useStyleSheet, Button } from "@ui-kitten/components";
 
 import Screen from "../components/Screen";
 
 import { APILoginAs, APIListFamilyMembers } from "../api";
-import {
-    LoginAsScreenNavigationProp,
-    User,
-    TransactionCategory,
-} from "../types";
+import { LoginAsScreenNavigationProp, User } from "../types";
 import { UserContext } from "../contexts";
 import { useFocusEffect } from "@react-navigation/native";
 import Users from "../components/Users";
 import { LandingStyles } from "../styles";
-import Loading from "../components/Loading";
 
 type Props = {
     navigation: LoginAsScreenNavigationProp;
 };
 
 // @TODO : Bug when a menu item (users, etc..) is open, after logout = navigate screen
-// @TODO : Bug when a children click on goals, => error
 export default function LoginAsScreen({ navigation }: Props) {
     const styles = useStyleSheet(LandingStyles);
     const { state, dispatch } = useContext(UserContext);
