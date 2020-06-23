@@ -39,7 +39,6 @@ export default function HomeScreen({ navigation }: Props) {
             .catch((error) => console.log("error", error));
     };
 
-    // @TODO: Test full stack -> Empty user -> Wizards -> Login as
     useFocusEffect(
         React.useCallback(() => {
             getStats();

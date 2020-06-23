@@ -89,6 +89,7 @@ export const SideMenu = ({ navigation, state }: Props) => {
                 dispatch({
                     type: "LOGOUT",
                 });
+                navigation.navigate("Home");
             }}
         />
     );

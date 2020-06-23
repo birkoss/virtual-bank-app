@@ -16,7 +16,6 @@ type Props = {
     navigation: LoginAsScreenNavigationProp;
 };
 
-// @TODO : Bug when a menu item (users, etc..) is open, after logout = navigate screen
 export default function LoginAsScreen({ navigation }: Props) {
     const styles = useStyleSheet(LandingStyles);
     const { state, dispatch } = useContext(UserContext);
