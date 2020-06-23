@@ -134,6 +134,7 @@ export type User = {
     lastname: string;
     is_children: boolean;
     accounts: Account[];
+    token: string;
 };
 
 export type TransactionCategory = {

@@ -55,7 +55,6 @@ export const UserContextReducer = (
                 ...state,
                 isAuthenticated: true,
                 token: action.payload.token,
-                loginAs: showLoginAs,
             };
         case "LOGOUT":
             AsyncStorage.removeItem("token");
@@ -70,6 +69,11 @@ export const UserContextReducer = (
             return {
                 ...state,
                 wizardCompleted: true,
+            };
+        case "LOGIN_AS":
+            return {
+                ...state,
+                loginAs: action.payload.loginAs,
             };
         default:
             console.log("action.type:" + action.type);

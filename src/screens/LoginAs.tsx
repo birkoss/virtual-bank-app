@@ -12,41 +12,73 @@ import {
 
 import Screen from "../components/Screen";
 
-import { APIListTransactionsCategories, APIListFamilyMembers } from "../api";
+import { APILoginAs, APIListFamilyMembers } from "../api";
 import {
     LoginAsScreenNavigationProp,
     User,
     TransactionCategory,
 } from "../types";
 import { UserContext } from "../contexts";
-import { UsersIcon } from "../icons";
 import { useFocusEffect } from "@react-navigation/native";
 import Users from "../components/Users";
 import { LandingStyles } from "../styles";
+import Loading from "../components/Loading";
 
 type Props = {
     navigation: LoginAsScreenNavigationProp;
 };
 
+// @TODO : Bug when a menu item (users, etc..) is open
+// @TODO : Bug when a children click on goals, => error
+// @TODO : Bug when loading the children after a parent is loaded, the dashbord is not refreshed for the children
 export default function LoginAsScreen({ navigation }: Props) {
     const styles = useStyleSheet(LandingStyles);
     const { state, dispatch } = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [users, setUsers] = useState<User[]>([]);
 
-    const [categories, setCategories] = useState<TransactionCategory[]>([]);
+    const loginSameUser = () => {
+        dispatch({
+            type: "LOGIN_AS",
+            payload: {
+                loginAs: false,
+            },
+        });
+    };
 
-    const closeWizard = () => {
-        try {
-            /* await */ AsyncStorage.setItem("wizard_completed", "1");
-        } catch (error) {
-            console.log("AsyncStorage.setItem - wizard_completed", error);
-        }
+    const loginNewUser = (userID: string) => {
+        setIsSubmitting(true);
+
+        APILoginAs(state.token, userID)
+            .then(onSubmitSuccess)
+            .catch((error) => {
+                onSubmitFailed(error);
+            });
+    };
+
+    const onSubmitSuccess = (data: any) => {
+        setIsSubmitting(false);
 
         dispatch({
-            type: "WIZARD_COMPLETED",
+            type: "LOGIN_AS",
+            payload: {
+                loginAs: false,
+            },
         });
+
+        dispatch({
+            type: "LOGIN",
+            payload: {
+                token: data["token"],
+            },
+        });
+    };
+
+    const onSubmitFailed = (error: any) => {
+        setIsSubmitting(false);
+        Alert.alert(error.message);
     };
 
     const getUsers = () => {
@@ -77,7 +109,11 @@ export default function LoginAsScreen({ navigation }: Props) {
 
     const pickUser = (user: User) => {
         return (
-            <Button size="tiny" onPress={() => console.log("...")}>
+            <Button
+                size="tiny"
+                disabled={isSubmitting}
+                onPress={() => loginNewUser(user.id)}
+            >
                 LOGIN
             </Button>
         );
@@ -106,7 +142,7 @@ export default function LoginAsScreen({ navigation }: Props) {
             <View>
                 <Button
                     style={styles.primaryActionButton}
-                    onPress={() => console.log("aa")}
+                    onPress={loginSameUser}
                 >
                     {primaryButtonLabel}
                 </Button>

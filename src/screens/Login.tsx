@@ -75,10 +75,16 @@ export default function LoginScreen({ navigation }: Props) {
         setIsSubmitting(false);
 
         dispatch({
+            type: "LOGIN_AS",
+            payload: {
+                loginAs: true,
+            },
+        });
+
+        dispatch({
             type: "LOGIN",
             payload: {
                 token: data["token"],
-                loginAs: true,
             },
         });
     };

@@ -36,7 +36,6 @@ function APIFetchRequest(
     response: Function,
     extra: object = {}
 ) {
-    console.log(extra);
     return fetch(request, extra)
         .then((response) => response.json())
         .then((data: any) => {
@@ -61,8 +60,6 @@ function APIFetchRequest(
                 }
             }
 
-            console.log(data);
-
             // Special case for Token error (to logout the user)
             if (data["detail"] && data["detail"] == "Invalid token.") {
                 throw new ApiError(data["detail"]);
@@ -72,7 +69,6 @@ function APIFetchRequest(
             throw new ApiError("An error occurred please try again later.");
         })
         .catch((error) => {
-            console.log("ERROR!!!");
             if (error.name !== "ApiError") {
                 throw new Error("An error occurred please try again later.");
             }
@@ -242,6 +238,21 @@ export function APIListUsers(token: string) {
 
 export function APILogin(email: string, password: string) {
     let request = APICreateRequest("login", "POST", { email, password });
+
+    return APIFetchRequest(request, (data: any) => {
+        return {
+            token: data["token"],
+        };
+    });
+}
+
+export function APILoginAs(token: string, userID: string) {
+    let request = APICreateRequest(
+        "loginAs",
+        "POST",
+        { user_id: userID },
+        token
+    );
 
     return APIFetchRequest(request, (data: any) => {
         return {
