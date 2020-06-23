@@ -20,13 +20,16 @@ import {
 } from "../types";
 import { UserContext } from "../contexts";
 import { UsersIcon } from "../icons";
+import { useFocusEffect } from "@react-navigation/native";
+import Users from "../components/Users";
+import { LandingStyles } from "../styles";
 
 type Props = {
     navigation: LoginAsScreenNavigationProp;
 };
 
 export default function LoginAsScreen({ navigation }: Props) {
-    const styles = useStyleSheet(themeStyles);
+    const styles = useStyleSheet(LandingStyles);
     const { state, dispatch } = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -48,44 +51,43 @@ export default function LoginAsScreen({ navigation }: Props) {
 
     const getUsers = () => {
         setIsLoading(true);
-
+        console.log("GET USERS");
         APIListFamilyMembers(state.token)
             .then((data) => {
                 let newUsers: User[] = [];
                 data["users"].forEach((user: User) => {
-                    newUsers.push(user);
+                    if (user.is_children) {
+                        newUsers.push(user);
+                    }
                 });
                 setUsers(newUsers);
-
-                // Get the transactions categories
-                getCategories();
-            })
-            .catch((error) => Alert.alert(error.message));
-    };
-
-    const getCategories = () => {
-        APIListTransactionsCategories(state.token)
-            .then((data) => {
-                let newCategories: TransactionCategory[] = [];
-                data["transactionsCategories"].forEach(
-                    (category: TransactionCategory) => {
-                        newCategories.push(category);
-                    }
-                );
-                setCategories(newCategories);
 
                 setIsLoading(false);
             })
             .catch((error) => Alert.alert(error.message));
     };
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener("focus", () => {
+    useFocusEffect(
+        React.useCallback(() => {
+            console.log("LoginAs useCallback...");
             setIsLoading(true);
             getUsers();
-        });
-        return unsubscribe;
-    }, [navigation]);
+        }, [])
+    );
+
+    const pickUser = (user: User) => {
+        return (
+            <Button size="tiny" onPress={() => console.log("...")}>
+                LOGIN
+            </Button>
+        );
+    };
+
+    const primaryButtonLabel: string =
+        "Continue as " +
+        state.account?.firstname +
+        " " +
+        state.account?.lastname;
 
     return (
         <Screen
@@ -95,37 +97,20 @@ export default function LoginAsScreen({ navigation }: Props) {
             mainActionType="none"
         >
             <View style={{ padding: 20 }}>
-                <Text style={{ marginBottom: 20 }}>
-                    To be able to use Walleteur correctly, you need to complete
-                    those steps :
+                <Text style={{ textAlign: "center", marginBottom: 20 }}>
+                    Pick a Children Accont to use on this device
                 </Text>
-
-                <View>
-                    {users.length === 0 && categories.length === 0 && (
-                        <Button
-                            appearance="ghost"
-                            status="basic"
-                            onPress={closeWizard}
-                        >
-                            I know what to do. Skip the wizard!
-                        </Button>
-                    )}
-                    {users.length > 0 && categories.length > 0 && (
-                        <Button status="primary" onPress={closeWizard}>
-                            Close the Wizard
-                        </Button>
-                    )}
-                </View>
+                <Users users={users} action={pickUser} />
+                <Text style={{ textAlign: "center", marginTop: 20 }}>or</Text>
+            </View>
+            <View>
+                <Button
+                    style={styles.primaryActionButton}
+                    onPress={() => console.log("aa")}
+                >
+                    {primaryButtonLabel}
+                </Button>
             </View>
         </Screen>
     );
 }
-
-const themeStyles = StyleService.create({
-    cardContainer: {
-        marginBottom: 20,
-    },
-    paragraph: {
-        marginBottom: 20,
-    },
-});

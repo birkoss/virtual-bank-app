@@ -34,6 +34,8 @@ export default function WizardScreen({ navigation }: Props) {
 
     const [categories, setCategories] = useState<TransactionCategory[]>([]);
 
+    const abortController = new AbortController();
+
     const closeWizard = () => {
         try {
             /* await */ AsyncStorage.setItem("wizard_completed", "1");
@@ -49,43 +51,65 @@ export default function WizardScreen({ navigation }: Props) {
     const getUsers = () => {
         setIsLoading(true);
 
-        APIListFamilyMembers(state.token)
-            .then((data) => {
-                let newUsers: User[] = [];
-                data["users"].forEach((user: User) => {
-                    newUsers.push(user);
-                });
-                setUsers(newUsers);
-
-                // Get the transactions categories
-                getCategories();
+        try {
+            APIListFamilyMembers(state.token, {
+                signal: abortController.signal,
             })
-            .catch((error) => Alert.alert(error.message));
+                .then((data) => {
+                    let newUsers: User[] = [];
+                    data["users"].forEach((user: User) => {
+                        newUsers.push(user);
+                    });
+                    setUsers(newUsers);
+
+                    // Get the transactions categories
+                    getCategories();
+                })
+                .catch((error) => {
+                    // Alert.alert(error.message);
+                });
+        } catch (err) {}
     };
 
     const getCategories = () => {
-        APIListTransactionsCategories(state.token)
-            .then((data) => {
-                let newCategories: TransactionCategory[] = [];
-                data["transactionsCategories"].forEach(
-                    (category: TransactionCategory) => {
-                        newCategories.push(category);
-                    }
-                );
-                setCategories(newCategories);
-
-                setIsLoading(false);
+        try {
+            APIListTransactionsCategories(state.token, {
+                signal: abortController.signal,
             })
-            .catch((error) => Alert.alert(error.message));
+                .then((data) => {
+                    let newCategories: TransactionCategory[] = [];
+                    data["transactionsCategories"].forEach(
+                        (category: TransactionCategory) => {
+                            newCategories.push(category);
+                        }
+                    );
+                    setCategories(newCategories);
+
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    // Alert.alert(error.message);
+                });
+        } catch (err) {}
     };
 
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", () => {
-            setIsLoading(true);
-            getUsers();
+            try {
+                setIsLoading(true);
+                getUsers();
+            } catch (err) {}
         });
         return unsubscribe;
     }, [navigation]);
+
+    useEffect(() => {
+        return function cleanup() {
+            try {
+                abortController.abort();
+            } catch (err) {}
+        };
+    }, []);
 
     return (
         <Screen

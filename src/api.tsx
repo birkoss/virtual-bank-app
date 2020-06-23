@@ -31,8 +31,13 @@ function APICreateRequest(
     return request;
 }
 
-function APIFetchRequest(request: Request, response: Function) {
-    return fetch(request)
+function APIFetchRequest(
+    request: Request,
+    response: Function,
+    extra: object = {}
+) {
+    console.log(extra);
+    return fetch(request, extra)
         .then((response) => response.json())
         .then((data: any) => {
             // Everything is fine from the API
@@ -67,7 +72,7 @@ function APIFetchRequest(request: Request, response: Function) {
             throw new ApiError("An error occurred please try again later.");
         })
         .catch((error) => {
-            console.log(error);
+            console.log("ERROR!!!");
             if (error.name !== "ApiError") {
                 throw new Error("An error occurred please try again later.");
             }
@@ -179,7 +184,10 @@ export function APITransactionsStats(token: string) {
     });
 }
 
-export function APIListTransactionsCategories(token: string) {
+export function APIListTransactionsCategories(
+    token: string,
+    extra: object = {}
+) {
     let request = APICreateRequest(
         "transactionsCategories",
         "GET",
@@ -187,11 +195,15 @@ export function APIListTransactionsCategories(token: string) {
         token
     );
 
-    return APIFetchRequest(request, (data: any) => {
-        return {
-            transactionsCategories: data["transactionsCategories"],
-        };
-    });
+    return APIFetchRequest(
+        request,
+        (data: any) => {
+            return {
+                transactionsCategories: data["transactionsCategories"],
+            };
+        },
+        extra
+    );
 }
 
 export function APIListGoals(token: string) {
@@ -204,14 +216,18 @@ export function APIListGoals(token: string) {
     });
 }
 
-export function APIListFamilyMembers(token: string) {
+export function APIListFamilyMembers(token: string, extra: object = {}) {
     let request = APICreateRequest("familyMembers", "GET", null, token);
 
-    return APIFetchRequest(request, (data: any) => {
-        return {
-            users: data["users"],
-        };
-    });
+    return APIFetchRequest(
+        request,
+        (data: any) => {
+            return {
+                users: data["users"],
+            };
+        },
+        extra
+    );
 }
 
 export function APIListUsers(token: string) {

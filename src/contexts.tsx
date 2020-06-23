@@ -12,7 +12,7 @@ type UserContextInitialStateType = {
 
 export const UserContextInitialValues = {
     isAuthenticated: false,
-    wizardCompleted: false,
+    wizardCompleted: true,
     loginAs: false,
     token: "",
     account: undefined,
