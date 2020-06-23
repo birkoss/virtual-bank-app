@@ -83,7 +83,6 @@ export default function LoginAsScreen({ navigation }: Props) {
 
     const getUsers = () => {
         setIsLoading(true);
-        console.log("GET USERS");
         APIListFamilyMembers(state.token)
             .then((data) => {
                 let newUsers: User[] = [];
@@ -101,7 +100,6 @@ export default function LoginAsScreen({ navigation }: Props) {
 
     useFocusEffect(
         React.useCallback(() => {
-            console.log("LoginAs useCallback...");
             setIsLoading(true);
             getUsers();
         }, [])

@@ -232,7 +232,8 @@ const Tabs = createBottomTabNavigator();
 const TabsScreen = () => {
     const { state } = useContext(UserContext);
 
-    if (!state.wizardCompleted) {
+    if (state.showWizard) {
+        console.log(state.showWizard);
         return <WizardStackScreen />;
     }
 

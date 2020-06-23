@@ -44,7 +44,10 @@ export default function WizardScreen({ navigation }: Props) {
         }
 
         dispatch({
-            type: "WIZARD_COMPLETED",
+            type: "SHOW_WIZARD",
+            payload: {
+                status: false,
+            },
         });
     };
 
@@ -110,6 +113,8 @@ export default function WizardScreen({ navigation }: Props) {
             } catch (err) {}
         };
     }, []);
+
+    console.log("Wizard.render()");
 
     return (
         <Screen

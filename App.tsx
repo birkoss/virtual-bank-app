@@ -43,9 +43,15 @@ export default function App() {
 
         APIAccountData(state.token)
             .then((data) => {
-                if (!data["needWizard"]) {
+                if (
+                    data["needWizard"] &&
+                    data["account"]["is_children"] === false
+                ) {
                     dispatch({
-                        type: "WIZARD_COMPLETED",
+                        type: "SHOW_WIZARD",
+                        payload: {
+                            status: true,
+                        },
                     });
                 }
 
