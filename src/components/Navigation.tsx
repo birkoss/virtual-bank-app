@@ -44,6 +44,9 @@ import {
     TransactionsIcon,
     SendMoneyIcon,
     WithdrawMoneyIcon,
+    UsersIcon,
+    TransactionsCategoriesIcon,
+    GoalIcon,
 } from "../icons";
 
 import {
@@ -256,28 +259,57 @@ const TabsScreen = () => {
 
 const Drawer = createDrawerNavigator();
 
+export function getNavigationTabs() {
+    const { state } = useContext(UserContext);
+
+    let tabs = [];
+
+    tabs.push({
+        label: "Home",
+        component: TabsScreen,
+        icon: HomeIcon,
+    });
+
+    if (state.account?.is_children === false) {
+        tabs.push({
+            label: "Users",
+            component: UsersStackScreen,
+            icon: UsersIcon,
+        });
+
+        tabs.push({
+            label: "Transactions Categories",
+            component: TransactionsCategoriesStackScreen,
+            icon: TransactionsCategoriesIcon,
+        });
+    }
+
+    tabs.push({
+        label: "Goals",
+        icon: GoalIcon,
+        component: GoalsStackScreen,
+    });
+
+    return tabs;
+}
+
 export default function Navigation() {
     const { state } = useContext(UserContext);
 
     const styles = useStyleSheet(ThemeStyles);
 
-    // @TODO refactor this and sidemenu into a single array
-    let tabs = [];
+    let tabs: any[] = [];
 
-    tabs.push(<Drawer.Screen name="Home" component={TabsScreen} />);
+    let visibleTabs = getNavigationTabs();
 
-    if (state.account?.is_children === false) {
-        tabs.push(<Drawer.Screen name="Users" component={UsersStackScreen} />);
-
+    visibleTabs.forEach((single_tab) => {
         tabs.push(
             <Drawer.Screen
-                name="Transactions Categories"
-                component={TransactionsCategoriesStackScreen}
+                name={single_tab.label}
+                component={single_tab.component}
             />
         );
-    }
-
-    tabs.push(<Drawer.Screen name="Goals" component={GoalsStackScreen} />);
+    });
 
     return (
         <SafeAreaView style={styles.container}>
@@ -285,7 +317,9 @@ export default function Navigation() {
                 {state.isAuthenticated ? (
                     <Drawer.Navigator
                         children={tabs}
-                        drawerContent={(props) => <SideMenu {...props} />}
+                        drawerContent={(props) => (
+                            <SideMenu tabs={visibleTabs} {...props} />
+                        )}
                     ></Drawer.Navigator>
                 ) : (
                     <AuthStack.Navigator headerMode="none">

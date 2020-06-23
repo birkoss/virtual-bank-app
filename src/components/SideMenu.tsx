@@ -11,14 +11,7 @@ import {
 } from "@ui-kitten/components";
 import { DrawerNavigationState } from "@react-navigation/native";
 
-import {
-    UsersIcon,
-    HomeIcon,
-    ForwardIcon,
-    GoalIcon,
-    TransactionsCategoriesIcon,
-    LogoutIcon,
-} from "../icons";
+import { ForwardIcon, LogoutIcon } from "../icons";
 import { UserContext } from "../contexts";
 
 const Header = (props: any) => {
@@ -38,48 +31,26 @@ const Header = (props: any) => {
 type Props = {
     navigation: any;
     state: DrawerNavigationState;
+    tabs: any[];
 };
 
-export const SideMenu = ({ navigation, state }: Props) => {
+export const SideMenu = ({ navigation, state, tabs }: Props) => {
     const [selectedIndex, setSelectedIndex] = React.useState<IndexPath>();
     const { state: contextState, dispatch } = useContext(UserContext);
 
-    let tabs = [];
-    tabs.push(
-        <DrawerItem
-            title="Home"
-            accessoryLeft={HomeIcon}
-            accessoryRight={ForwardIcon}
-        />
-    );
+    let menu = [];
 
-    if (contextState.account?.is_children === false) {
-        tabs.push(
+    tabs.forEach((single_tab) => {
+        menu.push(
             <DrawerItem
-                title="Users"
-                accessoryLeft={UsersIcon}
+                title={single_tab.label}
+                accessoryLeft={single_tab.icon}
                 accessoryRight={ForwardIcon}
             />
         );
+    });
 
-        tabs.push(
-            <DrawerItem
-                title="Transactions Categories"
-                accessoryLeft={TransactionsCategoriesIcon}
-                accessoryRight={ForwardIcon}
-            />
-        );
-    }
-
-    tabs.push(
-        <DrawerItem
-            title="Goals"
-            accessoryLeft={GoalIcon}
-            accessoryRight={ForwardIcon}
-        />
-    );
-
-    tabs.push(
+    menu.push(
         <DrawerItem
             title="Logout"
             accessoryLeft={LogoutIcon}
@@ -102,7 +73,7 @@ export const SideMenu = ({ navigation, state }: Props) => {
                 setSelectedIndex(index);
                 navigation.navigate(state.routeNames[index.row]);
             }}
-            children={tabs}
+            children={menu}
         />
     );
 };
