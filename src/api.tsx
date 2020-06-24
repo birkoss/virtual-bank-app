@@ -1,5 +1,5 @@
-const APIUrl = "https://api.walleteur.app/v1/";
-//const APIUrl = "http://192.168.0.120:8000/v1/";
+//const APIUrl = "https://api.walleteur.app/v1/";
+const APIUrl = "http://192.168.0.120:8000/v1/";
 
 class ApiError extends Error {
     constructor(...params: any[]) {

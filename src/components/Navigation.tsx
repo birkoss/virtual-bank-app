@@ -24,7 +24,6 @@ import RegisterScreen from "../screens/Register";
 import TransactionsScreen from "../screens/Transactions";
 import SendMoneyScreen from "../screens/SendMoney";
 import WithdrawMoneyScreen from "../screens/WithdrawMoney";
-import ChangeUserScreen from "../screens/ChangeUser";
 
 import UsersListScreen from "../screens/users/List";
 import UsersAddScreen from "../screens/users/Add";
@@ -61,7 +60,6 @@ import {
     LoginAsStackParamList,
 } from "../types";
 import { UserContext } from "../contexts";
-import ChangeCategoryScreen from "../screens/ChangeCategory";
 import { ThemeStyles } from "../styles";
 
 const AuthStack = createStackNavigator<AuthStackParamList>();
@@ -155,14 +153,6 @@ const SendMoneyStackScreen = () => {
                 name="SendMoney"
                 component={SendMoneyScreen}
             />
-            <SendMoneyStack.Screen
-                name="ChangeUser"
-                component={ChangeUserScreen}
-            />
-            <SendMoneyStack.Screen
-                name="ChangeCategory"
-                component={ChangeCategoryScreen}
-            />
         </SendMoneyStack.Navigator>
     );
 };
@@ -174,14 +164,6 @@ const WithdrawMoneyStackScreen = () => {
             <WithdrawMoneyStack.Screen
                 name="WithdrawMoney"
                 component={WithdrawMoneyScreen}
-            />
-            <WithdrawMoneyStack.Screen
-                name="ChangeUser"
-                component={ChangeUserScreen}
-            />
-            <WithdrawMoneyStack.Screen
-                name="ChangeCategory"
-                component={ChangeCategoryScreen}
             />
         </WithdrawMoneyStack.Navigator>
     );

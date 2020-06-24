@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { View, Alert } from "react-native";
 
 import {
@@ -6,9 +6,7 @@ import {
     Card,
     StyleService,
     useStyleSheet,
-    ListItem,
     Button,
-    Layout,
 } from "@ui-kitten/components";
 
 import { useForm, Controller } from "react-hook-form";
@@ -37,7 +35,10 @@ import {
 
 import { UserContext } from "../contexts";
 import { validateAmount } from "../validations";
-import ErrorMessage from "../components/ErrorMessage";
+import ListPicker from "./ListPicker";
+import Users from "./Users";
+import TransactionsCategories from "./TransactionsCategories";
+import { useFocusEffect } from "@react-navigation/native";
 
 type formData = {
     accountID: string;
@@ -64,7 +65,6 @@ type Props = {
 
 export default function MoneyTransfer({
     navigation,
-    route,
     button,
     title,
     userLabel,
@@ -90,40 +90,14 @@ export default function MoneyTransfer({
 
     const [categories, setCategories] = useState<TransactionCategory[]>([]);
 
-    const changeCategory = () => {
-        return (
-            <Button
-                disabled={categories.length === 0 ? true : false}
-                size="tiny"
-                onPress={() =>
-                    navigation.push("ChangeCategory", {
-                        screenName: route.name,
-                        categoryID: getValues("categoryID"),
-                        categories,
-                    })
-                }
-            >
-                CHANGE
-            </Button>
-        );
+    const onCategorySelected = (category: TransactionCategory) => {
+        setValue("categoryID", category.id, true);
+        setCategories([...categories]);
     };
 
-    const changeUser = () => {
-        return (
-            <Button
-                size="tiny"
-                disabled={users.length === 0 ? true : false}
-                onPress={() =>
-                    navigation.push("ChangeUser", {
-                        screenName: route.name,
-                        accountID: getValues("accountID"),
-                        users,
-                    })
-                }
-            >
-                CHANGE
-            </Button>
-        );
+    const onUserSelected = (user: User) => {
+        setValue("accountID", user.accounts[0].id, true);
+        setUsers([...users]);
     };
 
     const onSubmit = (data: formData) => {
@@ -164,16 +138,97 @@ export default function MoneyTransfer({
         Alert.alert(error.message);
     };
 
-    // Load the new accountID or categoryID from the Change Screen
-    useEffect(() => {
-        if (route.params?.newAccountID) {
-            setValue("accountID", route.params.newAccountID, true);
-        }
-        if (route.params?.newCategoryID) {
-            setValue("categoryID", route.params.newCategoryID, true);
-        }
-    }, [route.params?.newAccountID, route.params?.newCategoryID]);
+    const getUser = (accountID: string): User | undefined => {
+        let user = undefined;
 
+        users.forEach((single_user: User) => {
+            if (
+                single_user.accounts.filter(
+                    (account: Account) => accountID === account.id
+                ).length === 1
+            ) {
+                user = single_user;
+            }
+        });
+
+        return user;
+    };
+
+    const getCategory = (categoryID: string): TransactionCategory => {
+        return categories.filter((category) => category.id === categoryID)[0];
+    };
+
+    const getUsersFromAPI = () => {
+        setIsLoading(true);
+
+        APIListFamilyMembers(state.token)
+            .then((data) => {
+                let newUsers: User[] = [];
+                data["users"].forEach((user: User) => {
+                    newUsers.push(user);
+                });
+                setUsers(newUsers);
+
+                // Get the transactions categories
+                getCategoriesFromAPI();
+            })
+            .catch((error) => Alert.alert(error.message));
+    };
+
+    const getCategoriesFromAPI = () => {
+        APIListTransactionsCategories(state.token)
+            .then((data) => {
+                let newCategories: TransactionCategory[] = [];
+                data["transactionsCategories"].forEach(
+                    (category: TransactionCategory) => {
+                        newCategories.push(category);
+                    }
+                );
+                setCategories(newCategories);
+
+                setIsLoading(false);
+            })
+            .catch((error) => Alert.alert(error.message));
+    };
+
+    const increaseAmount = (amount: number) => {
+        let currentAmount: number = parseInt(getValues("amount"));
+        if (isNaN(currentAmount)) {
+            currentAmount = 0;
+        }
+        setValue("amount", (currentAmount + amount).toString(), true);
+    };
+
+    const currentUser = getUser(getValues("accountID"));
+    const currentCategory = getCategory(getValues("categoryID"));
+
+    // Load the users list from the API on each page reload
+    useFocusEffect(
+        useCallback(() => {
+            setIsLoading(true);
+            setIsSubmitting(false);
+            getUsersFromAPI();
+        }, [])
+    );
+
+    // Everytime the users list changed, validate the current Account ID
+    useEffect(() => {
+        if (getUser(getValues("accountID")) === undefined && users.length > 0) {
+            setValue("accountID", users[0].accounts[0].id, true);
+        }
+    }, [users]);
+
+    // Everytime the categories list changed, validate the current categoryID
+    useEffect(() => {
+        if (
+            getCategory(getValues("categoryID")) === undefined &&
+            categories.length > 0
+        ) {
+            setValue("categoryID", categories[0].id, true);
+        }
+    }, [categories]);
+
+    // Register the current form fields
     useEffect(() => {
         register(
             { name: "accountID" },
@@ -195,129 +250,39 @@ export default function MoneyTransfer({
         );
     }, [register]);
 
-    const getUser = (accountID: string): User | undefined => {
-        let user = undefined;
-
-        users.forEach((single_user: User) => {
-            if (
-                single_user.accounts.filter(
-                    (account: Account) => accountID === account.id
-                ).length === 1
-            ) {
-                user = single_user;
-            }
-        });
-
-        return user;
-    };
-
-    const getCategory = (categoryID: string): TransactionCategory => {
-        return categories.filter((category) => category.id === categoryID)[0];
-    };
-
-    const getUsers = () => {
-        setIsLoading(true);
-
-        APIListFamilyMembers(state.token)
-            .then((data) => {
-                let newUsers: User[] = [];
-                data["users"].forEach((user: User) => {
-                    newUsers.push(user);
-                });
-                setUsers(newUsers);
-
-                // Get the transactions categories
-                getCategories();
-            })
-            .catch((error) => Alert.alert(error.message));
-    };
-
-    const getCategories = () => {
-        APIListTransactionsCategories(state.token)
-            .then((data) => {
-                let newCategories: TransactionCategory[] = [];
-                data["transactionsCategories"].forEach(
-                    (category: TransactionCategory) => {
-                        newCategories.push(category);
-                    }
-                );
-                setCategories(newCategories);
-
-                setIsLoading(false);
-            })
-            .catch((error) => Alert.alert(error.message));
-    };
-
-    // Load the users list from the API on each page reload
-    useEffect(() => {
-        const unsubscribe = navigation.addListener("focus", () => {
-            setIsLoading(true);
-            setIsSubmitting(false);
-            getUsers();
-        });
-        return unsubscribe;
-    }, [navigation]);
-
-    // Assure that the current accountID is still from a valid user
-    useEffect(() => {
-        if (getUser(getValues("accountID")) === undefined && users.length > 0) {
-            setValue("accountID", users[0].accounts[0].id, true);
-        }
-    }, [users]);
-
-    // Select the first categoryID the the category list refresh
-    useEffect(() => {
-        if (
-            getCategory(getValues("categoryID")) === undefined &&
-            categories.length > 0
-        ) {
-            setValue("categoryID", categories[0].id, true);
-        }
-    }, [categories]);
-
-    const increaseAmount = (amount: number) => {
-        let currentAmount: number = parseInt(getValues("amount"));
-        if (isNaN(currentAmount)) {
-            currentAmount = 0;
-        }
-        setValue("amount", (currentAmount + amount).toString(), true);
-    };
-
-    const currentUser = getUser(getValues("accountID"));
-    const currentCategory = getCategory(getValues("categoryID"));
-
     return (
         <Screen isLoading={isLoading} title={title} navigation={navigation}>
             <KeyboardAvoidingView style={styles.container}>
-                <Layout style={styles.box}>
-                    <ListItem
-                        title={userLabel + ":"}
-                        description={
-                            currentUser === undefined
-                                ? "Nobody"
-                                : currentUser.firstname +
-                                  " " +
-                                  currentUser.lastname
-                        }
-                        accessoryLeft={UsersIcon}
-                        accessoryRight={changeUser}
-                    />
-                    <ErrorMessage field={errors.accountID} />
-                </Layout>
+                <ListPicker
+                    title={userLabel + ":"}
+                    description={
+                        currentUser === undefined
+                            ? "Nobody"
+                            : currentUser.firstname + " " + currentUser.lastname
+                    }
+                    icon={UsersIcon}
+                    error={errors.accountID}
+                    onItemSelected={onUserSelected}
+                >
+                    <Users users={users} action={undefined} />
+                </ListPicker>
 
-                <Layout style={styles.box}>
-                    <ListItem
-                        title="Category:"
-                        description={
-                            currentCategory === undefined
-                                ? "None"
-                                : currentCategory.name
-                        }
-                        accessoryLeft={TransactionsCategoriesIcon}
-                        accessoryRight={changeCategory}
+                <ListPicker
+                    title="Category:"
+                    description={
+                        currentCategory === undefined
+                            ? "None"
+                            : currentCategory.name
+                    }
+                    icon={TransactionsCategoriesIcon}
+                    error={errors.categoryID}
+                    onItemSelected={onCategorySelected}
+                >
+                    <TransactionsCategories
+                        categories={categories}
+                        action={undefined}
                     />
-                    <ErrorMessage field={errors.categoryID} />
-                </Layout>
+                </ListPicker>
 
                 <Card
                     style={styles.box}
