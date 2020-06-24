@@ -21,6 +21,7 @@ type Props = {
     error: FieldError | undefined;
     children: any;
     onItemSelected: Function;
+    currentItem: any;
 };
 
 export default function ListPicker({
@@ -30,6 +31,7 @@ export default function ListPicker({
     error,
     children,
     onItemSelected,
+    currentItem,
 }: Props) {
     const [isModalVisible, showModal] = useState(false);
 
@@ -48,6 +50,7 @@ export default function ListPicker({
     const chooseItem = (item: any) => {
         return (
             <Button
+                disabled={item === currentItem}
                 size="tiny"
                 onPress={() => {
                     showModal(false);

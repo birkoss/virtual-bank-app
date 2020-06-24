@@ -264,6 +264,7 @@ export default function MoneyTransfer({
                     icon={UsersIcon}
                     error={errors.accountID}
                     onItemSelected={onUserSelected}
+                    currentItem={currentUser}
                 >
                     <Users users={users} action={undefined} />
                 </ListPicker>
@@ -278,6 +279,7 @@ export default function MoneyTransfer({
                     icon={TransactionsCategoriesIcon}
                     error={errors.categoryID}
                     onItemSelected={onCategorySelected}
+                    currentItem={currentCategory}
                 >
                     <TransactionsCategories
                         categories={categories}
