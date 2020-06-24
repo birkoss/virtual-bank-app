@@ -1,8 +1,6 @@
 // @TOOD : On error with children account, keep token and show message with retry button
 // @TODO : On logout, remove the expo token in the server
 
-// @TODO : CHangeUser and ChangeCategory as modal instead of page
-
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 
