@@ -39,6 +39,7 @@ import ListPicker from "./ListPicker";
 import Users from "./Users";
 import TransactionsCategories from "./TransactionsCategories";
 import { useFocusEffect } from "@react-navigation/native";
+import { GetUserFullname } from "../helpers";
 
 type formData = {
     accountID: string;
@@ -258,7 +259,7 @@ export default function MoneyTransfer({
                     description={
                         currentUser === undefined
                             ? "Nobody"
-                            : currentUser.firstname + " " + currentUser.lastname
+                            : GetUserFullname(currentUser)
                     }
                     icon={UsersIcon}
                     error={errors.accountID}

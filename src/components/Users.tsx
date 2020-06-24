@@ -5,6 +5,7 @@ import { List, ListItem } from "@ui-kitten/components";
 import { UsersIcon, AdultIcon } from "../icons";
 
 import { User } from "../types";
+import { GetUserFullname } from "../helpers";
 
 type Props = {
     users: User[];
@@ -18,14 +19,9 @@ export default function Users({ users, action }: Props) {
             description += "\nBalance: " + item.accounts[0].balance + " $";
         }
 
-        let userFullname: string = item.firstname;
-        if (!item.is_children) {
-            userFullname += " " + item.lastname;
-        }
-
         return (
             <ListItem
-                title={userFullname}
+                title={GetUserFullname(item)}
                 description={description.trim()}
                 accessoryLeft={item.is_children ? UsersIcon : AdultIcon}
                 accessoryRight={() => action(item)}
