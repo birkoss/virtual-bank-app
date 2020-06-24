@@ -1,5 +1,5 @@
 const APIUrl = "https://api.walleteur.app/v1/";
-//const APIUrl = "http://localhost:8000/v1/";
+//const APIUrl = "http://192.168.0.120:8000/v1/";
 
 class ApiError extends Error {
     constructor(...params: any[]) {
@@ -251,6 +251,21 @@ export function APILoginAs(token: string, userID: string) {
         "loginAs",
         "POST",
         { user_id: userID },
+        token
+    );
+
+    return APIFetchRequest(request, (data: any) => {
+        return {
+            token: data["token"],
+        };
+    });
+}
+
+export function APISaveNotificationToken(token: string, expoToken: string) {
+    let request = APICreateRequest(
+        "saveNotificationToken",
+        "POST",
+        { expoToken: expoToken },
         token
     );
 
