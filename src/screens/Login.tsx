@@ -11,7 +11,7 @@ import ButtonLoading from "../components/ButtonLoading";
 
 import { LoginScreenNavigationProp } from "../types";
 
-import { LandingStyles, FormStyles } from "../styles";
+import { LandingStyles } from "../styles";
 
 import { validateEmail } from "../validations";
 
@@ -44,8 +44,6 @@ export default function LoginScreen({ navigation }: Props) {
     const styles = useStyleSheet(LandingStyles);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const formStyles = useStyleSheet(FormStyles);
 
     useEffect(() => {
         register(
@@ -115,9 +113,6 @@ export default function LoginScreen({ navigation }: Props) {
                 />
 
                 <Input
-                    returnKeyType="go"
-                    onSubmitEditing={handleSubmit(onSubmit)}
-                    style={styles.input}
                     secureTextEntry
                     onChangeText={(text: string) =>
                         setValue("password", text, true)

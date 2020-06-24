@@ -1,9 +1,7 @@
 // @TOOD : On error with children account, keep token and show message with retry button
 // @TODO : On logout, remove the expo token in the server
 
-// @TODO : Tests without internet connexion (once approuved)
-
-// @TODO : Bugs - No categories in Children account
+// @TODO : CHangeUser and ChangeCategory as modal instead of page
 
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
@@ -12,7 +10,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import React, { useEffect, useReducer, useState } from "react";
 
-import { AsyncStorage, StatusBar, Alert } from "react-native";
+import { AsyncStorage, StatusBar } from "react-native";
 
 import * as eva from "@eva-design/eva";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
@@ -120,7 +118,7 @@ export default function App() {
 
         // Must be granted to access Expo token
         if (status !== "granted") {
-            Alert.alert("No notification permissions: " + status);
+            //Alert.alert("No notification permissions: " + status);
             return;
         }
 
